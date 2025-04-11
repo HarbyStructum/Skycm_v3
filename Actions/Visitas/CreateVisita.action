@@ -1,0 +1,33 @@
+{
+	"_Type": "Action.Type.ODataService.CreateEntity",
+	"ActionResult": {
+		"_Name": "CreateVisita"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Visitas/msj_Errorcrearvisita.action",
+	"OnSuccess": "/Skycm_v3/Actions/Visitas/msj_Visitacreaconexito.action",
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Registrando Visita.....",
+	"Target": {
+		"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+		"EntitySet": "HISTV"
+	},
+	"Properties": {
+		"ID_VISITA": "#Page:VisitaClienteConfirmar/#Control:fc_idVisita/#Value",
+		"KUNNR": "#Page:VisitaClienteConfirmar/#Control:FC_Destinatario/#Value",
+		"KUNN2": "#Page:VisitaClienteConfirmar/#Control:FC_ADNR/#Value",
+		"BUKRS": "#Page:VisitaClienteConfirmar/#Control:FC_sociedad/#Value",
+		"NAME1": "#Page:VisitaClienteConfirmar/#Control:fc_nombrecliente/#Value",
+		"PERNR": "#Page:VisitaClienteConfirmar/#Control:Fc_Pernr/#Value",
+		"PERNR_SCP": "#Page:VisitaClienteConfirmar/#Control:fc_s-userVendedor/#Value",
+		"EMAIL_VEND": "#Application/#AppData/UserId",
+		"MES": "#Page:VisitaClienteConfirmar/#Control:FC_Mes/#Value",
+		"ANO": "/Skycm_v3/Rules/Application/GetAnio.js",
+		"HORA": "#Page:VisitaClienteConfirmar/#Control:FC_Hora/#Value",
+		"ID_OBJETIVO": "#Page:VisitaClienteConfirmar/#Control:FC_objetivoVisita/#SelectedValue",
+		"ESTADO": "ACTIVA",
+		"FECHA": "#Page:VisitaClienteConfirmar/#Control:Fc_Fecha/#Value",
+		"JUSTIF": "#Page:JustificacionGeorefenciacion/#Control:fc_justificacionv/#SelectedValue",
+		"LON_VENDOR": "#Page:VisitaClienteConfirmar/#Control:fc_longitud/#Value",
+		"LAT_VENDOR": "#Page:VisitaClienteConfirmar/#Control:fc_latitud/#Value"
+	}
+}

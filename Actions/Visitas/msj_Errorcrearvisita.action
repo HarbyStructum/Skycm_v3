@@ -1,0 +1,7 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "msj_Errorcrearvisita"
+	},
+	"Message": "{#ActionResults:CreateVisita/error}"
+}

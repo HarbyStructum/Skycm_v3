@@ -1,0 +1,25 @@
+{
+	"_Type": "Action.Type.ODataService.Initialize",
+	"ActionResult": {
+		"_Name": "init"
+	},
+	"OnSuccess": "/Skycm_v3/Actions/Service/InitializeOfflineSuccessMessage.action",
+	"Service": "/Skycm_v3/Services/Online_skycm.service",
+	"DefiningRequests": [
+		{
+			"Name": "CLIENTEINFO",
+			"Query": "CLIENTEINFO",
+			"AutomaticallyRetrievesStreams": false
+		},
+		{
+			"Name": "INVENTARIO",
+			"Query": "INVENTARIO",
+			"AutomaticallyRetrievesStreams": false
+		},
+		{
+			"Name": "DIRECCIONES",
+			"Query": "DIRECCIONES",
+			"AutomaticallyRetrievesStreams": false
+		}
+	]
+}

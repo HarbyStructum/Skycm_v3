@@ -1,0 +1,81 @@
+{
+	"Controls": [
+		{
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"_Type": "Section.Type.KeyValue",
+					"_Name": "SectionKeyValue0",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"KeyAndValues": [
+						{
+							"Value": " $(N,{CantReservada}) ",
+							"_Name": "KeyValue1",
+							"KeyName": "Cantidad reservada:",
+							"Visible": true
+						},
+						{
+							"Value": "$(N,{CantPedida}) ",
+							"_Name": "KeyValue0",
+							"KeyName": "Cantidad pedida:",
+							"Visible": true
+						},
+						{
+							"Value": "$(N,{CantDespachada}) ",
+							"_Name": "KeyValue3",
+							"KeyName": "Cantidad despachada:",
+							"Visible": true
+						},
+						{
+							"Value": "$(N,{CantCancelada}) ",
+							"_Name": "KeyValue4",
+							"KeyName": "Cantidad cancelada:",
+							"Visible": true
+						},
+						{
+							"Value": "$(N,{CanPendiente}) ",
+							"_Name": "KeyValue2",
+							"KeyName": "Cantidad pendiente:",
+							"Visible": true
+						},
+						{
+							"Value": "$(N,{PrecioUnitario})",
+							"_Name": "KeyValue5",
+							"KeyName": "Precio unitario:",
+							"Visible": true
+						},
+						{
+							"Value": "$(N,{ValorTotal})",
+							"_Name": "KeyValue6",
+							"KeyName": "Valor total:",
+							"Visible": true
+						}
+					],
+					"MaxItemCount": 1,
+					"Layout": {
+						"NumberOfColumns": 1
+					}
+				}
+			],
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			}
+		}
+	],
+	"_Type": "Page",
+	"_Name": "DetalleItemsPedido",
+	"Caption": "{Referencia}",
+	"PrefersLargeCaption": true
+}

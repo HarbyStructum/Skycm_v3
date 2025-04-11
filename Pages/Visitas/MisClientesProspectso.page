@@ -1,0 +1,68 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"_Type": "Section.Type.ContactCell",
+					"Target": {
+						"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+						"EntitySet": "CLIENTE_PROS",
+						"QueryOptions": "$filter=EMAIL_VEND eq '{{#Application/#AppData/UserId}}' or PERNR_SCP eq '{{/Skycm_v3/Rules/Visitas/get_pernScponly.js}}'"
+					},
+					"_Name": "SectionContactCell0",
+					"Visible": true,
+					"EmptySection": {
+						"Caption": "aun no tienes clientes prospectos...",
+						"FooterVisible": false
+					},
+					"ContactCell": {
+						"Visible": true,
+						"ContextMenu": {
+							"PerformFirstActionWithFullSwipe": true
+						},
+						"DetailImage": "/Skycm_v3/Images/staff-management.png",
+						"Headline": "{NACHN}",
+						"Subheadline": "{ADDRES}",
+						"Description": "{EMAIL}",
+						"OnPress": "/Skycm_v3/Actions/Visitas/Nav_confirmarvisitapros.action"
+					},
+					"DataPaging": {
+						"ShowLoadingIndicator": false,
+						"PageSize": 50
+					}
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "MisClientesProspectso",
+	"Caption": "Clientes Prospectos",
+	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Items": [
+			{
+				"_Name": "ActionBarItem0",
+				"Caption": "Item",
+				"Icon": "/Skycm_v3/Images/add.png",
+				"Position": "Right",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/Skycm_v3/Actions/Visitas/nav_FormClienteProspecto.action"
+			}
+		],
+		"_Name": "ActionBar1"
+	}
+}

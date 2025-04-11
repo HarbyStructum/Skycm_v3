@@ -1,0 +1,15 @@
+{
+	"_Type": "Action.Type.OfflineOData.Download",
+	"ActionResult": {
+		"_Name": "Download_visitas"
+	},
+	"ShowActivityIndicator": true,
+	"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+	"DefiningRequests": [
+		{
+			"Name": "HISTV",
+			"Query": "HISTV",
+			"AutomaticallyRetrievesStreams": false
+		}
+	]
+}

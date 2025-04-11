@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.ProgressBanner",
+	"OnSuccess": "/Skycm_v3/Actions/Visitas/CreateVisita.action",
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "...",
+	"Message": "Registrando visita espere un momento...",
+	"CompletionMessage": "Visita registrada con éxito!",
+	"CompletionTimeout": 5
+}

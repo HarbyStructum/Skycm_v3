@@ -1,0 +1,7 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "Nav_confirmarvisitapros"
+	},
+	"PageToOpen": "/Skycm_v3/Pages/Visitas/VisitaConfirmarProspectos.page"
+}

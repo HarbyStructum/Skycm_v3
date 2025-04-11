@@ -1,0 +1,5 @@
+{
+    "ModalPage": true,
+    "PageToOpen": "/Skycm_v3/Pages/Application/UserActivityLog.page",
+    "_Type": "Action.Type.Navigation"
+}

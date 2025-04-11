@@ -1,0 +1,121 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_nopedido",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Codigo pedido",
+							"PlaceHolder": "Digite el codigo de su pedido",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"Value": "#Page:MenuConsultas/#Control:fc_pernr/#Value",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_pernr",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "Pernr1",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"Value": "#Page:MenuConsultas/#Control:fc_pernr2/#Value",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_pernr2",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "Pernr2",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"Value": "#Page:MenuConsultas/#Control:fc_sociedad/#Value",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_sociedad",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "Sociedad",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": true
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"_Type": "Control.Type.FormCell.Button",
+							"_Name": "FormCellButton0",
+							"IsVisible": true,
+							"Separator": true,
+							"Styles": {
+								"Button": "MyCustomerButton"
+							},
+							"Title": "Buscar",
+							"Alignment": "Center",
+							"ButtonType": "Primary",
+							"Semantic": "Tint",
+							"Image": "/Skycm_v3/Images/search.png",
+							"ImagePosition": "Leading",
+							"ImageSize": {
+								"Height": 15,
+								"Width": 15
+							},
+							"Enabled": true,
+							"OnPress": "/Skycm_v3/Rules/consultas/ValidarConsultaSociedad.js"
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell1"
+				}
+			]
+		}
+	],
+	"DesignTimeTarget": {
+		"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+		"EntitySet": "VENDORINFO",
+		"QueryOptions": "$filter=contains(USRID, '{{#Application/#AppData/UserId}}')"
+	},
+	"_Type": "Page",
+	"_Name": "ConsultaPedido",
+	"Caption": "Consulta Pedido",
+	"PrefersLargeCaption": true
+}

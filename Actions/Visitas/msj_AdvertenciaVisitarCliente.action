@@ -1,0 +1,11 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "msj_AdvertenciaVisitarCliente"
+	},
+	"Message": "Debe iniciar la Jornada laboral para iniciar una visita.",
+	"Title": "Jornada laboral no iniciada!!!",
+	"OKCaption": "iniciar",
+	"OnOK": "/Skycm_v3/Actions/JornadaLaboral/nav_InicioJornadaLaboral.action",
+	"CancelCaption": "cancel"
+}

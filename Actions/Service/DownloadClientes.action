@@ -1,0 +1,16 @@
+{
+	"_Type": "Action.Type.OfflineOData.Download",
+	"ActionResult": {
+		"_Name": "DownloadClientes"
+	},
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Cargando clientes....",
+	"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+	"DefiningRequests": [
+		{
+			"Name": "CLIENTEINFO",
+			"Query": "CLIENTEINFO",
+			"AutomaticallyRetrievesStreams": false
+		}
+	]
+}

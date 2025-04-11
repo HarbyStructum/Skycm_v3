@@ -1,0 +1,28 @@
+{
+	"_Type": "Action.Type.RestService.SendRequest",
+	"ActionResult": {
+		"_Name": "ResultRest"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Consultas/msj_errorconexionconrest.action",
+	"OnSuccess": "/Skycm_v3/Rules/consultas/paises/Rest_Cartera.js",
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Enviando estado de cartera...!",
+	"Target": {
+		"Service": "/Skycm_v3/Services/Rest_Inventario.service",
+		"Path": "/CarteraSkyVMovil",
+		"OutputPath": "/MT_CarteraSkyVMovilResp/T_CarteraSkyVMovilResp/0",
+		"RequestProperties": {
+			"Method": "PUT",
+			"Body": {
+				"T_CarteraSKyVMovil": [
+					{
+						"Cliente": "#Page:ConsultaCartera/#Control:FC_CLIENTE/#SelectedValue",
+						"Vendedor": "#Page:ConsultaCartera/#Control:FC_PERNR/#Value",
+						"Userdefpr1": "#Page:ConsultaCartera/#Control:FC_ENVIAR_A/#SelectedValue",
+						"Userdefpr2": "#Page:ConsultaCartera/#Control:fc_sociedad/#Value"
+					}
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,138 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"ObjectHeader": {
+						"Subhead": "Gestione y administre sus visitas a clientes",
+						"Footnote": "3.0.2",
+						"DetailImage": "/Skycm_v3/Images/playstore.png",
+						"DetailImageIsCircular": false,
+						"Tags": [
+							{
+								"Color": "Green",
+								"Text": "#Application/#AppData/UserId"
+							},
+							{
+								"Color": "Mango",
+								"Text": "/Skycm_v3/Rules/Visitas/get_pernScponly.js"
+							}
+						],
+						"BodyText": "Sistema para casos B2B",
+						"HeadlineText": "Commercial Management",
+						"StatusPosition": "Stacked",
+						"StatusImagePosition": "Leading",
+						"SubstatusImagePosition": "Trailing",
+						"Styles": {
+							"ObjectHeader": "objectHeaderBackground",
+							"BodyText": "objectHeaderBodyText",
+							"Description": "objectHeaderDescription",
+							"Subhead": "objectHeaderSubhead"
+						}
+					},
+					"_Type": "Section.Type.ObjectHeader",
+					"_Name": "SectionObjectHeader0",
+					"Visible": true
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": false,
+						"HeaderSeparator": false,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"_Type": "Section.Type.ContactCell",
+					"_Name": "SectionContactCell4",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false,
+						"Style": "ObjectTableTitle"
+					},
+					"ContactCells": [
+						{
+							"ContactCell": {
+								"_Name": "ContactCellItem0",
+								"DetailImage": "/Skycm_v3/Images/busy.png",
+								"Headline": "Jornada laboral",
+								"Subheadline": "Registre el inicio de su jornada laboral",
+								"Description": "",
+								"Visible": true,
+								"OnPress": "/Skycm_v3/Actions/JornadaLaboral/nav_InicioJornadaLaboral.action"
+							}
+						},
+						{
+							"ContactCell": {
+								"_Name": "ContactCellItem1",
+								"DetailImage": "/Skycm_v3/Images/handshake.png",
+								"Headline": "Visita a cliente",
+								"Subheadline": "Cree una nueva visita a cliente",
+								"Description": "",
+								"Visible": true,
+								"OnPress": "/Skycm_v3/Actions/Visitas/nav_VisitaCliente.action"
+							}
+						},
+						{
+							"ContactCell": {
+								"_Name": "ContactCellItem2",
+								"DetailImage": "/Skycm_v3/Images/search.png",
+								"Headline": "Consultas",
+								"Subheadline": "Consulte, estado de pedido, inventario y cartera",
+								"Description": "",
+								"Visible": true,
+								"OnPress": "/Skycm_v3/Actions/Consultas/Nav_menuconsultas.action"
+							}
+						},
+						{
+							"ContactCell": {
+								"_Name": "ContactCellItem3",
+								"DetailImage": "/Skycm_v3/Images/labour-day.png",
+								"Headline": "Gestion de visitas",
+								"Subheadline": "Consulte informacion detallada de sus visitas",
+								"Description": "",
+								"Visible": true,
+								"OnPress": "/Skycm_v3/Actions/GestionVisitas/nav_gestionvisitas.action"
+							}
+						},
+						{
+							"ContactCell": {
+								"_Name": "ContactCellItem4",
+								"DetailImage": "/Skycm_v3/Images/profile.png",
+								"Headline": "Cuenta",
+								"Subheadline": "Configuracion de la cuenta",
+								"Description": "",
+								"Visible": false,
+								"OnPress": "/Skycm_v3/Actions/Application/NavToAbout.action"
+							}
+						}
+					]
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "Main",
+	"PrefersLargeCaption": true,
+	"OnLoaded": "/Skycm_v3/Rules/Application/Actualizar_interval.js",
+	"OnActivityBackPressed": "/Skycm_v3/Rules/Application/EjecutarMensaje.js",
+	"ActionBar": {
+		"Items": [
+			{
+				"_Name": "ActionBarItem0",
+				"Caption": "User Menu",
+				"Icon": "sap-icon://customer",
+				"Position": "Right",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/Skycm_v3/Actions/Application/UserMenuPopover.action"
+			}
+		],
+		"_Name": "ActionBar1"
+	}
+}

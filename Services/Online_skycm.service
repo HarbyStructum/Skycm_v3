@@ -1,0 +1,15 @@
+{
+	"DestinationName": "Online_skycm",
+	"PathSuffix": "/catalog/",
+	"LanguageURLParam": "sap-language",
+	"OfflineEnabled": false,
+	"OnlineOptions": {
+		"ServiceOptions": {
+			"dataVersion": 400
+		},
+		"CSDLOptions": [
+			"allowCaseConflicts"
+		]
+	},
+	"SourceType": "Mobile"
+}

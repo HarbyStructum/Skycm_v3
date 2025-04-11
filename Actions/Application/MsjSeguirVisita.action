@@ -1,0 +1,11 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "MsjSeguirVisita"
+	},
+	"Message": "Tienes una visita activa hace una hora, ¿Deseas seguir en la misma visita?",
+	"Title": "ATENCION",
+	"OKCaption": "Si",
+	"CancelCaption": "No",
+	"OnCancel": "/Skycm_v3/Actions/Visitas/nav_VisitaCliente.action"
+}

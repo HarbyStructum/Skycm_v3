@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "msj_seleccionarobjetivovisita"
+	},
+	"Message": "Debe seleccionar un objetivo de visita",
+	"Title": "Seleccionar objetivo de visita",
+	"OKCaption": "Ok"
+}

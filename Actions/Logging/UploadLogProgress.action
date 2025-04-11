@@ -1,0 +1,8 @@
+{
+    "Animated": true,
+    "CompletionMessage": "Logs Uploaded",
+    "CompletionTimeout": 2,
+    "Message": "Uploading Log Files...",
+    "OnSuccess": "/Skycm_v3/Actions/Logging/UploadLog.action",
+    "_Type": "Action.Type.ProgressBanner"
+}

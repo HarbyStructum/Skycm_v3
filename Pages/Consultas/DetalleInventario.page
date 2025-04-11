@@ -1,0 +1,134 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": false,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"KeyAndValues": [
+						{
+							"Value": "{Userdet5}",
+							"_Name": "KeyValue1",
+							"KeyName": "",
+							"Visible": true
+						},
+						{
+							"Value": "{Color}",
+							"_Name": "KeyValue0",
+							"KeyName": "Color:",
+							"Visible": true
+						},
+						{
+							"Value": "$(N,{CantDisponible})",
+							"_Name": "Cantidad disponible",
+							"KeyName": "cantidad disponible:",
+							"Visible": true
+						}
+					],
+					"MaxItemCount": 1,
+					"_Type": "Section.Type.KeyValue",
+					"_Name": "SectionKeyValue0",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"Layout": {
+						"NumberOfColumns": 1
+					}
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"Value": "{Userdet4}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FC_Precio",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Precio:",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "{Userdet6}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FormCellSimpleProperty0",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Precio especial: ",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"Value": "$(N,{Userdet1})",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FC_librePrima",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "Libre Utilizacion : ",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "$(N,{Userdet1})",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FC_transitoMex",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "Transito:",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "$(N,{Userdet2})",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FC_transPrima",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "Transito:",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
+				}
+			],
+			"OnRendered": "/Skycm_v3/Rules/consultas/InventarioCampos.js"
+		}
+	],
+	"_Type": "Page",
+	"_Name": "DetalleInventario",
+	"Caption": "{Referencia}",
+	"PrefersLargeCaption": true,
+	"OnLoaded": "/Skycm_v3/Rules/consultas/InventarioCampos.js",
+	"ActionBar": {
+		"Items": [],
+		"_Name": "ActionBar1"
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"_Type": "Action.Type.CheckRequiredFields",
+	"ActionResult": {
+		"_Name": "check_Cartera"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Consultas/msj_CheckCartera.action",
+	"OnSuccess": "/Skycm_v3/Rules/consultas/ValidarConsultaSociedad.js",
+	"RequiredFields": [
+		"FC_CLIENTE",
+		"FC_ENVIAR_A"
+	]
+}

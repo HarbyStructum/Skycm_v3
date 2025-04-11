@@ -1,0 +1,6 @@
+{
+	"_Type": "Action.Type.ClosePage",
+	"OnSuccess": "/Skycm_v3/Actions/Application/nav_MainPage.action",
+	"DismissModal": "Action.Type.ClosePage.Completed",
+	"CancelPendingActions": false
+}

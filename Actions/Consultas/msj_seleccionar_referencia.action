@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "msj_seleccionar_referencia"
+	},
+	"Message": "Debe seleccionar una referencia",
+	"Title": "Seleccionar referencia",
+	"OKCaption": "Ok"
+}

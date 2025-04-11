@@ -1,0 +1,50 @@
+{
+	"_Type": "Action.Type.ODataService.Initialize",
+	"ActionResult": {
+		"_Name": "init"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Service/InitializeOfflineFailureMessage.action",
+	"OnSuccess": "/Skycm_v3/Actions/Service/InitializeOnline.action",
+	"OnSuccessLog": {
+		"Level": "Debug",
+		"Message": "Debug"
+	},
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Downloading...",
+	"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+	"DefiningRequests": [
+		{
+			"Name": "OBJEVISIT",
+			"Query": "OBJEVISIT"
+		},
+		{
+			"Name": "VENDORINFO",
+			"Query": "VENDORINFO"
+		},
+		{
+			"Name": "WORKDAY",
+			"Query": "WORKDAY?$filter=EMAIL_VEND eq '{{#Application/#AppData/UserId}}'",
+			"AutomaticallyRetrievesStreams": false
+		},
+		{
+			"Name": "CLIENTEINFO",
+			"Query": "CLIENTEINFO?$filter=EMAIL_VEND eq '{{#Application/#AppData/UserId}}'",
+			"AutomaticallyRetrievesStreams": false
+		},
+		{
+			"Name": "HISTV",
+			"Query": "HISTV?$filter=EMAIL_VEND eq '{{#Application/#AppData/UserId}}'",
+			"AutomaticallyRetrievesStreams": false
+		},
+		{
+			"Name": "CLIENTE_PROS",
+			"Query": "CLIENTE_PROS?$filter=EMAIL_VEND eq '{{#Application/#AppData/UserId}}'",
+			"AutomaticallyRetrievesStreams": false
+		},
+		{
+			"Name": "DIRECCIONES",
+			"Query": "DIRECCIONES?$filter=EMAIL_VEND eq '{{#Application/#AppData/UserId}}'",
+			"AutomaticallyRetrievesStreams": false
+		}
+	]
+}

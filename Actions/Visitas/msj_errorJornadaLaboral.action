@@ -1,0 +1,8 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "msj_errorJornadaLaboral"
+	},
+	"Message": "{#ActionResults:create_Jornada/error}",
+	"Title": "Error al iniciar la jornada"
+}

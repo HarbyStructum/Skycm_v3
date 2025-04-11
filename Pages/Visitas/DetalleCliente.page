@@ -1,0 +1,117 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"ObjectHeader": {
+						"Subhead": "{SMTP_ADDR}",
+						"Description": "{KUNNR}",
+						"DetailImage": "/Skycm_v3/Images/info.png",
+						"DetailImageIsCircular": false,
+						"HeadlineText": "{NAME1}",
+						"StatusPosition": "Stacked",
+						"StatusImagePosition": "Leading",
+						"SubstatusImagePosition": "Leading",
+						"Styles": {
+							"ObjectHeader": "objectHeaderBackground"
+						}
+					},
+					"_Type": "Section.Type.ObjectHeader",
+					"_Name": "SectionObjectHeader0",
+					"Visible": true
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"_Type": "Section.Type.ContactCell",
+					"Target": {
+						"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+						"EntitySet": "DIRECCIONES",
+						"QueryOptions": "$filter=KUNNR eq '{KUNNR}' and PARVW eq 'WE' and PERNR eq '{PERNR}'"
+					},
+					"_Name": "SectionContactCell0",
+					"Header": {
+						"_Type": "SectionCommon.Type.Header",
+						"_Name": "SectionHeader0",
+						"AccessoryType": "None",
+						"UseTopPadding": true,
+						"Caption": "Seleccione la direccion de destino:"
+					},
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"ContactCell": {
+						"Visible": true,
+						"ContextMenu": {
+							"PerformFirstActionWithFullSwipe": true
+						},
+						"DetailImage": "/Skycm_v3/Images/signpost.png",
+						"Headline": "{STRAS}",
+						"Subheadline": "{ADRNR}",
+						"Description": "",
+						"OnPress": "/Skycm_v3/Actions/Visitas/nav_confirmarVisita.action"
+					},
+					"DataPaging": {
+						"ShowLoadingIndicator": false,
+						"PageSize": 50
+					}
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"Value": "{PERNR}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FC_PERNRDETALLE",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "PERNR",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"Value": "{PERNR_SCP}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_pernrScp",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "Pernr_scp",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": true
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "DetalleCliente",
+	"Caption": "Detalle cliente",
+	"PrefersLargeCaption": true
+}

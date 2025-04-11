@@ -1,0 +1,8 @@
+{
+    "_Type": "Action.Type.BannerMessage",
+    "Message": "Upload failed!",
+    "Duration": 0,
+    "Animated": false,
+    "OnActionLabelPress": "/Skycm_v3/Actions/ErrorArchive/NavToErrorArchive_List.action",
+    "ActionLabel": "View Errors"
+}

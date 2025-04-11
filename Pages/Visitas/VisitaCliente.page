@@ -1,0 +1,100 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": false,
+						"FooterSeparator": false,
+						"ControlSeparator": false
+					},
+					"_Type": "Section.Type.ContactCell",
+					"Target": {
+						"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+						"EntitySet": "HISTV",
+						"QueryOptions": "$top=1&$filter=EMAIL_VEND eq '{{#Application/#AppData/UserId}}' and ESTADO eq 'ACTIVA'"
+					},
+					"_Name": "SectionContactCell0",
+					"Visible": true,
+					"EmptySection": {
+						"Caption": "No tienes visitas activas....",
+						"FooterVisible": false
+					},
+					"ContactCell": {
+						"Visible": true,
+						"ContextMenu": {
+							"PerformFirstActionWithFullSwipe": true
+						},
+						"DetailImage": "/Skycm_v3/Images/work.png",
+						"Headline": "{NAME1}",
+						"Subheadline": "{KUNNR}",
+						"Description": "",
+						"OnPress": "/Skycm_v3/Actions/Visitas/nav_detallevisitaactiva.action"
+					},
+					"DataPaging": {
+						"ShowLoadingIndicator": false,
+						"PageSize": 50
+					}
+				},
+				{
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0",
+					"Controls": [
+						{
+							"_Type": "Control.Type.FormCell.Button",
+							"_Name": "FormCellButton0",
+							"IsVisible": true,
+							"Separator": true,
+							"Title": "Visitar cliente",
+							"Alignment": "Center",
+							"ButtonType": "Text",
+							"Semantic": "Tint",
+							"Image": "sap-icon://visits",
+							"ImagePosition": "Leading",
+							"Enabled": true,
+							"OnPress": "/Skycm_v3/Actions/Visitas/nav_misclientes.action"
+						},
+						{
+							"_Type": "Control.Type.FormCell.Button",
+							"_Name": "FormCellButton1",
+							"IsVisible": true,
+							"Separator": true,
+							"Title": "Visitar cliente prospecto",
+							"Alignment": "Center",
+							"ButtonType": "Text",
+							"Semantic": "Tint",
+							"Image": "sap-icon://employee-approvals",
+							"ImagePosition": "Leading",
+							"Enabled": true,
+							"OnPress": "/Skycm_v3/Actions/Visitas/nav_misclientesprospectos.action"
+						}
+					]
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "VisitaCliente",
+	"Caption": "Visita Cliente",
+	"PrefersLargeCaption": true,
+	"OnLoaded": "/Skycm_v3/Actions/Visitas/Download_visitas.action"
+}

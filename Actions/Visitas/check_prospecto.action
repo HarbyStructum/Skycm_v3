@@ -1,0 +1,11 @@
+{
+	"_Type": "Action.Type.CheckRequiredFields",
+	"ActionResult": {
+		"_Name": "check_prospecto"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Visitas/error_campo.action",
+	"OnSuccess": "/Skycm_v3/Actions/Visitas/CreateClienteProspecto.action",
+	"RequiredFields": [
+		"fc_nit"
+	]
+}

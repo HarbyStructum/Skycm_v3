@@ -1,0 +1,11 @@
+{
+	"_Type": "Action.Type.CheckRequiredFields",
+	"ActionResult": {
+		"_Name": "chek_referenciainventario"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Consultas/msj_seleccionar_referencia.action",
+	"OnSuccess": "/Skycm_v3/Rules/consultas/ValidarConsultaSociedad.js",
+	"RequiredFields": [
+		"fc_referencias"
+	]
+}

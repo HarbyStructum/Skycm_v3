@@ -1,0 +1,8 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "nav_detalleCliente"
+	},
+	"PageToOpen": "/Skycm_v3/Pages/Visitas/DetalleCliente.page",
+	"BackStackVisible": true
+}

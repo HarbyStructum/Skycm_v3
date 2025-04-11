@@ -1,0 +1,10 @@
+{
+	"_Type": "Action.Type.BannerMessage",
+	"ActionResult": {
+		"_Name": "msj_Visitacreaconexito"
+	},
+	"OnSuccess": "/Skycm_v3/Actions/Application/nav_MainPage.action",
+	"Message": "Visita iniciada con exito!!!",
+	"Duration": 100,
+	"Animated": true
+}

@@ -1,0 +1,11 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "msj_ConfirmacionCheck_out"
+	},
+	"Message": "Desea realizar el Check-out de su jornada?",
+	"Title": "Check-Out",
+	"OKCaption": "Si",
+	"OnOK": "/Skycm_v3/Actions/JornadaLaboral/Cerrar_jornada.action",
+	"CancelCaption": "No"
+}

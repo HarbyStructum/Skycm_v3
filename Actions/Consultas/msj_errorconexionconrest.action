@@ -1,0 +1,8 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "msj_errorconexionconrest"
+	},
+	"Message": "#ActionResults:ResultRest/error",
+	"Title": "Atencion!"
+}

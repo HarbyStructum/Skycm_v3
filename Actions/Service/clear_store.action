@@ -1,0 +1,8 @@
+{
+	"_Type": "Action.Type.OfflineOData.Clear",
+	"ActionResult": {
+		"_Name": "clear_store"
+	},
+	"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+	"Force": true
+}

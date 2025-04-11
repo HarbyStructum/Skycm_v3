@@ -1,0 +1,18 @@
+{
+	"_Type": "Action.Type.ODataService.UpdateEntity",
+	"ActionResult": {
+		"_Name": "Cerrar_jornada"
+	},
+	"OnSuccess": "/Skycm_v3/Actions/JornadaLaboral/msj_JornadaFinalizada.action",
+	"Target": {
+		"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+		"EntitySet": "WORKDAY",
+		"ReadLink": "{@odata.readLink}"
+	},
+	"Properties": {
+		"ID_JORNADA": "#Page:DetalleJornadaLaboral/#Control:FC_IDJORDETALLE/#Value",
+		"PERNR": "#Page:DetalleJornadaLaboral/#Control:FCDURACIONJOR/#Value",
+		"HORA_FIN": "#Page:DetalleJornadaLaboral/#Control:FC_HORAFINJOR/#Value",
+		"ESTADO": "INACTIVO"
+	}
+}

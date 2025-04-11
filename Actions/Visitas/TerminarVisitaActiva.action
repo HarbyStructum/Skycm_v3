@@ -1,0 +1,25 @@
+{
+	"_Type": "Action.Type.ODataService.UpdateEntity",
+	"ActionResult": {
+		"_Name": "TerminarVisitaActiva"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Visitas/msj_errorcerrarvisita.action",
+	"OnSuccess": "/Skycm_v3/Actions/Service/closePagevisi.action",
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Cerrando visita....",
+	"Target": {
+		"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+		"EntitySet": "HISTV",
+		"QueryOptions": "$filter=ID_VISITA eq '{{#Page:DetalleVisitaActiva/#Control:FC_idvisitadetalle/#Value}}'",
+		"ReadLink": "{@odata.readLink}"
+	},
+	"Properties": {
+		"ID_VISITA": "#Page:DetalleVisitaActiva/#Control:FC_idvisitadetalle/#Value",
+		"KUNNR": "#Page:DetalleVisitaActiva/#Control:fc_Kunnr/#Value",
+		"FIN": "/Skycm_v3/Rules/Application/GetHora.js",
+		"DURACION": "/Skycm_v3/Rules/Visitas/CalcularDuracionVisita.js",
+		"OBJ_CUMPL": "",
+		"OBSERVACION": "#Page:DetalleVisitaActiva/#Control:Fc_observacion/#Value",
+		"ESTADO": "INACTIVA"
+	}
+}

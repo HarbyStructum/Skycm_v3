@@ -1,0 +1,41 @@
+{
+	"_Type": "Action.Type.OfflineOData.Download",
+	"ActionResult": {
+		"_Name": "sync"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Service/SyncFailureMessage.action",
+	"OnSuccess": "/Skycm_v3/Rules/ErrorArchive/ErrorArchive_CheckForSyncError.js",
+	"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+	"DefiningRequests": [
+		{
+			"Name": "CLIENTE_PROS",
+			"Query": "CLIENTE_PROS"
+		},
+		{
+			"Name": "HISTV",
+			"Query": "HISTV"
+		},
+		{
+			"Name": "OBJEVISIT",
+			"Query": "OBJEVISIT"
+		},
+		{
+			"Name": "VENDORINFO",
+			"Query": "VENDORINFO"
+		},
+		{
+			"Name": "WORKDAY",
+			"Query": "WORKDAY"
+		},
+		{
+			"Name": "CLIENTEINFO",
+			"Query": "CLIENTEINFO",
+			"AutomaticallyRetrievesStreams": false
+		},
+		{
+			"Name": "DIRECCIONES",
+			"Query": "DIRECCIONES",
+			"AutomaticallyRetrievesStreams": false
+		}
+	]
+}

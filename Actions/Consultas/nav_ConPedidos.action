@@ -1,0 +1,8 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "nav_ConPedidos"
+	},
+	"PageToOpen": "/Skycm_v3/Pages/Consultas/ConsultaPedido.page",
+	"BackStackVisible": true
+}

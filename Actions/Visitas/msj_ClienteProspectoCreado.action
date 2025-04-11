@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.BannerMessage",
+	"ActionResult": {
+		"_Name": "msj_ClienteProspectoCreado"
+	},
+	"OnSuccess": "/Skycm_v3/Actions/CloseModalPage_Complete.action",
+	"Message": "Creacion exitosa...!",
+	"Duration": 100
+}

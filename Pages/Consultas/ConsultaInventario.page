@@ -1,0 +1,202 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"validationProperties": {
+								"SeparatorBackgroundColor": "#07f9ad",
+								"SeparatorIsHidden": false,
+								"ValidationViewIsHidden": true
+							},
+							"_Type": "Control.Type.FormCell.ListPicker",
+							"_Name": "fc_referencias",
+							"IsVisible": true,
+							"Separator": true,
+							"AllowMultipleSelection": false,
+							"AllowEmptySelection": true,
+							"Caption": "Referencias",
+							"DataPaging": {
+								"ShowLoadingIndicator": false,
+								"PageSize": 50
+							},
+							"PickerPrompt": "Seleccione una referencia",
+							"HelperText": "Seleccione una referencia",
+							"OnValueChange": "/Skycm_v3/Rules/consultas/getdataInven.js",
+							"IsSelectedSectionEnabled": false,
+							"IsPickerDismissedOnSelection": true,
+							"IsSearchCancelledAfterSelection": true,
+							"AllowDefaultValueIfOneItem": false,
+							"IsEditable": true,
+							"Search": {
+								"Enabled": true,
+								"BarcodeScanner": true
+							},
+							"PickerItems": {
+								"Target": {
+									"Service": "/Skycm_v3/Services/Online_skycm.service",
+									"EntitySet": "INVENTARIO",
+									"QueryOptions": "$filter=PERNR eq '{{#Page:MenuConsultas/#Control:fc_pernr/#Value}}'"
+								},
+								"DisplayValue": "$(PLT,{MATNR},{MINUS},null)",
+								"ReturnValue": "{MATNR}"
+							}
+						},
+						{
+							"validationProperties": {
+								"SeparatorBackgroundColor": "#fc0713"
+							},
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_invent",
+							"IsVisible": false,
+							"Separator": true,
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_color",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Color",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "#Page:MenuConsultas/#Control:fc_sociedad/#Value",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_sociedad",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "Sociedad",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"Value": "#Page:MenuConsultas/#Control:fc_pernr/#Value",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_pernr",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "Pernr",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"validationProperties": {
+								"ValidationViewIsHidden": true
+							},
+							"Value": [
+								"Predeterminado"
+							],
+							"_Type": "Control.Type.FormCell.ListPicker",
+							"_Name": "Fc_ordenar",
+							"IsVisible": true,
+							"Separator": true,
+							"AllowMultipleSelection": false,
+							"AllowEmptySelection": true,
+							"Caption": "ordenar por:",
+							"DataPaging": {
+								"ShowLoadingIndicator": false,
+								"PageSize": 50
+							},
+							"PickerPrompt": "Ordenar por",
+							"IsSelectedSectionEnabled": false,
+							"IsPickerDismissedOnSelection": false,
+							"IsSearchCancelledAfterSelection": false,
+							"AllowDefaultValueIfOneItem": false,
+							"IsEditable": true,
+							"FilterProperty": "''",
+							"PickerItems": [
+								"Color",
+								"Disponibilidad",
+								"Predeterminado"
+							]
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": false,
+						"HeaderSeparator": false,
+						"FooterSeparator": false,
+						"ControlSeparator": false
+					},
+					"Controls": [
+						{
+							"_Type": "Control.Type.FormCell.Button",
+							"_Name": "FormCellButton1",
+							"IsVisible": true,
+							"Separator": true,
+							"Styles": {
+								"Button": "MyCustomerButton"
+							},
+							"Title": "Consultar",
+							"Alignment": "Center",
+							"ButtonType": "Text",
+							"Semantic": "Normal",
+							"Image": "/Skycm_v3/Images/search.png",
+							"ImagePosition": "Leading",
+							"ImageSize": {
+								"Height": 30,
+								"Width": 30
+							},
+							"Enabled": true,
+							"OnPress": "/Skycm_v3/Actions/Consultas/chek_referenciainventario.action"
+						},
+						{
+							"_Type": "Control.Type.FormCell.Button",
+							"_Name": "FormCellButton0",
+							"IsVisible": true,
+							"Separator": false,
+							"Alignment": "Center",
+							"ButtonType": "Text",
+							"Semantic": "Tint",
+							"Image": "/Skycm_v3/Images/qr-code.png",
+							"ImagePosition": "Leading",
+							"ImageSize": {
+								"Height": 60,
+								"Width": 60
+							},
+							"Enabled": true,
+							"OnPress": "/Skycm_v3/Actions/Consultas/Scan_QR.action"
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell1"
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "ConsultaInventario",
+	"Caption": "Inventario",
+	"PrefersLargeCaption": true
+}

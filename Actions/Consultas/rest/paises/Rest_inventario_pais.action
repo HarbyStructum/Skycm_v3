@@ -1,0 +1,30 @@
+{
+	"_Type": "Action.Type.RestService.SendRequest",
+	"ActionResult": {
+		"_Name": "ResultRest"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Consultas/msj_errorconexionconrest.action",
+	"OnSuccess": "/Skycm_v3/Rules/consultas/Rule_Rest_Inventario.js",
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Realizando Consulta...!",
+	"Target": {
+		"Service": "/Skycm_v3/Services/Rest_Paises.service",
+		"Path": "/InvSkyVMovilPais",
+		"OutputPath": "/MT_InvSkyVMovilPFmsResp/T_InvSkyVMovilPFmsResp/T_CabeceraInvSkyVMovil",
+		"RequestProperties": {
+			"Method": "PUT",
+			"Body": {
+				"T_InvSkyVMovilPFms": [
+					{
+						"Referencia": "#Page:ConsultaInventario/#Control:fc_referencias/#SelectedValue",
+						"Vendedor": "#Page:ConsultaInventario/#Control:fc_pernr/#Value",
+						"Campocab1": "#Page:ConsultaInventario/#Control:fc_sociedad/#Value"
+					}
+				]
+			},
+			"Headers": {
+				"Content-Type": "application/json"
+			}
+		}
+	}
+}

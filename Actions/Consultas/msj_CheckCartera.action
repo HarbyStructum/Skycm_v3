@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "msj_CheckCartera"
+	},
+	"Message": "Debe seleccionar un cliente y enviar a....",
+	"Title": "Campos incompletos!!!",
+	"OKCaption": "Ok"
+}

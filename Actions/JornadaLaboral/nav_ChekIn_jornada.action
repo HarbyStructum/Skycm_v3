@@ -1,0 +1,10 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "nav_ChekIn_jornada"
+	},
+	"ValidationRule": "/Skycm_v3/Rules/Application/JornadaLaboral/ValiadarjornadaLaboral.js",
+	"PageToOpen": "/Skycm_v3/Pages/Jornadalaboral/ConfirmarJornadaLaboral.page",
+	"BackStackVisible": true,
+	"ModalPage": true
+}

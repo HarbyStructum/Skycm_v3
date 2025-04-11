@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "nav_misclientes"
+	},
+	"ValidationRule": "/Skycm_v3/Rules/Visitas/ValidarVisitaActiva.js",
+	"PageToOpen": "/Skycm_v3/Pages/Visitas/MisClientes.page",
+	"BackStackVisible": true
+}

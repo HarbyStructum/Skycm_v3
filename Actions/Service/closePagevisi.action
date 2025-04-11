@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.ClosePage",
+	"ActionResult": {
+		"_Name": "closePagevisi"
+	},
+	"OnSuccess": "/Skycm_v3/Actions/Visitas/Nav_vis_main.action",
+	"DismissModal": "Action.Type.ClosePage.Completed",
+	"CancelPendingActions": false
+}

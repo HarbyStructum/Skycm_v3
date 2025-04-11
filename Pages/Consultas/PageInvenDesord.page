@@ -1,0 +1,99 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"Value": "#Page:ConsultaInventario/#Control:fc_invent/#Value",
+							"_Type": "Control.Type.FormCell.Title",
+							"_Name": "fc_title",
+							"IsVisible": true,
+							"Separator": true,
+							"Enabled": true,
+							"IsEditable": true
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"_Type": "Section.Type.ObjectCardCollection",
+					"Target": "#Page:Main/#ClientData/#Property:Inventario",
+					"_Name": "SectionObjectCardCollection0",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"DataPaging": {
+						"ShowLoadingIndicator": false,
+						"PageSize": 50
+					},
+					"Card": {
+						"Visible": true,
+						"Title": "Color: {Color}",
+						"Subhead": "Cant disponible:  $(N,{CantDisponible})",
+						"Footnote": "{Userdet5}",
+						"DetailImage": "sap-icon://customer-order-entry",
+						"DetailImageIsCircular": false,
+						"StatusText": "{Userdet3}",
+						"OnPress": "/Skycm_v3/Actions/Consultas/nav_Detalle_inventario.action",
+						"PrimaryAction": {
+							"Style": "",
+							"Title": "Primary",
+							"Visible": false
+						},
+						"SecondaryAction": {
+							"Style": "",
+							"Title": "Secondary",
+							"Visible": false
+						},
+						"Styles": {
+							"StatusText": "ObjectCardStatusText"
+						},
+						"_Type": "Control.Type.ObjectCard"
+					},
+					"Search": {
+						"Enabled": true
+					},
+					"Layout": {
+						"LayoutType": "Vertical"
+					}
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "PageInvenDesord",
+	"Caption": "Predeterminado",
+	"PrefersLargeCaption": true,
+	"OnLoaded": "/Skycm_v3/Rules/consultas/visulisacionCampo.js",
+	"ActionBar": {
+		"Items": [],
+		"_Name": "ActionBar1"
+	}
+}

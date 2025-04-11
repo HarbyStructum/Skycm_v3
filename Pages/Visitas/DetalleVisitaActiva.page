@@ -1,0 +1,171 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"Value": "{ID_VISITA}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FC_idvisitadetalle",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Id visita:",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "{KUNNR}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_Kunnr",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "kunnr",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell1"
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"KeyAndValues": [
+						{
+							"Value": "/Skycm_v3/Rules/Application/GetMes.js",
+							"_Name": "KeyValue2",
+							"KeyName": "Mes",
+							"Visible": true
+						},
+						{
+							"Value": "/Skycm_v3/Rules/Application/GetAnio.js",
+							"_Name": "KeyValue4",
+							"KeyName": "Año",
+							"Visible": true
+						}
+					],
+					"MaxItemCount": 1,
+					"_Type": "Section.Type.KeyValue",
+					"_Name": "SectionKeyValue0",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"Layout": {
+						"NumberOfColumns": 1
+					}
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"Value": "{HORA}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "Fc_horainicio",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Hora Inicio",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "/Skycm_v3/Rules/Application/GetHora.js",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_horafin",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Hora fin",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "/Skycm_v3/Rules/Visitas/CalcularDuracionVisita.js",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "Fc_duracionvisita",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Duracion",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": false,
+							"_Type": "Control.Type.FormCell.Switch",
+							"_Name": "fc_objetivoCumplido",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "objetivo Cumplido?",
+							"IsEditable": true
+						},
+						{
+							"_Type": "Control.Type.FormCell.Note",
+							"_Name": "Fc_observacion",
+							"IsVisible": true,
+							"Separator": true,
+							"PlaceHolder": "Digite observaciones de la visita...",
+							"Enabled": true,
+							"IsEditable": true
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "DetalleVisitaActiva",
+	"Caption": "{ID_VISITA}",
+	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Items": [
+			{
+				"_Name": "ActionBarItem0",
+				"Caption": "Chek-out",
+				"Position": "Right",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/Skycm_v3/Actions/Visitas/TerminarVisitaActiva.action"
+			}
+		],
+		"_Name": "ActionBar1"
+	}
+}

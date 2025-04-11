@@ -1,0 +1,30 @@
+{
+	"_Type": "Action.Type.RestService.SendRequest",
+	"ActionResult": {
+		"_Name": "ResultRest"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Consultas/rest/ErrorPedido.action",
+	"OnSuccess": "/Skycm_v3/Rules/consultas/afs/RestPedidos3.js",
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Realizando consulta....",
+	"Target": {
+		"Service": "/Skycm_v3/Services/Rest_Inventario.service",
+		"Path": "/PedidoVendMovil",
+		"OutputPath": "/MT_PedidoVendMovilResp/T_PedidoVendMovilResp/0/T_Cabecera",
+		"RequestProperties": {
+			"Method": "PUT",
+			"Body": {
+				"T_PedVendMovil": [
+					{
+						"Pedido": "#Page:ConsultaPedido/#Control:fc_nopedido/#Value",
+						"Vendedor": "#Page:ConsultaPedido/#Control:fc_pernr/#Value",
+						"Campocab1": "#Page:ConsultaPedido/#Control:fc_sociedad/#Value"
+					}
+				]
+			},
+			"Headers": {
+				"Content-Type": "application/json"
+			}
+		}
+	}
+}

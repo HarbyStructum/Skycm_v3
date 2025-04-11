@@ -1,0 +1,10 @@
+{
+	"_Type": "Action.Type.OfflineOData.Upload",
+	"ActionResult": {
+		"_Name": "UploadonlyV"
+	},
+	"OnSuccess": "/Skycm_v3/Actions/Visitas/Download_visitas.action",
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Subiendo su Visita...",
+	"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service"
+}

@@ -1,0 +1,6 @@
+{
+	"DestinationName": "Rest_Inventario",
+	"OfflineEnabled": false,
+	"SourceType": "Mobile",
+	"RestService": true
+}

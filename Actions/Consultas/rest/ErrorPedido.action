@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "ErrorPedido"
+	},
+	"Message": "#ActionResults:ResultRest/error",
+	"Title": "ATENCION",
+	"OKCaption": "OK"
+}

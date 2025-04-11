@@ -1,0 +1,8 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "error_campo"
+	},
+	"Message": "El campo Nit es obligatorio",
+	"Title": "Error"
+}

@@ -1,0 +1,8 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "nav_detalleitemspedido"
+	},
+	"PageToOpen": "/Skycm_v3/Pages/Consultas/DetalleItemsPedido.page",
+	"BackStackVisible": true
+}

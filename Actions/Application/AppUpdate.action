@@ -1,0 +1,8 @@
+{
+    "_Type": "Action.Type.ApplicationUpdate",
+    "ActionResult": {
+        "_Name": "AppUpdate"
+    },
+    "OnFailure": "/Skycm_v3/Rules/Application/AppUpdateFailure.js",
+    "OnSuccess": "/Skycm_v3/Rules/Application/AppUpdateSuccess.js"
+}

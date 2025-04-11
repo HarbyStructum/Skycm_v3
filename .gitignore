@@ -1,0 +1,31 @@
+# Archivos y carpetas generadas automáticamente
+*.DS_Store
+node_modules/
+dist/
+build/
+out/
+
+# Archivos de configuración local
+.env
+*.log
+
+# Configuración específica del entorno
+.settings/
+.vscode/
+*.launch
+*.swp
+
+# Archivos de BAS
+.project
+.che/
+
+# Archivos generados por el empaquetado MDK
+*.App_Descriptor.xml
+*.mdkproject
+
+# Metadata generada temporalmente
+*.metadata
+*.tmp
+
+# Carpetas de plataformas
+platforms/

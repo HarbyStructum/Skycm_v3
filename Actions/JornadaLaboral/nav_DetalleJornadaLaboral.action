@@ -1,0 +1,10 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "nav_DetalleJornadaLaboral"
+	},
+	"PageToOpen": "/Skycm_v3/Pages/Jornadalaboral/DetalleJornadaLaboral.page",
+	"BackStackVisible": true,
+	"ModalPage": true,
+	"NavigationType": "Inner"
+}

@@ -1,0 +1,7 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "Nav_DetalleVisitarealizadas"
+	},
+	"PageToOpen": "/Skycm_v3/Pages/GestionVisitas/DetalleVisitaRealizada.page"
+}

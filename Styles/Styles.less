@@ -1,0 +1,96 @@
+@mdkYellow1: #104732;
+@mdkRed1: #0e0e0e;
+
+
+//// This style applies to all the ActionBars in the application
+ActionBar {
+    color: white;
+    background-color: #02cca4ad;
+}
+
+//// This style applies to all the ToolBars in the application
+ToolBar {
+    color: white;
+    background-color: rgb(183, 183, 183); /* Android */
+    bartintcolor: rgb(183, 183, 183);     /* iOS */
+}
+
+//// LogoutToolbarItem is tool bar item for Logout in Main.page
+#LogoutToolbarItem  {
+    color: rgb(244, 253, 253);
+}
+
+//// UploadToolbarItem is tool bar item for Sync in Main.page
+#UploadToolbarItem  {
+    color: blue;
+}
+
+//// By-Class style: These style classes can be referenced from rules and set using ClientAPI setStyle function
+//// below snippet is to style Customers button on Main.page
+.MyCustomerButton{
+  font-color: @mdkRed1;
+  background-color: rgba(29, 210, 210, 0.785);
+}
+
+//// below snippet is to style Title property of an Object Table control in Customers_List.page
+.ObjectTableTitle {
+ color: @mdkYellow1;
+}
+
+
+//// below snippet is to style Object Header control in Customers_Detail.page
+
+/* Object Header - BodyText */
+.objectHeaderBodyText {
+  color: #061814;
+}
+
+/* Object Header - Description */
+.objectHeaderDescription {
+  color: rgb(245, 248, 249);
+}
+
+/* Object Header - Footnote */
+.objectHeaderFootNote {
+  color: green;
+}
+
+/* Object Header - Headline */
+.objectHeaderHeadline {
+  color: #ff00ff;
+}
+
+/* Object Header - Background */
+.objectHeaderBackground {
+background-color: #78f4dd;
+}
+
+/* Object Header - StatusText */
+.objectHeaderStatus {
+  color: red;
+  font-style: italic;
+  font-size: 18;
+}
+
+/* Object Header - Subhead */
+.objectHeaderSubhead {
+  color: rgb(5, 48, 41);
+}
+
+/* Object Header - SubstatusText */
+.objectHeaderSubStatus {
+  color: rgb(5, 48, 41);
+  font-style: italic;
+  font-size: 18;
+}
+
+/*Contact cell*/
+.contactCell{
+  color: rgb(5, 48, 41);
+  font-style: oblique;
+  font-size: 18;
+}
+
+.ObjectCardStatusText::part(status) {
+  font-color: #f73e3e;
+}

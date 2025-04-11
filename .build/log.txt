@@ -1,0 +1,2 @@
+Pass:
+Generated bundle file /home/user/projects/Skycm_v3/.build/Skycm_v3/.build/uploadBundle.zip

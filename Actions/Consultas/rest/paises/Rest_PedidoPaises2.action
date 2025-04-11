@@ -1,0 +1,26 @@
+{
+	"_Type": "Action.Type.RestService.SendRequest",
+	"ActionResult": {
+		"_Name": "ResultRest"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Consultas/rest/ErrorPedido.action",
+	"OnSuccess": "/Skycm_v3/Rules/consultas/paises/Restpedidopais.js",
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Realizando consulta....",
+	"Target": {
+		"Service": "/Skycm_v3/Services/Rest_Paises.service",
+		"Path": "/PedidoVendMovilPais",
+		"OutputPath": "/MT_PedidoVendMovilResp/T_PedidoVendMovilResp/0/T_Cabecera",
+		"RequestProperties": {
+			"Method": "PUT",
+			"Body": {
+				"T_PedVendMovil": [
+					{
+						"Pedido": "#Page:ConsultaPedido/#Control:fc_nopedido/#Value",
+						"Vendedor": "#Page:ConsultaPedido/#Control:fc_pernr2/#Value"
+					}
+				]
+			}
+		}
+	}
+}

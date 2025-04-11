@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "msj_VisitaActivaAdver"
+	},
+	"Message": "Tienes una visita activa debes finalizarla para iniciar otra!",
+	"Title": "Visita activa!!!",
+	"OKCaption": "Ok"
+}

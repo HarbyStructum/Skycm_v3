@@ -1,0 +1,153 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_nit",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Nit:",
+							"PlaceHolder": "Digite el nit del cliente",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_nombre",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Nombre:",
+							"PlaceHolder": "Digite el nombre del cliente",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_direccion",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Direccion: ",
+							"PlaceHolder": "Digite la direccion",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_telefono",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Telefono:",
+							"PlaceHolder": "Digite el telefono del cliente",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_email",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Email:",
+							"PlaceHolder": "Digite el email del cliente",
+							"KeyboardType": "Email",
+							"AlternateInput": "None",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"_Type": "Control.Type.FormCell.ListPicker",
+							"_Name": "fc_tipocliente",
+							"IsVisible": true,
+							"Separator": true,
+							"AllowMultipleSelection": false,
+							"AllowEmptySelection": true,
+							"Caption": "Tipo cliente",
+							"DataPaging": {
+								"ShowLoadingIndicator": false,
+								"PageSize": 50
+							},
+							"PickerPrompt": "Seleccione una opcion.",
+							"IsSelectedSectionEnabled": false,
+							"IsPickerDismissedOnSelection": true,
+							"IsSearchCancelledAfterSelection": false,
+							"AllowDefaultValueIfOneItem": false,
+							"IsEditable": true,
+							"PickerItems": [
+								"Femenino",
+								"Masculino",
+								"infantil",
+								"Baño",
+								"Interior",
+								"Industrial",
+								"Deportivo",
+								"Pijamero",
+								"Dotaciones",
+								"Control"
+							]
+						},
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_longitud",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Longitud:",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_latitud",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Latitud:",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"_Type": "Control.Type.FormCell.Button",
+							"_Name": "FormCellButton0",
+							"IsVisible": true,
+							"Separator": true,
+							"Title": "Guardar",
+							"Alignment": "Center",
+							"ButtonType": "Primary",
+							"Semantic": "Tint",
+							"Image": "sap-icon://save",
+							"ImagePosition": "Leading",
+							"Enabled": true,
+							"OnPress": "/Skycm_v3/Actions/Visitas/check_prospecto.action"
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "FormClienteProspecto",
+	"Caption": "Crear Prospecto",
+	"PrefersLargeCaption": true,
+	"OnLoaded": "/Skycm_v3/Rules/Visitas/Geo.rule.js"
+}

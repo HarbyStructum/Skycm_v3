@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "nav_FormClienteProspecto"
+	},
+	"PageToOpen": "/Skycm_v3/Pages/Visitas/FormClienteProspecto.page",
+	"BackStackVisible": true,
+	"ModalPage": true
+}

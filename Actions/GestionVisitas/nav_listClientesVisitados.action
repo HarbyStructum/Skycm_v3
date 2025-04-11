@@ -1,0 +1,7 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "nav_listClientesVisitados"
+	},
+	"PageToOpen": "/Skycm_v3/Pages/GestionVisitas/ListClientesVisitados.page"
+}

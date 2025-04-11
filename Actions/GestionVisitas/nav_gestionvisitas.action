@@ -1,0 +1,8 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "nav_gestionvisitas"
+	},
+	"PageToOpen": "/Skycm_v3/Pages/GestionVisitas/GestionVisitas.page",
+	"BackStackVisible": true
+}

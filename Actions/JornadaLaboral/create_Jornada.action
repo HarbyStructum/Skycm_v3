@@ -1,0 +1,21 @@
+{
+	"_Type": "Action.Type.ODataService.CreateEntity",
+	"ActionResult": {
+		"_Name": "create_Jornada"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Visitas/msj_errorJornadaLaboral.action",
+	"OnSuccess": "/Skycm_v3/Actions/JornadaLaboral/msj_JornadaLaboralIniciada.action",
+	"Target": {
+		"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+		"EntitySet": "WORKDAY"
+	},
+	"Properties": {
+		"ID_JORNADA": "#Page:ConfirmarJornadaLaboral/#Control:FC_IDJORNADA/#Value",
+		"PERNR": "0",
+		"PERNR_SCP": "#Page:ConfirmarJornadaLaboral/#Control:fc_pernr_scp/#Value",
+		"EMAIL_VEND": "#Application/#AppData/UserId",
+		"FECHA": "#Page:ConfirmarJornadaLaboral/#Control:FC_FECHAJORNADA/#Value",
+		"HORA_INICIO": "#Page:ConfirmarJornadaLaboral/#Control:FC_HORAJORNADA/#Value",
+		"ESTADO": "ACTIVO"
+	}
+}

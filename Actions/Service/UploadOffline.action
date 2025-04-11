@@ -1,0 +1,9 @@
+{
+    "Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+    "_Type": "Action.Type.OfflineOData.Upload",
+    "ActionResult": {
+        "_Name": "sync"
+    },
+    "OnSuccess": "/Skycm_v3/Actions/Service/DownloadStartedMessage.action",
+    "OnFailure": "/Skycm_v3/Actions/Service/SyncFailureMessage.action"
+}

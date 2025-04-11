@@ -1,0 +1,302 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"Target": {
+				"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+				"EntitySet": "CLIENTEINFO",
+				"QueryOptions": "$filter=KUNNR eq '{KUNNR}'"
+			},
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"Value": "/Skycm_v3/Rules/Visitas/GenerarIdVisita.js",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_idVisita",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "ID",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "{KUNNR}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FC_Destinatario",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Destinatario",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": true
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": true,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"_Type": "Control.Type.FormCell.ListPicker",
+							"_Name": "FC_objetivoVisita",
+							"IsVisible": true,
+							"Separator": true,
+							"AllowMultipleSelection": false,
+							"AllowEmptySelection": true,
+							"Caption": "Objetivo Visita",
+							"DataPaging": {
+								"ShowLoadingIndicator": false,
+								"PageSize": 50
+							},
+							"PickerPrompt": "Please select one single item",
+							"IsSelectedSectionEnabled": false,
+							"IsPickerDismissedOnSelection": true,
+							"IsSearchCancelledAfterSelection": false,
+							"AllowDefaultValueIfOneItem": false,
+							"IsEditable": true,
+							"FilterProperty": "\"\"",
+							"PickerItems": {
+								"Target": {
+									"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+									"EntitySet": "OBJEVISIT"
+								},
+								"DisplayValue": "{NOM_OBJE}",
+								"ReturnValue": "{ID_OBJE}"
+							}
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell1"
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": true,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"Value": "PROS",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FC_sociedad",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Sociedad: ",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "{KUNNR}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_idcliente",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "ID Cliente:",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "{NACHN}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_nombrecliente",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Nombre Cliente:",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "{LATITUD}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_LatitudCliente",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Latitud",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "{LONGITUD}",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_longitudCliente",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Longitud",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell2"
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"Value": "/Skycm_v3/Rules/Application/GetFecha.js",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "Fc_Fecha",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Fecha",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "/Skycm_v3/Rules/Application/GetAnio.js",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FC_Anio",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Año",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "/Skycm_v3/Rules/Application/GetMes.js",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FC_Mes",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Mes",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "/Skycm_v3/Rules/Application/GetHora.js",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "FC_Hora",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Hora",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell4"
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": true,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"Value": "#Application/#AppData/UserId",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_s-userVendedor",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Pernr_scp",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_latitud",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "Latitud",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": true
+						},
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_longitud",
+							"IsVisible": true,
+							"Separator": true,
+							"Caption": "longitud",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": true
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell3"
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "VisitaConfirmarProspectos",
+	"Caption": "VisitaConfirmarProspectos",
+	"PrefersLargeCaption": true,
+	"OnLoaded": "/Skycm_v3/Rules/Visitas/Geo.rule.js",
+	"ActionBar": {
+		"Items": [
+			{
+				"_Name": "ActionBarItem0",
+				"Caption": "Check in",
+				"Position": "Right",
+				"IsIconCircular": false,
+				"Visible": true,
+				"OnPress": "/Skycm_v3/Actions/Visitas/CreateVisitaProspecto.action"
+			}
+		],
+		"_Name": "ActionBar1"
+	}
+}

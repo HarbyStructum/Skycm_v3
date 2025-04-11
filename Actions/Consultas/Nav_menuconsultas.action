@@ -1,0 +1,8 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "Nav_menuconsultas"
+	},
+	"PageToOpen": "/Skycm_v3/Pages/Consultas/MenuConsultas.page",
+	"BackStackVisible": true
+}

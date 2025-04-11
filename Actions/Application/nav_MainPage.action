@@ -1,0 +1,10 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "nav_MainPage"
+	},
+	"PageToOpen": "/Skycm_v3/Pages/Main.page",
+	"BackStackVisible": true,
+	"ClearHistory": true,
+	"NavigationType": "Inner"
+}

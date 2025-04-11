@@ -1,0 +1,7 @@
+{
+	"_Type": "Action.Type.ProgressBanner",
+	"OnSuccess": "/Skycm_v3/Rules/Visitas/ValidarDistancia.js",
+	"Message": "Calculando ubicacion espere un momento...",
+	"CompletionTimeout": 50,
+	"Animated": true
+}

@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "msj_JornadaLaboralActiva"
+	},
+	"Message": "ya tienes una jornada laboral activa...",
+	"Title": "Jornada activa!!!",
+	"OKCaption": "Ok"
+}

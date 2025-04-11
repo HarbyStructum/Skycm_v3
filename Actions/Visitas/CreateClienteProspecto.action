@@ -1,0 +1,25 @@
+{
+	"_Type": "Action.Type.ODataService.CreateEntity",
+	"ActionResult": {
+		"_Name": "TerminarVisitaActiva"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Visitas/msj_errorcerrarvisita.action",
+	"OnSuccess": "/Skycm_v3/Actions/Visitas/msj_ClienteProspectoCreado.action",
+	"Target": {
+		"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+		"EntitySet": "CLIENTE_PROS"
+	},
+	"Properties": {
+		"KUNNR": "#Page:FormClienteProspecto/#Control:fc_nit/#Value",
+		"PERNR_SCP": "#Application/#ClientData/#Property:UserId",
+		"EMAIL_VEND": "#Application/#AppData/UserId",
+		"NACHN": "#Page:FormClienteProspecto/#Control:fc_nombre/#Value",
+		"TEL": "#Page:FormClienteProspecto/#Control:fc_telefono/#Value",
+		"EMAIL": "#Page:FormClienteProspecto/#Control:fc_email/#Value",
+		"ADDRES": "#Page:FormClienteProspecto/#Control:fc_direccion/#Value",
+		"TIPO_CLI": "#Page:FormClienteProspecto/#Control:fc_tipocliente/#SelectedValue",
+		"LATITUD": "#Page:FormClienteProspecto/#Control:fc_latitud/#Value",
+		"LONGITUD": "#Page:FormClienteProspecto/#Control:fc_longitud/#Value",
+		"ESTADO": "PROS"
+	}
+}

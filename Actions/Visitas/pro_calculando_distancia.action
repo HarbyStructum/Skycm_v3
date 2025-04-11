@@ -1,0 +1,10 @@
+{
+	"_Type": "Action.Type.ProgressBanner",
+	"ActionResult": {
+		"_Name": "pro_calculando_distancia"
+	},
+	"ShowActivityIndicator": true,
+	"Message": "calculando distancia, espere un momento...!",
+	"CompletionTimeout": 15,
+	"Animated": true
+}

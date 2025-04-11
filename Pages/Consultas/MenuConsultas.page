@@ -1,0 +1,145 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": false,
+						"HeaderSeparator": false,
+						"FooterSeparator": false,
+						"ControlSeparator": false
+					},
+					"_Type": "Section.Type.Image",
+					"_Name": "SectionImage0",
+					"Visible": true,
+					"Image": "/Skycm_v3/Images/keywords.png",
+					"Width": 180,
+					"Height": 180,
+					"Alignment": "Center",
+					"ContentMode": "ScaleToFill",
+					"PaddingTop": 10,
+					"PaddingBottom": 10,
+					"PaddingLeft": 10,
+					"PaddingRight": 10
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": false,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": false
+					},
+					"_Type": "Section.Type.ContactCell",
+					"_Name": "SectionContactCell0",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"ContactCells": [
+						{
+							"ContactCell": {
+								"_Name": "ContactCellItem0",
+								"DetailImage": "/Skycm_v3/Images/order.png",
+								"Headline": "Consultar pedidos",
+								"Subheadline": "Consulte sus pedidos",
+								"Description": "",
+								"Visible": true,
+								"OnPress": "/Skycm_v3/Actions/Consultas/nav_ConPedidos.action"
+							}
+						},
+						{
+							"ContactCell": {
+								"_Name": "ContactCellItem1",
+								"DetailImage": "/Skycm_v3/Images/case.png",
+								"Headline": "Consulta de Cartera",
+								"Subheadline": "Consulte su cartera",
+								"Description": "",
+								"Visible": true,
+								"OnPress": "/Skycm_v3/Actions/Consultas/nav_ConCartera.action"
+							}
+						},
+						{
+							"ContactCell": {
+								"_Name": "ContactCellItem2",
+								"DetailImage": "/Skycm_v3/Images/inventory.png",
+								"Headline": "Consulta Inventario",
+								"Subheadline": "Consulte su inventario",
+								"Description": "",
+								"Visible": true,
+								"OnPress": "/Skycm_v3/Actions/Consultas/nav_ConInventario.action"
+							}
+						}
+					]
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"Controls": [
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_pernr",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "Pernr",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"Value": "/Skycm_v3/Rules/consultas/getPernr2.js",
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_pernr2",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "Pernr 2",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						},
+						{
+							"_Type": "Control.Type.FormCell.SimpleProperty",
+							"_Name": "fc_sociedad",
+							"IsVisible": false,
+							"Separator": true,
+							"Caption": "Sociedad",
+							"PlaceHolder": "PlaceHolder",
+							"Enabled": true,
+							"IsEditable": false
+						}
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "MenuConsultas",
+	"Caption": "Consultas",
+	"PrefersLargeCaption": true,
+	"OnLoaded": "/Skycm_v3/Rules/consultas/getPernr.js",
+	"ActionBar": {
+		"Items": [],
+		"_Name": "ActionBar1"
+	}
+}

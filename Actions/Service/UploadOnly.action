@@ -1,0 +1,10 @@
+{
+	"_Type": "Action.Type.OfflineOData.Upload",
+	"ActionResult": {
+		"_Name": "UploadOnly"
+	},
+	"OnSuccess": "/Skycm_v3/Actions/JornadaLaboral/Download_jornada.action",
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Subiendo visita...",
+	"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service"
+}

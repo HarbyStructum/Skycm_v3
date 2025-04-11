@@ -1,0 +1,29 @@
+{
+	"_Type": "Action.Type.ODataService.CreateEntity",
+	"ActionResult": {
+		"_Name": "CreateVisitaProspecto"
+	},
+	"OnSuccess": "/Skycm_v3/Actions/Application/nav_MainPage.action",
+	"Target": {
+		"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+		"EntitySet": "HISTV"
+	},
+	"Properties": {
+		"ID_VISITA": "#Page:VisitaConfirmarProspectos/#Control:fc_idVisita/#Value",
+		"KUNNR": "#Page:VisitaConfirmarProspectos/#Control:FC_Destinatario/#Value",
+		"KUNN2": "",
+		"BUKRS": "PROS",
+		"NAME1": "#Page:VisitaConfirmarProspectos/#Control:fc_nombrecliente/#Value",
+		"PERNR": "/Skycm_v3/Rules/Visitas/get_pernOnly.js",
+		"PERNR_SCP": "/Skycm_v3/Rules/Visitas/get_pernScponly.js",
+		"EMAIL_VEND": "#Application/#AppData/UserId",
+		"MES": "/Skycm_v3/Rules/Application/GetMes.js",
+		"ANO": "/Skycm_v3/Rules/Application/GetAnio.js",
+		"HORA": "/Skycm_v3/Rules/Application/GetHora.js",
+		"ID_OBJETIVO": "#Page:VisitaConfirmarProspectos/#Control:FC_objetivoVisita/#SelectedValue",
+		"ESTADO": "ACTIVA",
+		"FECHA": "/Skycm_v3/Rules/Application/GetFecha.js",
+		"LON_VENDOR": "#Page:VisitaConfirmarProspectos/#Control:fc_longitudCliente/#Value",
+		"LAT_VENDOR": "#Page:VisitaConfirmarProspectos/#Control:fc_LatitudCliente/#Value"
+	}
+}

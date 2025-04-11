@@ -1,0 +1,107 @@
+{
+	"Controls": [
+		{
+			"FilterFeedbackBar": {
+				"ShowAllFilters": false,
+				"_Type": "Control.Type.FilterFeedbackBar"
+			},
+			"_Type": "Control.Type.SectionedTable",
+			"_Name": "SectionedTable0",
+			"Sections": [
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"_Type": "Section.Type.KPISection",
+					"_Name": "SectionKPISection0",
+					"Visible": true,
+					"KPIItems": [
+						{
+							"_Name": "KPIItem0",
+							"CaptionLabel": "% Clientes visitados",
+							"MetricItems": [
+								{
+									"Value": "/Skycm_v3/Rules/Visitas/porcentaje_visitas.js",
+									"TrailingUnit": "%",
+									"_Name": "KPIItem0MetricItem0"
+								}
+							],
+							"Icon": "/Skycm_v3/Images/best-customer-experience.png",
+							"ShowProgress": true,
+							"Progress": 100
+						}
+					]
+				},
+				{
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"_Type": "Section.Type.ContactCell",
+					"_Name": "SectionContactCell1",
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"ContactCells": [
+						{
+							"ContactCell": {
+								"_Name": "ContactCellItem0",
+								"DetailImage": "sap-icon://detail-view",
+								"Headline": "Detalle de visitas calendario",
+								"Subheadline": "Ver detalle de visitas",
+								"Description": "",
+								"Visible": true,
+								"OnPress": "/Skycm_v3/Actions/GestionVisitas/nav_detallegestion.action"
+							}
+						},
+						{
+							"ContactCell": {
+								"_Name": "ContactCellItem1",
+								"DetailImage": "sap-icon://detail-view",
+								"Headline": "Visitas por cliente",
+								"Subheadline": "Ver visitas por cliente",
+								"Description": "",
+								"Visible": true,
+								"OnPress": "/Skycm_v3/Actions/GestionVisitas/nav_listClientesVisitados.action"
+							}
+						}
+					]
+				},
+				{
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"Separators": {
+						"TopSectionSeparator": false,
+						"BottomSectionSeparator": true,
+						"HeaderSeparator": true,
+						"FooterSeparator": true,
+						"ControlSeparator": true
+					},
+					"_Type": "Section.Type.Image",
+					"_Name": "SectionImage0",
+					"Visible": true,
+					"Image": "/Skycm_v3/Images/atencion-al-cliente.png",
+					"Width": 150,
+					"Height": 150,
+					"Alignment": "Center",
+					"ContentMode": "ScaleAspectFit",
+					"PaddingTop": 40,
+					"PaddingBottom": 15
+				}
+			]
+		}
+	],
+	"_Type": "Page",
+	"_Name": "GestionVisitas",
+	"Caption": "Gestion de Visitas",
+	"PrefersLargeCaption": true
+}

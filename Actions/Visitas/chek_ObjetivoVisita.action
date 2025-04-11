@@ -1,0 +1,11 @@
+{
+	"_Type": "Action.Type.CheckRequiredFields",
+	"ActionResult": {
+		"_Name": "chek_ObjetivoVisita"
+	},
+	"OnFailure": "/Skycm_v3/Actions/Visitas/msj_seleccionarobjetivovisita.action",
+	"OnSuccess": "/Skycm_v3/Rules/Visitas/ValidarDistancia.js",
+	"RequiredFields": [
+		"FC_objetivoVisita"
+	]
+}

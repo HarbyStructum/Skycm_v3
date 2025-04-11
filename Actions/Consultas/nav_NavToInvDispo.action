@@ -1,0 +1,8 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "nav_NavToInvDispo"
+	},
+	"PageToOpen": "/Skycm_v3/Pages/Consultas/Inven_Ord_DISPONIBLE.page",
+	"BackStackVisible": true
+}

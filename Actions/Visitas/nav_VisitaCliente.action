@@ -1,0 +1,9 @@
+{
+	"_Type": "Action.Type.Navigation",
+	"ActionResult": {
+		"_Name": "nav_VisitaCliente"
+	},
+	"ValidationRule": "/Skycm_v3/Rules/Visitas/ValidarJornadalaboralVisita.js",
+	"PageToOpen": "/Skycm_v3/Pages/Visitas/VisitaCliente.page",
+	"BackStackVisible": true
+}

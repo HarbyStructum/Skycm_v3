@@ -1,0 +1,16 @@
+{
+	"_Type": "Action.Type.OfflineOData.Download",
+	"ActionResult": {
+		"_Name": "Download_jornada"
+	},
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Sincronizando sus Jornadas",
+	"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+	"DefiningRequests": [
+		{
+			"Name": "WORKDAY",
+			"Query": "WORKDAY",
+			"AutomaticallyRetrievesStreams": false
+		}
+	]
+}
