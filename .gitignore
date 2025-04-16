@@ -29,3 +29,5 @@ out/
 
 # Carpetas de plataformas
 platforms/
+*.project.json
+
