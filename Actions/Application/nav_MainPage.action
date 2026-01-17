@@ -6,5 +6,9 @@
 	"PageToOpen": "/Skycm_v3/Pages/Main.page",
 	"BackStackVisible": true,
 	"ClearHistory": true,
-	"NavigationType": "Inner"
+	"NavigationType": "Inner",
+	"Transition": {
+		"Curve": "Linear",
+		"Name": "Fade"
+	}
 }

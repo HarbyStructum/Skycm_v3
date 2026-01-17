@@ -6,5 +6,6 @@
 	"OnSuccess": "/Skycm_v3/Actions/Application/nav_MainPage.action",
 	"Message": "Visita iniciada con exito!!!",
 	"Duration": 100,
-	"Animated": true
+	"Animated": true,
+	"Semantic": "Positive"
 }

@@ -5,6 +5,7 @@
 	},
 	"OnSuccess": "/Skycm_v3/Actions/JornadaLaboral/close_modal_jornada.action",
 	"Message": "Jornada finalizada con exito!!!",
-	"Duration": 60,
-	"Animated": true
+	"Duration": 100,
+	"Animated": true,
+	"Semantic": "Positive"
 }

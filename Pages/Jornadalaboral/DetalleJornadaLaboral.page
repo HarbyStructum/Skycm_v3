@@ -22,7 +22,7 @@
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "FC_IDJORDETALLE",
 							"IsVisible": true,
-							"Separator": true,
+							"Separator": false,
 							"Caption": "ID",
 							"PlaceHolder": "PlaceHolder",
 							"Enabled": true,
@@ -33,7 +33,7 @@
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "FCHORAINIDETALLE",
 							"IsVisible": true,
-							"Separator": true,
+							"Separator": false,
 							"Caption": "Hora inicio",
 							"PlaceHolder": "PlaceHolder",
 							"Enabled": true,
@@ -44,7 +44,7 @@
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "FC_HORAFINJOR",
 							"IsVisible": true,
-							"Separator": true,
+							"Separator": false,
 							"Caption": "Hora fin",
 							"PlaceHolder": "PlaceHolder",
 							"Enabled": true,
@@ -54,8 +54,8 @@
 							"Value": "/Skycm_v3/Rules/Application/JornadaLaboral/CalcularDuracionJornada.js",
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "FCDURACIONJOR",
-							"IsVisible": true,
-							"Separator": true,
+							"IsVisible": false,
+							"Separator": false,
 							"Caption": "DURACION",
 							"PlaceHolder": "PlaceHolder",
 							"Enabled": true,
@@ -88,9 +88,9 @@
 				"Position": "Right",
 				"IsIconCircular": false,
 				"Visible": true,
-				"OnPress": "/Skycm_v3/Actions/JornadaLaboral/msj_ConfirmacionCheck_out.action"
+				"OnPress": "/Skycm_v3/Rules/Visitas/ValidarVisitaActivaJor.js"
 			}
 		],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar0"
 	}
 }

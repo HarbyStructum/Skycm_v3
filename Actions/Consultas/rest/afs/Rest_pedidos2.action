@@ -9,18 +9,15 @@
 	"ActivityIndicatorText": "Realizando consulta 2....",
 	"Target": {
 		"Service": "/Skycm_v3/Services/Rest_Inventario.service",
-		"Path": "/PedidoVendMovil",
-		"OutputPath": "/MT_PedidoVendMovilResp/T_PedidoVendMovilResp/0/T_Cabecera",
+		"Path": "/PedVendedor/rest",
+		"OutputPath": "/T_PedidoVendMovilResp/T_Cabecera",
 		"RequestProperties": {
 			"Method": "PUT",
 			"Body": {
-				"T_PedVendMovil": [
-					{
-						"Pedido": "#Page:ConsultaPedido/#Control:fc_nopedido/#Value",
-						"Vendedor": "#Page:ConsultaPedido/#Control:fc_pernr2/#Value",
-						"Campocab1": "#Page:ConsultaPedido/#Control:fc_sociedad/#Value"
-					}
-				]
+				"T_PED_VEND_MOVIL":{
+					"PEDIDO": "#Page:ConsultaPedido/#Control:fc_nopedido/#Value",
+					"VENDEDOR": "#Page:ConsultaPedido/#Control:fc_pernr2/#Value"
+				}
 			},
 			"Headers": {
 				"Content-Type": "application/json"

@@ -22,7 +22,7 @@
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "FC_IDJORNADA",
 							"IsVisible": true,
-							"Separator": true,
+							"Separator": false,
 							"Caption": "ID",
 							"PlaceHolder": "PlaceHolder",
 							"Enabled": true,
@@ -33,7 +33,7 @@
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "fc_pernr_scp",
 							"IsVisible": true,
-							"Separator": true,
+							"Separator": false,
 							"Caption": "PERNR_SCP",
 							"PlaceHolder": "PlaceHolder",
 							"Enabled": true,
@@ -44,7 +44,7 @@
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "FC_FECHAJORNADA",
 							"IsVisible": true,
-							"Separator": true,
+							"Separator": false,
 							"Caption": "FECHA",
 							"PlaceHolder": "PlaceHolder",
 							"Enabled": true,
@@ -55,7 +55,7 @@
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "FC_HORAJORNADA",
 							"IsVisible": true,
-							"Separator": true,
+							"Separator": false,
 							"Caption": "HORA",
 							"PlaceHolder": "PlaceHolder",
 							"Enabled": true,
@@ -89,5 +89,9 @@
 	"_Type": "Page",
 	"_Name": "ConfirmarJornadaLaboral",
 	"Caption": "ConfirmarJornadaLaboral",
-	"PrefersLargeCaption": true
+	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Items": [],
+		"_Name": "ActionBar1"
+	}
 }

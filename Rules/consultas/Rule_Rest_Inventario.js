@@ -9,23 +9,27 @@ export default function Rule_Rest_Inventario(context) {
 	let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
 	var dialog = context.nativescript.uiDialogsModule;
 	//	var listpickerRef= context.evaluateTargetPath('#Page:Inventario/#Control:FC_List_Referencia/#SelectedValue');
-	var referencia = resultado.Referencia;
+	var referencia = resultado?.Referencia;
 	var sociedad = context.evaluateTargetPath('#Page:ConsultaInventario/#Control:fc_sociedad/#Value');
+	var listpick = context.evaluateTargetPath("#Page:ConsultaInventario/#Control:fc_referencias/#SelectedValue");
 	//	if(referencia == listpickerRef && resultado.length>0){
 	var error = resultado.T_Mensaje.TipoMsj
 	var errorTextoMensaje = resultado.T_Mensaje.TextoMsj
 	var listpickerOrden = context.evaluateTargetPath('#Page:ConsultaInventario/#Control:Fc_ordenar/#SelectedValue'); //LINO
 	//let color = context.evaluateTargetPath('#Page:ConsultaInventario/#Control:fc_color/#Value').trimStart();
 	//color.toUpperCase();
-	var Listado = resultado.T_Detalle;
-
+	var Listado = resultado?.T_Detalle;
 	clientData.ListadoDes = resultado.T_Detalle;
 
 	clientData.Referencia = referencia;
 
-	if (Listado.length < 0) {
-
-		dialog.alert("No se recuperaron registros para la referencia seleccionada")
+	if (!Listado) {
+		dialog.alert({
+			title: 'Atención!',
+			message: `La referencia (${listpick}) no se encuentra asignada a su portafolio`,
+			okButtonText: 'OK',
+			cancelable: true,
+		})
 
 	} else {
 

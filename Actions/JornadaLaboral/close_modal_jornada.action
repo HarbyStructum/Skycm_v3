@@ -3,7 +3,8 @@
 	"ActionResult": {
 		"_Name": "close_modal_jornada"
 	},
-	"OnSuccess": "/Skycm_v3/Actions/Service/UploadOnly.action",
+	"OnSuccess": "/Skycm_v3/Actions/JornadaLaboral/msj_jornada_finalizada.action",
+	"DismissModal": "Action.Type.ClosePage.Completed",
 	"CancelPendingActions": false,
 	"NavigateBackToPage": "Main"
 }

@@ -8,8 +8,9 @@ export default function Rest_Cartera(context) {
 	
 	var actionResult = context.getActionResult("ResultRest");
 	var resultado = actionResult.data;
+	//dialog.alert(JSON.stringify(resultado));
 	//var error = resultado.T_Mensaje.TipoMsj;
-	var errorTextoMensaje= resultado.TextoMsj
+	var errorTextoMensaje= resultado.texto_msj
 
      	var message = ` ¡${errorTextoMensaje}!`;
 		return context.executeAction({

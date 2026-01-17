@@ -1,9 +1,12 @@
 {
 	"_Type": "Action.Type.ODataService.UpdateEntity",
 	"ActionResult": {
-		"_Name": "Cerrar_jornada"
+		"_Name": "create_Jornada"
 	},
-	"OnSuccess": "/Skycm_v3/Actions/JornadaLaboral/msj_JornadaFinalizada.action",
+	"OnFailure": "/Skycm_v3/Actions/Visitas/msj_errorJornadaLaboral.action",
+	"OnSuccess": "/Skycm_v3/Actions/JornadaLaboral/close_modal_jornada.action",
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Finalizando Jornada laboral...",
 	"Target": {
 		"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
 		"EntitySet": "WORKDAY",

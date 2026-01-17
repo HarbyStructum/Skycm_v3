@@ -8,6 +8,14 @@
     </edmx:Reference>
     <edmx:DataServices>
         <Schema Namespace="Catalog" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <Annotation Term="Core.Links">
+                <Collection>
+                    <Record>
+                        <PropertyValue Property="rel" String="author"/>
+                        <PropertyValue Property="href" String="https://cap.cloud.sap"/>
+                    </Record>
+                </Collection>
+            </Annotation>
             <EntityContainer Name="EntityContainer">
                 <EntitySet Name="CLIENTE_PROS" EntityType="Catalog.CLIENTE_PROS"/>
                 <EntitySet Name="CLIENTEINFO" EntityType="Catalog.CLIENTEINFO"/>
@@ -34,7 +42,7 @@
                 <Property Name="NACHN" Type="Edm.String" MaxLength="100"/>
                 <Property Name="TEL" Type="Edm.String" MaxLength="30"/>
                 <Property Name="EMAIL" Type="Edm.String" MaxLength="100"/>
-                <Property Name="ADDRES" Type="Edm.String" MaxLength="50"/>
+                <Property Name="ADDRES" Type="Edm.String" MaxLength="100"/>
                 <Property Name="TIPO_CLI" Type="Edm.String" MaxLength="50"/>
                 <Property Name="LATITUD" Type="Edm.String" MaxLength="50"/>
                 <Property Name="LONGITUD" Type="Edm.String" MaxLength="50"/>
@@ -260,6 +268,9 @@
                 <Property Name="PERNR" Type="Edm.String" MaxLength="100" Nullable="false"/>
                 <Property Name="BUKRS" Type="Edm.String" MaxLength="100" Nullable="false"/>
             </EntityType>
+            <Annotations Target="Catalog.CLIENTE_PROS/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
             <Annotations Target="Catalog.CLIENTE_PROS/createdAt">
                 <Annotation Term="Core.Computed" Bool="true"/>
             </Annotations>

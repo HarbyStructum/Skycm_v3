@@ -9,16 +9,16 @@
 	"ActivityIndicatorText": "Realizando Consulta...!",
 	"Target": {
 		"Service": "/Skycm_v3/Services/Rest_Inventario.service",
-		"Path": "/InvSkyVMovil",
-		"OutputPath": "/MT_InvSkyVMovilAfsResp/T_InvSkyVMovilAfsResp/0/T_CabeceraInvSkyVMovil",
+		"Path": "/inventarioskyvmovil/rest",
+		"OutputPath": "/T_InvSkyVMovilAfsResp/T_CabeceraInvSkyVMovil",
 		"RequestProperties": {
 			"Method": "PUT",
 			"Body": {
-				"T_InvSkyVMovilAfs": [
+				"T_INVSKYVMOVILAFS": [
 					{
-						"Referencia": "#Page:ConsultaInventario/#Control:fc_referencias/#SelectedValue",
-						"Vendedor": "#Page:ConsultaInventario/#Control:fc_pernr/#Value",
-						"Campocab1": "#Page:ConsultaInventario/#Control:fc_sociedad/#Value"
+						"REFERENCIA": "#Page:ConsultaInventario/#Control:fc_referencias/#SelectedValue",
+						"VENDEDOR": "#Page:ConsultaInventario/#Control:fc_pernr/#Value",
+						"CAMPOCAB1": "#Page:ConsultaInventario/#Control:fc_sociedad/#Value"
 					}
 				]
 			},

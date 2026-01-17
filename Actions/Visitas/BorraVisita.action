@@ -1,0 +1,12 @@
+{
+	"_Type": "Action.Type.ODataService.DeleteEntity",
+	"ActionResult": {
+		"_Name": "BorraVisita"
+	},
+	"OnSuccess": "/Skycm_v3/Actions/Visitas/Nav_vis_main.action",
+	"Target": {
+		"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
+		"EntitySet": "HISTV",
+		"ReadLink": "{@odata.readLink}"
+	}
+}

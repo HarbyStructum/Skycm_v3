@@ -3,5 +3,6 @@
 	"ActionResult": {
 		"_Name": "msj_Errorcrearvisita"
 	},
-	"Message": "{#ActionResults:CreateVisita/error}"
+	"Message": "{#ActionResults:CreateVisita/error}",
+	"OKCaption": "Ok"
 }

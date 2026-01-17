@@ -20,7 +20,7 @@
 					"Target": {
 						"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
 						"EntitySet": "WORKDAY",
-						"QueryOptions": "$top=1&$filter=ESTADO eq 'ACTIVO' and EMAIL_VEND eq '{{#Application/#AppData/UserId}}'"
+						"QueryOptions": "$top=1&$filter=ESTADO eq 'ACTIVO' and EMAIL_VEND eq '{{#Application/#AppData/UserId}}' and FECHA eq '{{#Page:Main/#Control:FC_fechaini/#Value}}'"
 					},
 					"_Name": "SectionContactCell0",
 					"Visible": true,
@@ -30,14 +30,14 @@
 					},
 					"ContactCell": {
 						"Visible": true,
-						"ContextMenu": {
-							"PerformFirstActionWithFullSwipe": true
-						},
 						"DetailImage": "/Skycm_v3/Images/busy.png",
 						"Headline": "{FECHA}",
 						"Subheadline": "{ESTADO}",
 						"Description": "",
-						"OnPress": "/Skycm_v3/Actions/JornadaLaboral/nav_DetalleJornadaLaboral.action"
+						"OnPress": "/Skycm_v3/Actions/JornadaLaboral/nav_DetalleJornadaLaboral.action",
+						"ContextMenu": {
+							"PerformFirstActionWithFullSwipe": true
+						}
 					},
 					"DataPaging": {
 						"ShowLoadingIndicator": false,
@@ -45,10 +45,6 @@
 					}
 				},
 				{
-					"Visible": true,
-					"EmptySection": {
-						"FooterVisible": false
-					},
 					"Separators": {
 						"TopSectionSeparator": false,
 						"BottomSectionSeparator": true,
@@ -56,8 +52,6 @@
 						"FooterSeparator": true,
 						"ControlSeparator": true
 					},
-					"_Type": "Section.Type.FormCell",
-					"_Name": "SectionFormCell0",
 					"Controls": [
 						{
 							"_Type": "Control.Type.FormCell.Button",
@@ -87,7 +81,13 @@
 							"Enabled": true,
 							"OnPress": "/Skycm_v3/Actions/JornadaLaboral/nav_HistoricoJornada.action"
 						}
-					]
+					],
+					"Visible": true,
+					"EmptySection": {
+						"FooterVisible": false
+					},
+					"_Type": "Section.Type.FormCell",
+					"_Name": "SectionFormCell0"
 				}
 			]
 		}
@@ -96,5 +96,9 @@
 	"_Name": "InicioJornadalaboral",
 	"Caption": "Jornada Laboral",
 	"PrefersLargeCaption": true,
-	"OnLoaded": "/Skycm_v3/Actions/JornadaLaboral/Download_jornada.action"
+	"OnLoaded": "/Skycm_v3/Actions/JornadaLaboral/Download_jornada.action",
+	"ActionBar": {
+		"Items": [],
+		"_Name": "ActionBar1"
+	}
 }

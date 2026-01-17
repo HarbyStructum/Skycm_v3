@@ -5,5 +5,6 @@
 	"ActivityIndicatorText": "...",
 	"Message": "Registrando visita espere un momento...",
 	"CompletionMessage": "Visita registrada con éxito!",
-	"CompletionTimeout": 5
+	"CompletionTimeout": 5,
+	"Animated": true
 }

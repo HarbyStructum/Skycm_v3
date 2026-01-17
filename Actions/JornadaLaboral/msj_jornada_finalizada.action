@@ -1,10 +1,11 @@
 {
 	"_Type": "Action.Type.BannerMessage",
 	"ActionResult": {
-		"_Name": "msj_JornadaLaboralIniciada"
+		"_Name": "msj_jornada_finalizada"
 	},
 	"OnSuccess": "/Skycm_v3/Actions/Application/nav_MainPage.action",
-	"Message": "Jornada Laboral iniciada con exito!!!",
+	"Message": "Jornada Finalizada con exito!!!",
 	"Duration": 100,
+	"Animated": true,
 	"Semantic": "Positive"
 }

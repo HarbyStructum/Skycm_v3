@@ -20,6 +20,7 @@
 						{
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "fc_nopedido",
+							"RequiredIndicator": false,
 							"IsVisible": true,
 							"Separator": true,
 							"Caption": "Codigo pedido",
@@ -31,6 +32,7 @@
 							"Value": "#Page:MenuConsultas/#Control:fc_pernr/#Value",
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "fc_pernr",
+							"RequiredIndicator": false,
 							"IsVisible": false,
 							"Separator": true,
 							"Caption": "Pernr1",
@@ -42,6 +44,7 @@
 							"Value": "#Page:MenuConsultas/#Control:fc_pernr2/#Value",
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "fc_pernr2",
+							"RequiredIndicator": false,
 							"IsVisible": false,
 							"Separator": true,
 							"Caption": "Pernr2",
@@ -53,6 +56,7 @@
 							"Value": "#Page:MenuConsultas/#Control:fc_sociedad/#Value",
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "fc_sociedad",
+							"RequiredIndicator": false,
 							"IsVisible": false,
 							"Separator": true,
 							"Caption": "Sociedad",
@@ -78,6 +82,7 @@
 					},
 					"Controls": [
 						{
+							"RequiredIndicator": false,
 							"_Type": "Control.Type.FormCell.Button",
 							"_Name": "FormCellButton0",
 							"IsVisible": true,
@@ -117,5 +122,9 @@
 	"_Type": "Page",
 	"_Name": "ConsultaPedido",
 	"Caption": "Consulta Pedido",
-	"PrefersLargeCaption": true
+	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Items": [],
+		"_Name": "ActionBar1"
+	}
 }

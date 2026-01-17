@@ -5,6 +5,8 @@
 	},
 	"OnFailure": "/Skycm_v3/Actions/Visitas/msj_errorJornadaLaboral.action",
 	"OnSuccess": "/Skycm_v3/Actions/JornadaLaboral/msj_JornadaLaboralIniciada.action",
+	"ShowActivityIndicator": true,
+	"ActivityIndicatorText": "Iniciando Jornada Laboral...",
 	"Target": {
 		"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
 		"EntitySet": "WORKDAY"

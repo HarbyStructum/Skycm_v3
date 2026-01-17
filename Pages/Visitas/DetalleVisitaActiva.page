@@ -163,9 +163,9 @@
 				"Position": "Right",
 				"IsIconCircular": false,
 				"Visible": true,
-				"OnPress": "/Skycm_v3/Actions/Visitas/TerminarVisitaActiva.action"
+				"OnPress": "/Skycm_v3/Rules/Visitas/CerrarVisita.js"
 			}
 		],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar0"
 	}
 }

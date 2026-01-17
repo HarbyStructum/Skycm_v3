@@ -4,5 +4,6 @@
 		"_Name": "msj_errorconexionconrest"
 	},
 	"Message": "#ActionResults:ResultRest/error",
-	"Title": "Atencion!"
+	"Title": "Atencion!",
+	"OKCaption": "Ok"
 }

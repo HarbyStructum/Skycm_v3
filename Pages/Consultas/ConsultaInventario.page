@@ -25,6 +25,7 @@
 							},
 							"_Type": "Control.Type.FormCell.ListPicker",
 							"_Name": "fc_referencias",
+							"RequiredIndicator": false,
 							"IsVisible": true,
 							"Separator": true,
 							"AllowMultipleSelection": false,
@@ -50,9 +51,9 @@
 								"Target": {
 									"Service": "/Skycm_v3/Services/Online_skycm.service",
 									"EntitySet": "INVENTARIO",
-									"QueryOptions": "$filter=PERNR eq '{{#Page:MenuConsultas/#Control:fc_pernr/#Value}}'"
+									"QueryOptions": "/Skycm_v3/Rules/consultas/searchCustom.js"
 								},
-								"DisplayValue": "$(PLT,{MATNR},{MINUS},null)",
+								"DisplayValue": "{MATNR}",
 								"ReturnValue": "{MATNR}"
 							}
 						},
@@ -62,6 +63,7 @@
 							},
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "fc_invent",
+							"RequiredIndicator": false,
 							"IsVisible": false,
 							"Separator": true,
 							"Enabled": true,
@@ -70,6 +72,7 @@
 						{
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "fc_color",
+							"RequiredIndicator": false,
 							"IsVisible": true,
 							"Separator": true,
 							"Caption": "Color",
@@ -80,6 +83,7 @@
 							"Value": "#Page:MenuConsultas/#Control:fc_sociedad/#Value",
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "fc_sociedad",
+							"RequiredIndicator": false,
 							"IsVisible": false,
 							"Separator": true,
 							"Caption": "Sociedad",
@@ -91,6 +95,7 @@
 							"Value": "#Page:MenuConsultas/#Control:fc_pernr/#Value",
 							"_Type": "Control.Type.FormCell.SimpleProperty",
 							"_Name": "fc_pernr",
+							"RequiredIndicator": false,
 							"IsVisible": false,
 							"Separator": true,
 							"Caption": "Pernr",
@@ -107,6 +112,7 @@
 							],
 							"_Type": "Control.Type.FormCell.ListPicker",
 							"_Name": "Fc_ordenar",
+							"RequiredIndicator": false,
 							"IsVisible": true,
 							"Separator": true,
 							"AllowMultipleSelection": false,
@@ -147,6 +153,7 @@
 					},
 					"Controls": [
 						{
+							"RequiredIndicator": false,
 							"_Type": "Control.Type.FormCell.Button",
 							"_Name": "FormCellButton1",
 							"IsVisible": true,
@@ -168,6 +175,7 @@
 							"OnPress": "/Skycm_v3/Actions/Consultas/chek_referenciainventario.action"
 						},
 						{
+							"RequiredIndicator": false,
 							"_Type": "Control.Type.FormCell.Button",
 							"_Name": "FormCellButton0",
 							"IsVisible": true,
@@ -198,5 +206,9 @@
 	"_Type": "Page",
 	"_Name": "ConsultaInventario",
 	"Caption": "Inventario",
-	"PrefersLargeCaption": true
+	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Items": [],
+		"_Name": "ActionBar1"
+	}
 }

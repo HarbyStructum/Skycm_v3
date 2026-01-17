@@ -1,0 +1,11 @@
+{
+	"_Type": "Action.Type.Message",
+	"ActionResult": {
+		"_Name": "msj_visita_activa"
+	},
+	"Message": "Tienes una visita activa, debes finalizarla para cerrar tu jornada.",
+	"Title": "Visita activa",
+	"OKCaption": "Finalizar visita",
+	"OnOK": "/Skycm_v3/Actions/Visitas/nav_VisitaCliente.action",
+	"CancelCaption": "Cancelar"
+}

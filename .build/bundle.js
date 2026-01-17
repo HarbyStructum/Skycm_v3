@@ -11,2639 +11,6 @@ module.exports = "\nJORNADA_LABORAL=Jornada Laboral"
 
 /***/ }),
 
-/***/ "./build.definitions/Skycm_v3/Rules/Application/Actualizar_interval.js":
-/*!*****************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/Actualizar_interval.js ***!
-  \*****************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Actualizar_interval)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function Actualizar_interval(context) {
-	setInterval (function () {context.executeAction ('/Skycm_v3/Rules/Application/ValidarCambios.js');}, 150000);
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/AppUpdateFailure.js":
-/*!**************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/AppUpdateFailure.js ***!
-  \**************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ AppUpdateFailure)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function AppUpdateFailure(clientAPI) {
-    let result = clientAPI.actionResults.AppUpdate.error.toString();
-    var message;
-    console.log(result);
-    if (result.startsWith('Error: Uncaught app extraction failure:')) {
-        result = 'Error: Uncaught app extraction failure:';
-    }
-    if (result.startsWith('Error: LCMS GET Version Response Error Response Status: 404 | Body: 404 Not Found: Requested route')) {
-        result = 'Application instance is not up or running';
-    }
-    if (result.startsWith('Error: LCMS GET Version Response Error Response Status: 404 | Body')) {
-        result = 'Service instance not found.';
-    }
-
-    switch (result) {
-        case 'Service instance not found.':
-            message = 'Mobile App Update feature is not assigned or not running for your application. Please add the Mobile App Update feature, deploy your application, and try again.';
-            break;
-        case 'Error: LCMS GET Version Response Error Response Status: 404 | Body: Failed to find a matched endpoint':
-            message = 'Mobile App Update feature is not assigned to your application. Please add the Mobile App Update feature, deploy your application, and try again.';
-            break;
-        case 'Error: LCMS GET Version Response failed: Error: Optional(OAuth2Error.tokenRejected: The newly acquired or refreshed token got rejected.)':
-            message = 'The Mobile App Update feature is not assigned to your application or there is no Application metadata deployed. Please check your application in Mobile Services and try again.';
-            break;
-        case 'Error: Uncaught app extraction failure:':
-            message = 'Error extracting metadata. Please redeploy and try again.';
-            break;
-        case 'Application instance is not up or running':
-            message = 'Communication failure. Verify that the BindMobileApplicationRoutesToME Application route is running in your BTP space cockpit.';
-            break;
-        default:
-            message = result;
-            break;
-    }
-    return clientAPI.getPageProxy().executeAction({
-        "Name": "/Skycm_v3/Actions/Application/AppUpdateFailureMessage.action",
-        "Properties": {
-            "Duration": 0,
-            "Message": message
-        }
-    });
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/AppUpdateSuccess.js":
-/*!**************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/AppUpdateSuccess.js ***!
-  \**************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ AppUpdateSuccess)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function sleep(ms) {
-    return (new Promise(function(resolve, reject) {
-        setTimeout(function() {
-            resolve();
-        }, ms);
-    }));
-}
-function AppUpdateSuccess(clientAPI) {
-    var message;
-    // Force a small pause to let the progress banner show in case there is no new version available
-    return sleep(500).then(function() {
-        let result = clientAPI.actionResults.AppUpdate.data;
-        console.log(result);
-
-        let versionNum = result.split(': ')[1];
-        if (result.startsWith('Current version is already up to date')) {
-            return clientAPI.getPageProxy().executeAction({
-                "Name": "/Skycm_v3/Actions/Application/AppUpdateSuccessMessage.action",
-                "Properties": {
-                    "Message": `You are already using the latest version: ${versionNum}`,
-                    "NumberOfLines": 2
-                }
-            });
-        } else if (result === 'AppUpdate feature is not enabled or no new revision found.') {
-            message = 'No Application metadata found. Please deploy your application and try again.';
-            return clientAPI.getPageProxy().executeAction({
-                "Name": "/Skycm_v3/Actions/Application/AppUpdateSuccessMessage.action",
-                "Properties": {
-                    "Duration": 5,
-                    "Message": message,
-                    "NumberOfLines": 2
-                }
-            });
-        }
-    });
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/ClientIsMultiUserMode.js":
-/*!*******************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/ClientIsMultiUserMode.js ***!
-  \*******************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ClientIsMultiUserMode)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function ClientIsMultiUserMode(clientAPI) {
-    return clientAPI.isAppInMultiUserMode();
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/EjecutarMensaje.js":
-/*!*************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/EjecutarMensaje.js ***!
-  \*************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ EjecutarMensaje)
-/* harmony export */ });
-
-function EjecutarMensaje(context) {
-    //var dialog = context.nativescript.uiDialogsModule;
-    var pernr = context.evaluateTargetPath("#Application/#ClientData/#Property:UserId");
-    var hoy = new Date();
-    var horaactual = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
-
-    
-
-    return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'HISTV', [], `$filter=ESTADO eq 'ACTIVA' and EMAIL_VEND eq '${pernr}'`).then((result) => {
-        
-        if (result && result.length > 0) {
-            let datos = result.getItem(0);
-            
-            let hora = datos.HORA;
-            var hora1 = horaactual.toString().split(":"), // campo hora_fin
-                hora2 = hora.toString().split(":"), // campo hora_inicio
-                t1 = new Date(),
-                t2 = new Date();
-
-            t1.setHours(hora1[0], hora1[1], hora1[2]);
-            t2.setHours(hora2[0], hora2[1], hora2[2]);
-
-            //Aquí hago la resta
-            t1.setHours(t1.getHours() - t2.getHours(), t1.getMinutes() - t2.getMinutes(), t1.getSeconds() - t2.getSeconds());
-
-            //Imprimo el resultado
-            var resultado = (t1.getHours() < 10 ? "0" + t1.getHours() : "" + t1.getHours()) + ":" + (t1.getMinutes() < 10 ? "0" + t1.getMinutes() :
-                "" + t1.getMinutes()) + ":" + (t1.getSeconds() < 10 ? "0" + t1.getSeconds() : "" + t1.getSeconds());
-
-            var Horas = parseInt(resultado.slice(0, 2))
-
-            if (Horas > 0) {
-                return context.executeAction('/Skycm_v3/Actions/Application/MsjSeguirVisita.action');
-            } else {
-                return true;
-            }
-        }
-
-    })
-
-}
-
-
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/GetAnio.js":
-/*!*****************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/GetAnio.js ***!
-  \*****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ GetAnio)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function GetAnio(clientAPI) {
-
-    const fechaActual = new Date(); // Obtiene la fecha actual
-    const anio = fechaActual.getFullYear(); // Obtiene el año completo
-    return anio.toString();
-    
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/GetClientSupportVersions.js":
-/*!**********************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/GetClientSupportVersions.js ***!
-  \**********************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ GetClientSupportVersions)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function GetClientSupportVersions(clientAPI) {
-    let versionInfo = clientAPI.getVersionInfo();
-    let versionStr = '';
-    Object.keys(versionInfo).forEach(function(key, index) {
-        // key: the name of the object key
-        // index: the ordinal position of the key within the object
-        //console.log(`Key: ${key}   Index: ${index}`);
-        if (key != 'Application Version') {
-            versionStr += `${key}: ${versionInfo[key]}\n`;
-        }
-    });
-    return versionStr;
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/GetClientVersion.js":
-/*!**************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/GetClientVersion.js ***!
-  \**************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ GetClientVersion)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function GetClientVersion(clientAPI) {
-    let versionInfo = clientAPI.getVersionInfo();
-    if (versionInfo.hasOwnProperty('Application Version')) {
-        return versionInfo['Application Version'];
-    }
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/GetFecha.js":
-/*!******************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/GetFecha.js ***!
-  \******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ GetFecha)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function GetFecha(clientAPI) {
-    
-    let currentDate = new Date();
-    return currentDate.toISOString().split('T')[0]; // Retorna la fecha en formato YYYY-MM-DD
-
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/GetHora.js":
-/*!*****************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/GetHora.js ***!
-  \*****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ GetHora)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function GetHora(clientAPI) {
-    let currentTime = new Date();
-    return currentTime.toTimeString().split(' ')[0]; // Retorna solo la hora, minuto y segundo
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/GetMes.js":
-/*!****************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/GetMes.js ***!
-  \****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ GetMes)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function GetMes(clientAPI) {
-
-    const fechaActual = new Date(); // Obtiene la fecha actual
-    const mes = fechaActual.getMonth() + 1; // getMonth() es base 0; añade 1 para obtener el mes correcto
-    const mesConDosDigitos = mes.toString().padStart(2, '0'); // Asegura dos dígitos
-    return mesConDosDigitos;
-
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/Get_PernrScp.js":
-/*!**********************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/Get_PernrScp.js ***!
-  \**********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Get_PernrScp)
-/* harmony export */ });
-function Get_PernrScp(context) {
-    var dialog = context.nativescript.uiDialogsModule;
-    let clientData = context.evaluateTargetPathForAPI('#Page:GestionVisitas').getClientData();
-    let id = context.evaluateTargetPath("#Application/#ClientData/#Property:UserId");
-
-    if (id) {
-        var pernr2 = id.toUpperCase();
-        
-
-        return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'VENDORINFO', [], `$filter=USRID eq '${pernr2}'`)
-            .then((results) => {
-                if (results && results.length > 0) {
-                    let prod = results.getItem(0);
-                    var pernr_scp = prod.PERNR_SCP;
-                    //dialog.alert(pernr_scp);
-                    return pernr_scp
-                } else {
-                    console.log("no se hizo la consulta");
-                    return "n/a";
-                }
-            })
-            .catch((error) => {
-                console.error('Error during read: ', error);
-                return "n/e";
-            });
-    } else {
-        console.log("User ID is not defined");
-        return 0;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/JornadaLaboral/CalcularDuracionJornada.js":
-/*!************************************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/JornadaLaboral/CalcularDuracionJornada.js ***!
-  \************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ CalcularDuracionJornada)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function CalcularDuracionJornada(clientAPI) {
-    // Obtener las horas de inicio y fin
-    let ini = clientAPI.evaluateTargetPath("#Page:DetalleJornadaLaboral/#Control:FCHORAINIDETALLE/#Value");
-    let finis = clientAPI.evaluateTargetPath("#Page:DetalleJornadaLaboral/#Control:FC_HORAFINJOR/#Value");
-
-    // Convertir las horas a objetos Date
-    let horaInicio = ini.split(":");
-    let horaFin = finis.split(":");
-    let t1 = new Date();
-    let t2 = new Date();
-
-    t1.setHours(horaInicio[0], horaInicio[1], horaInicio[2]);
-    t2.setHours(horaFin[0], horaFin[1], horaFin[2]);
-
-    // Calcular la diferencia en milisegundos
-    let diferencia = t2 - t1;
-
-    // Convertir la diferencia en horas, minutos y segundos
-    let horas = Math.floor(diferencia / (1000 * 60 * 60));
-    let minutos = Math.floor((diferencia / (1000 * 60)) % 60);
-    let segundos = Math.floor((diferencia / 1000) % 60);
-
-    // Formatear el resultado a hh:mm:ss
-    let resultado = (horas < 10 ? "0" + horas : horas) + ":" + (minutos < 10 ? "0" + minutos : minutos) + ":" + (segundos < 10 ? "0" + segundos : segundos);
-    console.log("esta es la duracion de la jornada: ", resultado)
-    return resultado;
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/JornadaLaboral/GenerarIDJornada.js":
-/*!*****************************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/JornadaLaboral/GenerarIDJornada.js ***!
-  \*****************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ GenerarIDJornada)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function GenerarIDJornada(clientAPI) {
-
-    function generateUUID() {
-        let d = new Date().getTime();
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            let r = (d + Math.random() * 16) % 16 | 0;
-            d = Math.floor(d / 16);
-            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-        });
-    }
-
-    let randomUUID = generateUUID();
-    
-    return 'Jor-' + randomUUID;
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/JornadaLaboral/ValiadarjornadaLaboral.js":
-/*!***********************************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/JornadaLaboral/ValiadarjornadaLaboral.js ***!
-  \***********************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ValiadarjornadaLaboral)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function ValiadarjornadaLaboral(context) {
-
-    let pernr_scp = context.evaluateTargetPath("#Application/#AppData/UserId");
-    //var dialog = context.nativescript.uiDialogsModule;
-    
-	return context.count('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'WORKDAY', `$filter=ESTADO eq 'ACTIVO' and EMAIL_VEND eq '${pernr_scp}'`).then((count) => {
-		context.getPageProxy().getClientData().EquipmentTotalCount = count;
-		// If “Customers” Entity set is availale, then it return the total customers
-		if(count > 0){
-			//dialog.alert(pernr_scp)
-			return context.executeAction('/Skycm_v3/Actions/JornadaLaboral/msj_JornadaLaboralActiva.action')
-		}else{
-			return true
-		}
-	});
-    
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/OnWillUpdate.js":
-/*!**********************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/OnWillUpdate.js ***!
-  \**********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ OnWillUpdate)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function OnWillUpdate(clientAPI) {
-   /* return clientAPI.executeAction('/Skycm_v3/Actions/Application/OnWillUpdate.action').then((result) => {
-        if (result.data) {*/
-            return clientAPI.executeAction('/Skycm_v3/Actions/Service/CloseOffline.action').then(
-                (success) => Promise.resolve(success),
-                (failure) => Promise.reject('Offline Odata Close Failed ' + failure));
-       /* } else {
-            return Promise.reject('User Deferred');
-        }
-    });*/
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/ResetAppSettingsAndLogout.js":
-/*!***********************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/ResetAppSettingsAndLogout.js ***!
-  \***********************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ResetAppSettingsAndLogout)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function ResetAppSettingsAndLogout(clientAPI) {
-    let logger = clientAPI.getLogger();
-    let platform = clientAPI.nativescript.platformModule;
-    let appSettings = clientAPI.nativescript.appSettingsModule;
-    var appId;
-    if (platform && (platform.isIOS || platform.isAndroid)) {
-        appId = clientAPI.evaluateTargetPath('#Application/#AppData/MobileServiceAppId');
-    } else {
-        appId = 'WindowsClient';
-    }
-    try {
-        // Remove any other app specific settings
-        appSettings.getAllKeys().forEach(key => {
-            if (key.substring(0, appId.length) === appId) {
-                appSettings.remove(key);
-            }
-        });
-    } catch (err) {
-        logger.log(`ERROR: AppSettings cleanup failure - ${err}`, 'ERROR');
-    } finally {
-        // Logout 
-        return clientAPI.getPageProxy().executeAction('/Skycm_v3/Actions/Application/Reset.action');
-    }
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Application/ValidarCambios.js":
-/*!************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Application/ValidarCambios.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ValidarCambios)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function ValidarCambios(context) {
-    var xhr = new XMLHttpRequest();
-	var file = "https://www.google.com/";
-	var randomNum = Math.round(Math.random() * 10000);
-	var dialog = context.nativescript.uiDialogsModule;
-
-	xhr.open('HEAD', file + "?rand=" + randomNum, true);
-	xhr.send();
-	xhr.addEventListener("readystatechange", processRequest, false);
-
-	function processRequest(e) {
-		
-		var provider = context.getODataProvider('/Skycm_v3/Services/Dest_SkyCM_Productivo.service');
-		if (xhr.readyState == 4) {
-			if (xhr.status >= 200 && xhr.status < 304) {
-				
-				if (provider.isRequestQueueEmpty() == false) {
-					return context.executeAction('/Skycm_v3/Actions/Service/SyncStartedMessage.action');
-					
-				} else {
-				  //dialog.alert("No hay cambios pendientes");
-				}
-
-			} else {
-                //dialog.alert("No tienes conexion a internet!");
-			}
-		}
-	}
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/ErrorArchive/ErrorArchive_CheckForSyncError.js":
-/*!*****************************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/ErrorArchive/ErrorArchive_CheckForSyncError.js ***!
-  \*****************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ CheckForSyncError)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} context
- */
-function CheckForSyncError(context) {
-    context.count('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'ErrorArchive', '').then(errorCount => {
-        if (errorCount > 0) {
-            return context.getPageProxy().executeAction('/Skycm_v3/Actions/ErrorArchive/ErrorArchive_SyncFailure.action').then(function() {
-                return Promise.reject(false);
-            });
-        }
-    });
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Logging/LogLevels.js":
-/*!***************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Logging/LogLevels.js ***!
-  \***************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ LogLevels)
-/* harmony export */ });
-function LogLevels(clientAPI) {
-    var levels = [];
-    levels.push({
-        'DisplayValue': 'Error',
-        'ReturnValue': 'Error',
-    });
-    levels.push({
-        'DisplayValue': 'Warning',
-        'ReturnValue': 'Warn',
-    });
-    levels.push({
-        'DisplayValue': 'Info',
-        'ReturnValue': 'Info',
-    });
-    levels.push({
-        'DisplayValue': 'Debug',
-        'ReturnValue': 'Debug',
-    });
-    levels.push({
-        'DisplayValue': 'Trace',
-        'ReturnValue': 'Trace',
-    });
-    return levels;
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Logging/SetTraceCategories.js":
-/*!************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Logging/SetTraceCategories.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ SetTraceCategories)
-/* harmony export */ });
-function SetTraceCategories(clientAPI) {
-    var logger = clientAPI.getLogger();
-    const sectionedTable = clientAPI.getPageProxy().getControl('SectionedTable');
-    const fcsection = sectionedTable.getSection('FormCellSection0');
-    const traceCategory = fcsection.getControl('TracingCategoriesListPicker');
-    const odataTrace = fcsection.getControl('odataTrace');
-
-    try {
-        if (traceCategory.getValue()) {
-            var values = traceCategory.getValue();
-            var categories = [];
-
-            if (values && values.length) {
-                categories = values.map((value) => {
-                    return 'mdk.trace.' + value.ReturnValue;
-                });
-            }
-            clientAPI.setDebugSettings(odataTrace.getValue(), true, categories);
-        }
-    } catch (exception) {
-        logger.log(String(exception), 'Error');
-        return undefined;
-    }
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Logging/SetUserLogLevel.js":
-/*!*********************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Logging/SetUserLogLevel.js ***!
-  \*********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ SetUserLogLevel)
-/* harmony export */ });
-function SetUserLogLevel(clientAPI) {
-    try {
-        if (clientAPI.getValue() && clientAPI.getValue()[0]) {
-            var logger = clientAPI.getLogger();
-            var listPickerValue = clientAPI.getValue()[0].ReturnValue;
-            if (listPickerValue) {
-                switch (listPickerValue) {
-                    case 'Debug':
-                        logger.setLevel('Debug');
-                        ShowTraceOptions(clientAPI, false);
-                        break;
-                    case 'Error':
-                        logger.setLevel('Error');
-                        ShowTraceOptions(clientAPI, false);
-                        break;
-                    case 'Warn':
-                        logger.setLevel('Warn');
-                        ShowTraceOptions(clientAPI, false);
-                        break;
-                    case 'Info':
-                        logger.setLevel('Info');
-                        ShowTraceOptions(clientAPI, false);
-                        break;
-                    case 'Trace':
-                        logger.setLevel('Trace');
-                        ShowTraceOptions(clientAPI, true);
-                        break;
-                    default:
-                        // eslint-disable-next-line no-console
-                        console.log(`unrecognized key ${listPickerValue}`);
-                }
-                return listPickerValue;
-            }
-        }
-    } catch (exception) {
-        logger.log(String(exception), 'Error');
-        return undefined;
-    }
-}
-
-function ShowTraceOptions(clientAPI, tracingEnabled) {
-    let categories = clientAPI.getPageProxy().getControl('SectionedTable').getControl('TracingCategoriesListPicker');
-    let odataTrace = clientAPI.getPageProxy().getControl('SectionedTable').getControl('odataTrace');
-
-    categories.setVisible(tracingEnabled);
-    odataTrace.setVisible(tracingEnabled);
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Logging/ToggleLogging.js":
-/*!*******************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Logging/ToggleLogging.js ***!
-  \*******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ToggleLogging)
-/* harmony export */ });
-function ToggleLogging(clientAPI) {
-    try {
-        var logger = clientAPI.getLogger();
-        const sectionedTable = clientAPI.getPageProxy().getControl('SectionedTable');
-        const fcsection = sectionedTable.getSection('FormCellSection0');
-        const enableLogSwitch = fcsection.getControl('EnableLogSwitch');
-        const logLevelListPicker = fcsection.getControl('LogLevelListPicker');
-        let switchValue = enableLogSwitch.getValue();
-        if (switchValue) {
-            logger.on();
-            logLevelListPicker.setVisible(true);
-            logLevelListPicker.setEditable(true);
-            logLevelListPicker.redraw();
-        } else {
-            logger.off();
-            logLevelListPicker.setEditable(false);
-            logLevelListPicker.setVisible(false);
-            logLevelListPicker.redraw();
-        }
-        return switchValue;
-    } catch (exception) {
-        logger.log(String(exception), 'Error');
-        return undefined;
-    }
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Logging/TraceCategories.js":
-/*!*********************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Logging/TraceCategories.js ***!
-  \*********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ TraceCategories)
-/* harmony export */ });
-function TraceCategories(clientAPI) {
-    var categories = ['action', 'api', 'app', 'binding', 'branding',
-        'core', 'i18n', 'lcms', 'logging', 'odata', 'onboarding', 'profiling', 'push',
-        'restservice', 'settings', 'targetpath', 'ui'
-    ];
-
-    var values = [];
-    categories.forEach((category) => {
-        values.push({
-            'DisplayValue': category,
-            'ReturnValue': category,
-        });
-    });
-
-    return values;
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Logging/UserLogSetting.js":
-/*!********************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Logging/UserLogSetting.js ***!
-  \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ UserLogSetting)
-/* harmony export */ });
-function UserLogSetting(clientAPI) {
-
-    try {
-        var logger = clientAPI.getLogger();
-
-        const sectionedTable = clientAPI.getControl('SectionedTable');
-        const fcsection = sectionedTable.getSection('FormCellSection0');
-        const enableLogSwitch = fcsection.getControl('EnableLogSwitch');
-        const logLevelListPicker = fcsection.getControl('LogLevelListPicker');
-        const traceCategory = fcsection.getControl('TracingCategoriesListPicker');
-        const odataTrace = fcsection.getControl('odataTrace');
-
-
-        //Persist the user logging preferences
-        if (logger) {
-            console.log("in logger state");
-            if (logger.isTurnedOn()) {
-                if (enableLogSwitch) {
-                    enableLogSwitch.setValue(true);
-                }
-                if (logLevelListPicker) {
-                    logLevelListPicker.setEditable(true);
-                }
-            } else {
-                if (enableLogSwitch) {
-                    enableLogSwitch.setValue(false);
-                }
-                if (logLevelListPicker) {
-                    logLevelListPicker.setEditable(false);
-                }
-            }
-            var logLevel = logger.getLevel();
-            if (logLevel) {
-                if (logLevelListPicker) {
-                    logLevelListPicker.setValue([logLevel]);
-                }
-            }
-            if (logLevel === 'Trace') {
-                traceCategory.setVisible(true);
-                odataTrace.setVisible(true);
-            }
-
-            //Upon selecting a value in the List picker and clicking the back button 
-            //will enable the onload page rule. This will set the selected value
-            //in the control
-            if (logLevelListPicker.getValue()[0]) {
-                var returnValue = logLevelListPicker.getValue()[0].ReturnValue;
-                if (returnValue) {
-                    logLevelListPicker.setValue([returnValue]);
-                    logger.setLevel(returnValue);
-                }
-            }
-        }
-    } catch (exception) {
-        // eslint-disable-next-line no-console
-        console.log(String(exception), 'Error User Logger could not be set');
-    }
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Visitas/CalcularDuracionVisita.js":
-/*!****************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Visitas/CalcularDuracionVisita.js ***!
-  \****************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ CalcularDuracionVisita)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function CalcularDuracionVisita(context) {
-
-    // Obtener los valores de las horas de inicio y fin
-    var HoraInicio = context.evaluateTargetPath('#Page:DetalleVisitaActiva/#Control:Fc_horainicio/#Value');
-    var HoraFin = context.evaluateTargetPath('#Page:DetalleVisitaActiva/#Control:fc_horafin/#Value');
-
-    // Convertir las horas de inicio y fin en minutos
-    let parteIni = HoraInicio.split(":");
-    let minutosInicio = parseInt(parteIni[0], 10) * 60 + parseInt(parteIni[1], 10);
-
-    let parteFin = HoraFin.split(":");
-    let minutosFin = parseInt(parteFin[0], 10) * 60 + parseInt(parteFin[1], 10);
-    
-    // Calcular la diferencia en minutos
-    let diferencia = minutosFin - minutosInicio;
-
-    // Ajustar si la diferencia es negativa (cruce de medianoche)
-    if (diferencia < 0) {
-        diferencia += 24 * 60;
-    }
-
-    // Convertir la diferencia de nuevo a HH:mm:ss
-    const horas = Math.floor(diferencia / 60);
-    const minutos = diferencia % 60;
-
-    var result = `${horas < 10 ? '0' : ''}${horas}:${minutos < 10 ? '0' : ''}${minutos}:00`;
-
-    console.log(result);
-    
-    return result;
-}
-
-
-
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Visitas/GenerarIdProspecto.js":
-/*!************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Visitas/GenerarIdProspecto.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ GenerarIdProspecto)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function GenerarIdProspecto(clientAPI) {
-    function generateUUID() {
-        let d = new Date().getTime();
-        return 'xxxxxxxx-xxxx-4xxx-yxxx'.replace(/[xy]/g, function (c) {
-            let r = (d + Math.random() * 16) % 16 | 0;
-            d = Math.floor(d / 16);
-            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-        });
-    }
-
-    let randomUUID = generateUUID();
-    
-    return 'PROS-' + randomUUID;
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Visitas/GenerarIdVisita.js":
-/*!*********************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Visitas/GenerarIdVisita.js ***!
-  \*********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ GenerarIdVisita)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function GenerarIdVisita(clientAPI) {
-
-    function generateUUID() {
-        let d = new Date().getTime();
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            let r = (d + Math.random() * 16) % 16 | 0;
-            d = Math.floor(d / 16);
-            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-        });
-    }
-
-    let randomUUID = generateUUID();
-    
-    return 'VI-' + randomUUID;
-
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Visitas/Geo.rule.js":
-/*!**************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Visitas/Geo.rule.js ***!
-  \**************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Geo)
-/* harmony export */ });
-/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nativescript/geolocation */ "webpack/sharing/consume/default/@nativescript/geolocation");
-/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nativescript/core */ "webpack/sharing/consume/default/@nativescript/core");
-/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nativescript_core__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-function Geo(clientAPI) {
-	var lati,longi;
-	lati = clientAPI.evaluateTargetPath('#Control:fc_latitud');
-	longi = clientAPI.evaluateTargetPath('#Control:fc_longitud');
-    
-    var logger = clientAPI.getLogger();
-    console.log("ingrese a la georreferenciacion");
-    console.log("Current Log Level: " + logger.getLevel());
-
-    return _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.enableLocationRequest().then(() => {
-        _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.getCurrentLocation({
-            desiredAccuracy: _nativescript_core__WEBPACK_IMPORTED_MODULE_1__.CoreTypes.Accuracy.high,
-            maximumAge: 5000,
-            timeout: 20000,
-        })
-        .then((currentLocation) => {
-            console.log('My current latitude: ', currentLocation.latitude);
-            console.log('My current longitude: ', currentLocation.longitude);
-            var lt = currentLocation.latitude;
-            var lg = currentLocation.longitude
-			lati.setValue(lt.toString());
-			longi.setValue(lg.toString()); // Added longitude for more completeness
-        })
-        .catch((error) => {
-            console.error('Error getting location: ', error);
-        });
-    })
-    .catch((error) => {
-        console.error('Error enabling location request: ', error);
-    });
-}
-
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Visitas/Longitud.rule.js":
-/*!*******************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Visitas/Longitud.rule.js ***!
-  \*******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Geo)
-/* harmony export */ });
-/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nativescript/geolocation */ "webpack/sharing/consume/default/@nativescript/geolocation");
-/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nativescript/core */ "webpack/sharing/consume/default/@nativescript/core");
-/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nativescript_core__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-function Geo(clientAPI){
-	var logger = clientAPI.getLogger();
-	
-	console.log("Current Log Level: " + logger.getLevel());
-	
-	if(!_nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.isEnabled()){
-		_nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.enableLocationRequest();
-	}
-	return _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.getCurrentLocation(
-		{
-			desiredAccuracy: _nativescript_core__WEBPACK_IMPORTED_MODULE_1__.CoreTypes.Accuracy.high,
-			updateDistance: 5,
-			timeout: 11000
-		}
-		).then(function(loc){
-			if(loc){
-				console.log(loc);
-				console.log('\nCurrent Location: (' + loc.latitude + ',' + loc.longitude + ')');
-				logger.log(loc.toString());
-				
-				var locMessage = loc.longitude;
-				logger.log('Current Location: ' +locMessage, 'INFO');
-				var result = loc.longitude.toString();
-				return result;
-			}
-		}, function(e){
-			logger.log(e.message,'ERROR');
-		});
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Visitas/RectificarLatyLong.js":
-/*!************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Visitas/RectificarLatyLong.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Geo)
-/* harmony export */ });
-/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nativescript/geolocation */ "webpack/sharing/consume/default/@nativescript/geolocation");
-/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nativescript/core */ "webpack/sharing/consume/default/@nativescript/core");
-/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nativescript_core__WEBPACK_IMPORTED_MODULE_1__);
-
-
-function Geo(clientAPI) {
-	var campolat = clientAPI.evaluateTargetPath("#Page:VisitaClienteConfirmar/#Control:fc_LatitudCliente/#Value");
-	var valorlat = clientAPI.evaluateTargetPath("#Page:VisitaClienteConfirmar/#Control:fc_latitudVendor/#Value");
-	var valorlong = clientAPI.evaluateTargetPath("#Page:VisitaClienteConfirmar/#Control:fc_longitudCliente/#Value");
-	var campolong = clientAPI.evaluateTargetPath("#Page:VisitaClienteConfirmar/#Control:fc_longitudVendor/#Value");
-
-	if (valorlat == "" || valorlong == "" || valorlat === null || valorlong === null) {
-
-		var logger = clientAPI.getLogger();
-
-		console.log("Current Log Level: " + logger.getLevel());
-		var locationIsEnabled = _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.isEnabled();
-
-		if (!locationIsEnabled) {
-			_nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.enableLocationRequest();
-		}
-		return _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.getCurrentLocation({
-			//desiredAccuracy: Accuracy.high,
-			desiredAccuracy: _nativescript_core__WEBPACK_IMPORTED_MODULE_1__.CoreTypes.Accuracy.high,
-			updateDistance: 5,
-			timeout: 11000
-		}).then(function (loc) {
-			if (loc) {
-				console.log(loc);
-				console.log('\nCurrent Location: (' + loc.latitude + ',' + loc.longitude + ')');
-				logger.log(loc.toString());
-
-				var locMessage = loc.latitude;
-				logger.log('Current Location: ' + locMessage, 'INFO');
-				var result = loc.latitude.toString();
-				campolat.setValue(result);
-				var result2 = loc.longitude.toString();
-				campolong.setValue(result2);
-				// alert("se lleno lat y long")
-				return clientAPI.executeAction('/Skycm_v3/Actions/Visitas/ProgressCalculandoUbicacion.action');
-
-			}
-
-		}, function (e) {
-			logger.log(e.message, 'ERROR');
-		});
-	} else {
-		return clientAPI.executeAction('/Skycm_v3/Actions/Visitas/ProgressCalculandoUbicacion.action');
-	}
-
-}
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Visitas/ValidarDistancia.js":
-/*!**********************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Visitas/ValidarDistancia.js ***!
-  \**********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ validardistancia)
-/* harmony export */ });
-/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nativescript/geolocation */ "webpack/sharing/consume/default/@nativescript/geolocation");
-/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nativescript/core */ "webpack/sharing/consume/default/@nativescript/core");
-/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nativescript_core__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-function validardistancia(clientAPI) {
-    let dialogs = clientAPI.nativescript.uiDialogsModule;
-    let logger = clientAPI.getLogger();
-    let distancia = '';
-
-    console.log("Current Log Level: " + logger.getLevel());
-
-    let lati = parseFloat(clientAPI.evaluateTargetPath('#Page:VisitaClienteConfirmar/#Control:fc_LatitudCliente/#Value'));
-    let longi = parseFloat(clientAPI.evaluateTargetPath('#Page:VisitaClienteConfirmar/#Control:fc_longitudCliente/#Value'));
-
-    return _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.isEnabled().then((enabled) => {
-        if (!enabled) {
-            return _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.enableLocationRequest();
-        }
-    }).then(() => {
-        return _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.getCurrentLocation({
-            desiredAccuracy: _nativescript_core__WEBPACK_IMPORTED_MODULE_1__.CoreTypes.Accuracy.high,
-            updateDistance: 1,
-            timeout: 11000
-        });
-    }).then((loc) => {
-        if (loc) {
-            clientAPI.executeAction('/Skycm_v3/Actions/Visitas/pro_calculando_distancia.action');
-
-            let calculaDistancia = () => {
-                let graRad = (grados) => (grados * Math.PI) / 180;
-
-                // Conversión de coordenadas a radianes
-                let lat1 = graRad(loc.latitude);
-                let lon1 = graRad(loc.longitude);
-
-                let lat2 = graRad(lati);
-                let lon2 = graRad(longi);
-
-                // Diferencias de latitud y longitud
-                let dLat = lat2 - lat1;
-                let dLon = lon2 - lon1;
-
-                // Fórmula del Haversine
-                let a = Math.sin(dLat / 2) ** 2 +
-                        Math.cos(lat1) * Math.cos(lat2) *
-                        Math.sin(dLon / 2) ** 2;
-
-                let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-                let R = 6371000; // Radio de la Tierra en metros
-
-                let distancia = R * c; // Distancia en metros
-
-                return distancia.toFixed(2); // Retorna la distancia con dos decimales
-            };
-
-            distancia = calculaDistancia();
-            console.log(`Distancia calculada: ${distancia} m`);
-
-            if (distancia <= 10000) {
-                // Permitir realizar check-in
-                return clientAPI.executeAction('/Skycm_v3/Actions/Visitas/ProgressCrearVisita.action');
-            } else {
-                // Impedir realizar check-in y pedir justificación
-                return dialogs.confirm({
-                    title: "¡Ubicación Fuera de Rango!",
-                    message: `Indique el motivo, distancia del cliente: (${distancia} m)`,
-                    okButtonText: "Motivos ->"
-                }).then((respuesta) => {
-                    if (respuesta) {
-                        return clientAPI.executeAction('/Skycm_v3/Actions/Visitas/nav_justificacionGeo.action');
-                    }
-                });
-            }
-        }
-    }).catch((error) => {
-        console.error('Error:', error);
-        logger.log('Error: ' + error.message, 'ERROR');
-    });
-}
-
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Visitas/ValidarJornadalaboralVisita.js":
-/*!*********************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Visitas/ValidarJornadalaboralVisita.js ***!
-  \*********************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ValidarJornadalaboral)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function ValidarJornadalaboral(context) {
-    let pernr_scp = context.evaluateTargetPath("#Application/#AppData/UserId");
-    //var dialog = context.nativescript.uiDialogsModule;
-    
-	return context.count('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'WORKDAY', `$filter=ESTADO eq 'ACTIVO' and EMAIL_VEND eq '${pernr_scp}'`).then((count) => {
-		context.getPageProxy().getClientData().EquipmentTotalCount = count;
-		// If “Customers” Entity set is availale, then it return the total customers
-		if(count > 0){
-			//dialog.alert(pernr_scp)
-            return true
-		}else{
-			return context.executeAction('/Skycm_v3/Actions/Visitas/msj_AdvertenciaVisitarCliente.action')
-		}
-	});
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Visitas/ValidarVisitaActiva.js":
-/*!*************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Visitas/ValidarVisitaActiva.js ***!
-  \*************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ValidarVisitaActiva)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function ValidarVisitaActiva(context) {
-
-    let pernr_scp = context.evaluateTargetPath("#Application/#AppData/UserId");
-    //var dialog = context.nativescript.uiDialogsModule;
-    
-	return context.count('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'HISTV', `$filter=ESTADO eq 'ACTIVA' and EMAIL_VEND eq '${pernr_scp}'`).then((count) => {
-		context.getPageProxy().getClientData().EquipmentTotalCount = count;
-		// If “Customers” Entity set is availale, then it return the total customers
-		if(count > 0){
-			//dialog.alert(pernr_scp)
-            return context.executeAction('/Skycm_v3/Actions/Visitas/msj_VisitaActivaAdver.action')
-		}else{
-
-            return true
-		}
-	});
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Visitas/get_pernOnly.js":
-/*!******************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Visitas/get_pernOnly.js ***!
-  \******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ getPernr)
-/* harmony export */ });
-function getPernr(context) {
-    let id = context.evaluateTargetPath("#Application/#ClientData/#Property:UserId");
-
-    if (id) {
-        var correo = id.toUpperCase();
-        return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'VENDORINFO', [], `$filter=USRID eq '${correo}'`)
-            .then((results) => {
-                if (results && results.length > 0) {
-                    let prod = results.getItem(0);
-                    return prod.PERNR;
-                } else {
-                    return 0;
-                }
-            })
-            .catch((error) => {
-                console.error('Error during read: ', error);
-                return 0;
-            });
-    } else {
-        console.log("User ID is not defined");
-        return 0;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Visitas/get_pernScponly.js":
-/*!*********************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Visitas/get_pernScponly.js ***!
-  \*********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ getPernr)
-/* harmony export */ });
-function getPernr(context) {
-    let id = context.evaluateTargetPath("#Application/#ClientData/#Property:UserId");
-
-    if (id) {
-        var correo = id.toUpperCase();
-        return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'VENDORINFO', [], `$filter=USRID eq '${correo}'`)
-            .then((results) => {
-                if (results && results.length > 0) {
-                    let prod = results.getItem(0);
-                    return prod.PERNR_SCP;
-                } else {
-                    return 0;
-                }
-            })
-            .catch((error) => {
-                console.error('Error during read: ', error);
-                return 0;
-            });
-    } else {
-        console.log("User ID is not defined");
-        return 0;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/Visitas/porcentaje_visitas.js":
-/*!************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/Visitas/porcentaje_visitas.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ porcentaje_visitas)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-async function porcentaje_visitas(context) {
-    const hoy = new Date();
-    const mes = ("0" + (hoy.getMonth() + 1)).slice(-2);
-    const anio = hoy.getFullYear();
-
-    // Obtener visitas del mes y año actual
-    const resultadosVisitas = await context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'HISTV', [], `$filter=MES eq '${mes}' and ANO eq '${anio}'`);
-    let clientesVisitados = resultadosVisitas.map(v => v.KUNNR);
-    let clientesUnicos = [...new Set(clientesVisitados)];
-    let numVisitas = clientesUnicos.length;
-
-    // Obtener información total de clientes
-    const resultadosClientes = await context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'CLIENTEINFO', []);
-    let totalClientes = resultadosClientes.map(v => v.KUNNR);
-    let totalClientesUnicos = [...new Set(totalClientes)];
-    let numTotalClientes = totalClientesUnicos.length;
-
-    // Calcular el porcentaje
-    let porcentaje = 0;
-    if (numTotalClientes > 0) {
-        porcentaje = Math.round((numVisitas / numTotalClientes) * 100); 
-    }
-    
-    return porcentaje;
-}
-
-
-
-
-
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/BarcodeScanResult.js":
-/*!*************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/BarcodeScanResult.js ***!
-  \*************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ BarcodeScanResult)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function BarcodeScanResult(context) {
-    var dialog =context.nativescript.uiDialogsModule;
-    
-    function ejecutar(){
-        context.executeAction('/Skycm_v3/Actions/Consultas/chek_referenciainventario.action');
-    }
-    
-    var actionResult = context.getActionResult('BarcodeScanner');
-    var scannedResult = actionResult.data;
-
-    const splitString = scannedResult.split(";");
-	let referencia = splitString[0].split("-")[0];
-	let color = splitString[1];
-    
-    let Referencia = context.evaluateTargetPath("#Page:ConsultaInventario/#Control:fc_referencias");
-    let colorcampo = context.evaluateTargetPath("#Page:ConsultaInventario/#Control:fc_color");
-    Referencia.setValue(referencia);
-    colorcampo.setValue(color)
-    setTimeout(ejecutar, 1501);
-
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/InventarioCampos.js":
-/*!************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/InventarioCampos.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ InventarioCampos)
-/* harmony export */ });
-
-function InventarioCampos(context) {
-    var dialog = context.nativescript.uiDialogsModule;
-    var sociedad = context.evaluateTargetPath("#Page:ConsultaInventario/#Control:fc_sociedad/#Value");
-	var Prima1 = context.evaluateTargetPath("#Control:FC_librePrima");
-	var Prima2 = context.evaluateTargetPath("#Control:FC_transPrima");
-    var Mex1 = context.evaluateTargetPath("#Control:FC_transitoMex");
-	var precio = context.evaluateTargetPath("#Control:FC_Precio");
-    
-    //dialog.alert("consultando inventario")
-	
-    switch (sociedad) {
-        case "1000":
-            Prima1.setVisible(true);
-            Prima2.setVisible(true);
-            break;
-        case "6000":
-            Mex1.setVisible(true);
-            break;
-        case "5000":
-            Mex1.setVisible(true);
-            break;    
-        case "2000":
-            viene.setVisible(true);
-            precio.setVisible(true);
-            break;    
-        default:
-            console.log("no hay sociedad");
-            break;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/ResultInventario.js":
-/*!************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/ResultInventario.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ResultInventario)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function ResultInventario(context) {
-	let target = context.evaluateTargetPath('#Page:Main/#ClientData/#Property:Inventario');
-    //let searchString = context.searchString;
-    let color = context.evaluateTargetPath('#Page:ConsultaInventario/#Control:fc_color/#Value').trimStart();
-    color.toUpperCase();
-    
-    
-    if(color){
-    	let searchResult1 = target.filter(prod => { return prod.Color.includes(color)});
-    	return searchResult1;
-    }
-    /*else if (searchString) {
-        let searchResult = target.filter(prod => { return prod.Color.includes(searchString)});
-        target = searchResult;
-    }*/
-
-    return '#Page:Main/#ClientData/#Property:Inventario';
-    
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/Rule_Rest_Inventario.js":
-/*!****************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/Rule_Rest_Inventario.js ***!
-  \****************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Rule_Rest_Inventario)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function Rule_Rest_Inventario(context) {
-
-	var actionResult = context.getActionResult("ResultRest");
-	var resultado = actionResult.data;
-	let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
-	var dialog = context.nativescript.uiDialogsModule;
-	//	var listpickerRef= context.evaluateTargetPath('#Page:Inventario/#Control:FC_List_Referencia/#SelectedValue');
-	var referencia = resultado.Referencia;
-	var sociedad = context.evaluateTargetPath('#Page:ConsultaInventario/#Control:fc_sociedad/#Value');
-	//	if(referencia == listpickerRef && resultado.length>0){
-	var error = resultado.T_Mensaje.TipoMsj
-	var errorTextoMensaje = resultado.T_Mensaje.TextoMsj
-	var listpickerOrden = context.evaluateTargetPath('#Page:ConsultaInventario/#Control:Fc_ordenar/#SelectedValue'); //LINO
-	//let color = context.evaluateTargetPath('#Page:ConsultaInventario/#Control:fc_color/#Value').trimStart();
-	//color.toUpperCase();
-	var Listado = resultado.T_Detalle;
-
-	clientData.ListadoDes = resultado.T_Detalle;
-
-	clientData.Referencia = referencia;
-
-	if (Listado.length < 0) {
-
-		dialog.alert("No se recuperaron registros para la referencia seleccionada")
-
-	} else {
-
-		if (resultado && error != "E") {
-			if (sociedad == '2000') {
-				Listado.forEach(function (item) {
-					if (item.Userdet5 < 1) {
-						item.Userdet5 = ''
-					} else {
-						item.Userdet5 = 'VIENE'
-					}
-				})
-			}
-
-			/*if (sociedad != '2000') {
-				Listado.forEach(function (item) {
-					if (item.CantDisponible < 1) {
-						item.status = 'Agotado';
-					} else {
-						item.status = '';
-					}
-				})
-			}*/
-
-			switch (listpickerOrden) {
-				case "Color":
-					clientData.Inventario = Listado.sort(GetSortOrder("Color"));
-					return context.executeAction('/Skycm_v3/Actions/Consultas/nav_NavToInvColor.action');
-					break;
-
-				case "Disponibilidad":
-					clientData.Inventario = Listado.sort(SortNumeros("CantDisponible"));
-					return context.executeAction('/Skycm_v3/Actions/Consultas/nav_NavToInvDispo.action');
-					break;
-
-				case "Predeterminado":
-					clientData.Inventario = Listado;
-					//dialog.alert("ESTE ES EL INVENTARIO : ", Listado)
-					return context.executeAction('/Skycm_v3/Actions/Consultas/nav_NavToInvenDesordenado.action');
-					break;
-
-				default:
-					clientData.Inventario = Listado;
-					return context.executeAction('/Skycm_v3/Actions/Consultas/nav_NavToInvenDesordenado.action');
-			}
-
-		} else {
-
-			var message = ` ¡${errorTextoMensaje}!`;
-			return context.executeAction({
-				"Name": "/Skycm_v3/Actions/Consultas/msj_InventarioNoExiste.action",
-				"Properties": {
-					"Message": message
-				}
-			});
-
-		}
-	}
-
-	function GetSortOrder(prop) {
-		return function (a, b) {
-			if (a[prop] > b[prop]) {
-				return 1;
-			} else if (a[prop] < b[prop]) {
-				return -1;
-			}
-			return 0;
-		}
-	}
-
-	function SortNumeros(prop) {
-		return function (a, b) {
-			return b[prop] - a[prop];
-		}
-	}
-
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/ValidarConsultaSociedad.js":
-/*!*******************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/ValidarConsultaSociedad.js ***!
-  \*******************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ValidarConsultaSociedad)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function ValidarConsultaSociedad(clientAPI) {
-    var sociedad = clientAPI.evaluateTargetPath("#Page:MenuConsultas/#Control:fc_sociedad/#Value")
-    
-    var pageProxy = clientAPI.getPageProxy();
-    var dialog = clientAPI.nativescript.uiDialogsModule;
-    var namePage = pageProxy._page.id;
-
-    var raiz = "/Skycm_v3/Actions/Consultas/rest/";
-    var RestCol = "";
-    var RestPaises = "";
-    
-    switch (namePage) {
-        case "ConsultaInventario":
-            RestCol = raiz + "afs/Rest_Inventario.action";
-            RestPaises = raiz + "paises/Rest_inventario_pais.action";
-            break;
-        case "ConsultaCartera":
-            RestCol = raiz + "afs/Rest_Cartera.action"; 
-            RestPaises = raiz + "paises/Rest_CarteraPaises.action";
-            break;
-        case "ConsultaPedido":
-            RestCol = raiz + "afs/Rest_Pedidos.action";
-            RestPaises = raiz + "paises/Rest_PedidoPaises.action";
-            break;
-
-    }
-    
-    if(sociedad == '1000' || sociedad == '2000' ){
-    	//dialog.alert("colombia" + sociedad);
-        //dialog.alert(namePage + " - Colombia - " + RestCol)
-        return clientAPI.executeAction(RestCol)
-    }else{
-        //dialog.alert(namePage + " - Paises - " + RestPaises)
-        //dialog.alert("paises" + sociedad);
-        return clientAPI.executeAction(RestPaises)
-    }
-
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/afs/RestPedidos.js":
-/*!***********************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/afs/RestPedidos.js ***!
-  \***********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ RestPedidos)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function RestPedidos(context) {
-    //Instancio el modulo para poder emitir alertas en la aplicacion.
-	var dialog = context.nativescript.uiDialogsModule;
-	
-	//Creo una variable global clientData para poder acceder a cualquier dato. Siempre se debe instanciar en el menu principal YA  QUE ES LA PAGINA QUE PRIMERO SE CARGA.
-	let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
-
-	//  utilizando el context.getpaggeprxy le digo que lleve la informacion a la pagina que se llama detalle pedido
-	let pageProxy = context.getPageProxy('#Page:DetallePedido');
-	//	let pageProxyFactura= context.getPageProxy('#Page:DetallePedido');
-	
-	//Aqui capturo el resultado de la accion REST que se llama resultRest
-	var actionResult = context.getActionResult("ResultRest");
-	
-	//Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
-	var resultado = actionResult.data;
-	
-	//Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
-	//var resultadoFactura= resultado.T_Factura.Factura;
-	var error = resultado.T_Mensaje.TipoMsj;
-	var Listado = resultado.T_Detalle;
-
-	var TextoMensaje = resultado.T_Mensaje.TextoMsj
-	if (resultado && error != "E") { //E Es el resultado que arroja el servicio rest cuando no encuentra el pedido
-	clientData.NoFactura = resultado.T_Factura;
-	 
-		//le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
-		pageProxy.setActionBinding(resultado);
-		clientData.Pedido = Listado
-		return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
-
-	} else {
-		
-		return context.executeAction("/Skycm_v3/Actions/Consultas/rest/afs/Rest_pedidos2.action")
-		
-	}
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/afs/RestPedidos2.js":
-/*!************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/afs/RestPedidos2.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ RestPedidos2)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function RestPedidos2(context) {
-    //Instancio el modulo para poder emitir alertas en la aplicacion.
-	var dialog = context.nativescript.uiDialogsModule;
-	
-	//Creo una variable global clientData para poder acceder a cualquier dato. Siempre se debe instanciar en el menu principal YA  QUE ES LA PAGINA QUE PRIMERO SE CARGA.
-	let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
-
-	//  utilizando el context.getpaggeprxy le digo que lleve la informacion a la pagina que se llama detalle pedido
-	let pageProxy = context.getPageProxy('#Page:DetallePedido');
-	//	let pageProxyFactura= context.getPageProxy('#Page:DetallePedido');
-	
-	//Aqui capturo el resultado de la accion REST que se llama resultRest
-	var actionResult = context.getActionResult("ResultRest");
-	
-	//Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
-	var resultado = actionResult.data;
-	
-	//Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
-	//var resultadoFactura= resultado.T_Factura.Factura;
-	var error = resultado.T_Mensaje.TipoMsj;
-	var Listado = resultado.T_Detalle;
-
-	var TextoMensaje = resultado.T_Mensaje.TextoMsj
-	if (resultado && error != "E") { //E Es el resultado que arroja el servicio rest cuando no encuentra el pedido
-	clientData.NoFactura = resultado.T_Factura;
-		
-		//le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
-		pageProxy.setActionBinding(resultado);
-		clientData.Pedido = Listado
-		return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
-
-	} else {
-		return context.executeAction("/Skycm_v3/Actions/Consultas/rest/afs/Rest_pedido3.action")
-		
-	}
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/afs/RestPedidos3.js":
-/*!************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/afs/RestPedidos3.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ RestPedidos)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function RestPedidos(context) {
-    //Instancio el modulo para poder emitir alertas en la aplicacion.
-	var dialog = context.nativescript.uiDialogsModule;
-	
-	//Creo una variable global clientData para poder acceder a cualquier dato. Siempre se debe instanciar en el menu principal YA  QUE ES LA PAGINA QUE PRIMERO SE CARGA.
-	let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
-
-	//  utilizando el context.getpaggeprxy le digo que lleve la informacion a la pagina que se llama detalle pedido
-	let pageProxy = context.getPageProxy('#Page:DetallePedido');
-	//	let pageProxyFactura= context.getPageProxy('#Page:DetallePedido');
-	
-	//Aqui capturo el resultado de la accion REST que se llama resultRest
-	var actionResult = context.getActionResult("ResultRest");
-	
-	//Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
-	var resultado = actionResult.data;
-	
-	//Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
-	//var resultadoFactura= resultado.T_Factura.Factura;
-	var error = resultado.T_Mensaje.TipoMsj;
-	var Listado = resultado.T_Detalle;
-
-	var TextoMensaje = resultado.T_Mensaje.TextoMsj
-	if (resultado && error != "E") { //E Es el resultado que arroja el servicio rest cuando no encuentra el pedido
-	clientData.NoFactura = resultado.T_Factura;
-		
-		//le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
-		pageProxy.setActionBinding(resultado);
-		clientData.Pedido = Listado
-		return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
-
-	} else {
-		dialog.alert(JSON.stringify(TextoMensaje));
-		message = `¡${TextoMensaje}!`;
-		
-		return context.executeAction({
-			"Name": "/Skycm_v3/Actions/Consultas/msj_InventarioNoExiste.action",
-			"Properties": {
-				"Message": message
-			}
-		});
-		
-	}
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/filterinventario.js":
-/*!************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/filterinventario.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ filterinventario)
-/* harmony export */ });
-
-function filterinventario(context) {
-    let search = context.searchString;
-    let qoB = context.dataQueryBuilder();
-    let pernr = context.evaluateTargetPath("#Page:MenuConsultas/#Control:fc_pernr/#Value");
-    // Filtro por defecto para el campo PERNR
-    let pernrFilter = qoB.filterTerm(`PERNR eq '${pernr}'`);
-
-    if (search && search != '') {
-
-        let upperCaseSearch = search.toUpperCase();
-        // Filtro dinámico para el campo MATNR utilizando contains y mayúsculas
-        let matnrFilter = qoB.filterTerm(`MATNR eq '${upperCaseSearch}'`);
-        
-        let defaultSearch = qoB.mdkSearch(upperCaseSearch);
-        
-        // Combinamos los filtros con OR para MATNR y el defaultSearch, y agregamos el filtro PERNR con AND
-        qoB.filter().and(pernrFilter).and(qoB.or(matnrFilter, defaultSearch));
-    } else {
-        // Si no hay búsqueda, simplemente aplicamos el filtro por defecto de PERNR
-        qoB.filter(pernrFilter);
-    }
-
-    return qoB;
-}
-
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/getPernr.js":
-/*!****************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/getPernr.js ***!
-  \****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ getPernr)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function getPernr(context) {
-    let id = context.evaluateTargetPath("#Application/#ClientData/#Property:UserId");
-    let pernr = context.evaluateTargetPath("#Control:fc_pernr");
-    let sociedad = context.evaluateTargetPath("#Control:fc_sociedad");
-
-
-
-    if (id) {
-        var correo = id.toUpperCase();
-        return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'VENDORINFO', [], `$filter=USRID eq '${correo}'`)
-            .then((results) => {
-                if (results && results.length > 0) {
-                    let prod = results.getItem(0);
-                    pernr.setValue(prod.PERNR);
-                    sociedad.setValue(prod.VKORG == '2001' ? "2000" : prod.VKORG);
-                                        
-                    return prod.PERNR;
-                } else {
-                    return 0;
-                }
-            })
-            .catch((error) => {
-                console.error('Error during read: ', error);
-                return 0;
-            });
-    } else {
-        console.log("User ID is not defined");
-        return 0;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/getPernr2.js":
-/*!*****************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/getPernr2.js ***!
-  \*****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ getPernr)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function getPernr(context) {
-    let id = context.evaluateTargetPath("#Application/#ClientData/#Property:UserId");
-
-    if (id) {
-        var correo = id.toUpperCase();
-        return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'VENDORINFO', [], `$filter=USRID eq '${correo}'`)
-            .then((results) => {
-                if (results && results.length > 0) {
-                    let prod = results.getItem(1);
-                    
-                    if(prod){
-                        return prod.PERNR;
-                    }else{
-                        return '0'
-                    }
-                    
-                    
-                } else {
-                    return 0;
-                }
-            })
-            .catch((error) => {
-                console.error('Error during read: ', error);
-                return 0;
-            });
-    } else {
-        console.log("User ID is not defined");
-        return 0;
-    }
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/getdataCliente.js":
-/*!**********************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/getdataCliente.js ***!
-  \**********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ getdataCliente)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function getdataCliente(context) {
-    var kunnr = context.getValue()[0].ReturnValue;
-    var sociedad = context.getPageProxy().evaluateTargetPath("#Control:fc_sociedad");
-    var pernr = context.getPageProxy().evaluateTargetPath("#Control:FC_PERNR");
-    //alert("si se llamo la regla")
-    return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'CLIENTEINFO', [], `$filter=KUNNR eq '${kunnr}'`)
-        .then((results) => {
-            if (results && results.length > 0) {
-                var prod = results.getItem(0);
-                sociedad.setValue(prod.BUKRS);
-                pernr.setValue(prod.PERNR);
-                //alert("si se hace la consulta")
-                return 1; // Indica éxito
-            } else {
-                console.log("No se encontraron datos para el cliente.");
-                return 0; // Indica fallo o ausencia de datos
-            }
-        })
-        .catch(error => {
-            console.error("Error al leer la información del cliente:", error);
-            return 0; // Manejo de errores
-        });
-}
-
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/getdataInven.js":
-/*!********************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/getdataInven.js ***!
-  \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ getdataCliente)
-/* harmony export */ });
- /**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function getdataCliente(context) {
-    var matnr = context.getPageProxy().evaluateTargetPath("#Control:fc_referencias/#SelectedValue");
-    var invent = context.getPageProxy().evaluateTargetPath("#Control:fc_invent");
-
-    return context.read('/Skycm_v3/Services/Online_skycm.service', 'INVENTARIO', [], `$filter=MATNR eq '${matnr}'`)
-        .then((results) => {
-            if (results && results.length > 0) {
-                var prod = results.getItem(0);
-                if (prod.PROVG) { 
-                    invent.setValue(prod.PROVG);
-                    invent.setVisible(true);
-                }else{
-                    invent.setVisible(false);
-                    invent.setValue('')
-                }
-                return 1; // Indica éxito
-            } else {
-                console.log("No se encontraron datos para el cliente.");
-                return 0; // Indica fallo o ausencia de datos
-            }
-        })
-        .catch(error => {
-            console.error("Error al leer la información del cliente:", error);
-            return 0; // Manejo de errores
-        });
-}
-
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/paises/Rest_Cartera.js":
-/*!***************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/paises/Rest_Cartera.js ***!
-  \***************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Rest_Cartera)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function Rest_Cartera(context) {
-    var dialog = context.nativescript.uiDialogsModule;
-//	let pageProxy = context.getPageProxy('#Page:DetallePedido');
-	
-	var actionResult = context.getActionResult("ResultRest");
-	var resultado = actionResult.data;
-	//var error = resultado.T_Mensaje.TipoMsj;
-	var errorTextoMensaje= resultado.TextoMsj
-
-     	var message = ` ¡${errorTextoMensaje}!`;
-		return context.executeAction({
-			"Name": "/Skycm_v3/Actions/Consultas/msj_InventarioNoExiste.action",
-			"Properties": {
-				"Message": message
-			}
-		});
-	
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/paises/Restpedidopais.js":
-/*!*****************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/paises/Restpedidopais.js ***!
-  \*****************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Restpedidopais)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function Restpedidopais(context) {
-    var dialog = context.nativescript.uiDialogsModule;
-	
-	//Creo una variable global clientData para poder acceder a cualquier dato. Siempre se debe instanciar en el menu principal YA  QUE ES LA PAGINA QUE PRIMERO SE CARGA.
-	let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
-
-	//  utilizando el context.getpaggeprxy le digo que lleve la informacion a la pagina que se llama detalle pedido
-	let pageProxy = context.getPageProxy('#Page:DetallePedido');
-	//	let pageProxyFactura= context.getPageProxy('#Page:DetallePedido');
-	
-	//Aqui capturo el resultado de la accion REST que se llama resultRest
-	var actionResult = context.getActionResult("ResultRest");
-	
-	//Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
-	var resultado = actionResult.data;
-	
-	//Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
-	//var resultadoFactura= resultado.T_Factura.Factura;
-	var error = resultado.T_Mensaje.TipoMsj;
-	var Listado = resultado.T_Detalle;
-
-	var TextoMensaje = resultado.T_Mensaje.TextoMsj
-	if (resultado && error != "E") { //E Es el resultado que arroja el servicio rest cuando no encuentra el pedido
-	clientData.NoFactura = resultado.T_Factura;
-
-		//le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
-		pageProxy.setActionBinding(resultado);
-		clientData.Pedido = Listado
-		return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
-
-	} else {
-		return context.executeAction("/Skycm_v3/Actions/Consultas/rest/paises/Rest_PedidoPaises2.action")
-		
-	}
-
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/paises/Restpedidopais2.js":
-/*!******************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/paises/Restpedidopais2.js ***!
-  \******************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Restpedidopais)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function Restpedidopais(context) {
-    var dialog = context.nativescript.uiDialogsModule;
-	
-	//Creo una variable global clientData para poder acceder a cualquier dato. Siempre se debe instanciar en el menu principal YA  QUE ES LA PAGINA QUE PRIMERO SE CARGA.
-	let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
-
-	//  utilizando el context.getpaggeprxy le digo que lleve la informacion a la pagina que se llama detalle pedido
-	let pageProxy = context.getPageProxy('#Page:DetallePedido');
-	//	let pageProxyFactura= context.getPageProxy('#Page:DetallePedido');
-	
-	//Aqui capturo el resultado de la accion REST que se llama resultRest
-	var actionResult = context.getActionResult("ResultRest");
-	
-	//Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
-	var resultado = actionResult.data;
-	
-	//Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
-	//var resultadoFactura= resultado.T_Factura.Factura;
-	var error = resultado.T_Mensaje.TipoMsj;
-	var Listado = resultado.T_Detalle;
-
-	var TextoMensaje = resultado.T_Mensaje.TextoMsj
-	if (resultado && error != "E") { //E Es el resultado que arroja el servicio rest cuando no encuentra el pedido
-	clientData.NoFactura = resultado.T_Factura;
-
-		//le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
-		pageProxy.setActionBinding(resultado);
-		clientData.Pedido = Listado
-		return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
-
-	} else {
-		
-		return context.executeAction("/Skycm_v3/Actions/Consultas/rest/paises/Rest_PedidoPaises3.action")
-		
-		
-	}
-
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/paises/Restpedidopais3.js":
-/*!******************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/paises/Restpedidopais3.js ***!
-  \******************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ Restpedidopais)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function Restpedidopais(context) {
-    var dialog = context.nativescript.uiDialogsModule;
-	
-	//Creo una variable global clientData para poder acceder a cualquier dato. Siempre se debe instanciar en el menu principal YA  QUE ES LA PAGINA QUE PRIMERO SE CARGA.
-	let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
-
-	//  utilizando el context.getpaggeprxy le digo que lleve la informacion a la pagina que se llama detalle pedido
-	let pageProxy = context.getPageProxy('#Page:DetallePedido');
-	//	let pageProxyFactura= context.getPageProxy('#Page:DetallePedido');
-	
-	//Aqui capturo el resultado de la accion REST que se llama resultRest
-	var actionResult = context.getActionResult("ResultRest");
-	
-	//Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
-	var resultado = actionResult.data;
-	
-	//Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
-	//var resultadoFactura= resultado.T_Factura.Factura;
-	var error = resultado.T_Mensaje.TipoMsj;
-	var Listado = resultado.T_Detalle;
-
-	var TextoMensaje = resultado.T_Mensaje.TextoMsj
-	if (resultado && error != "E") { //E Es el resultado que arroja el servicio rest cuando no encuentra el pedido
-	clientData.NoFactura = resultado.T_Factura;
-
-		//le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
-		pageProxy.setActionBinding(resultado);
-		clientData.Pedido = Listado
-		return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
-
-	} else {
-		dialog.alert(JSON.stringify(TextoMensaje));
-		message = `¡${TextoMensaje}!`;
-		
-		return context.executeAction({
-			"Name": "/Skycm_v3/Actions/Consultas/msj_InventarioNoExiste.action",
-			"Properties": {
-				"Message": message
-			}
-		});
-	}
-
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/prueba.js":
-/*!**************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/prueba.js ***!
-  \**************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ prueba)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function prueba(clientAPI) {
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/visibilidad_inventario.js":
-/*!******************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/visibilidad_inventario.js ***!
-  \******************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ visibilidad_inventario)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function visibilidad_inventario(clientAPI) {
-
-    var sociedad = clientAPI.evaluateTargetPath("#Control:fc_sociedad/#Value")
-	
-	switch (sociedad) {
-        case "1000":
-            return 'Transito :$(N,{Userdet2})'
-            break; 
-        case "2000":
-            return ''
-            break;
-        case "6000":
-            return 'Transito :$(N,{Userdet1})'
-            break;
-
-    }
-    
-
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/consultas/visulisacionCampo.js":
-/*!*************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/consultas/visulisacionCampo.js ***!
-  \*************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ visualizacion)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function visualizacion(context) {
-    var matnr = context.getPageProxy().evaluateTargetPath("#Page:ConsultaInventario/#Control:fc_invent/#Value");
-    let control = context.getPageProxy().getControl("#Control:fc_title");
-
-    if(matnr.length > 0){
-        control.setVisible(true);
-        return true;
-    } else {
-        control.setVisible(false);
-        return false;
-    }
-}
-
-
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/gestionVisitas/getdatecalendar.js":
-/*!****************************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/gestionVisitas/getdatecalendar.js ***!
-  \****************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ getdatecalendar)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function getdatecalendar(context) {
-
-    let sectiontable = context.getPageProxy().getControl('SectionedTable0');
-    let sectionCell = sectiontable.getSection("SectionObjectTable0");
-    let fechaString = sectiontable.getSection('SectionCalendar0').getSelectedDate();
-
-    //Convertir la cadena a un objeto Date
-    const fecha = new Date(fechaString);
-
-    // Extraer el año, mes y día
-    const anio = fecha.getFullYear(); // 2024
-    const mes = fecha.getMonth() + 1; // Mes es 0-index, por lo tanto, sumamos 1
-    const dia = fecha.getDate(); // 23
-
-    // Asegurar que el mes y el día tengan dos dígitos
-    const mesFormateado = mes.toString().padStart(2, '0');
-    const diaFormateado = dia.toString().padStart(2, '0');
-
-    // Concatenar para obtener el formato deseado
-    const fechaFormateada = `${anio}-${mesFormateado}-${diaFormateado}`;
-
-    let qo = `$filter=FECHA eq '${fechaFormateada}'`;
-    let pickspec = sectionCell.getTargetSpecifier();
-    pickspec.setQueryOptions(qo);
-    sectionCell.setTargetSpecifier(pickspec);
-
-    sectionCell.redraw();
-
-    console.log(fechaFormateada); // 2024-05-23
-}
-
-
-/***/ }),
-
-/***/ "./build.definitions/Skycm_v3/Rules/gestionVisitas/setFecha.js":
-/*!*********************************************************************!*\
-  !*** ./build.definitions/Skycm_v3/Rules/gestionVisitas/setFecha.js ***!
-  \*********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ setFecha)
-/* harmony export */ });
-/**
- * Describe this function...
- * @param {IClientAPI} clientAPI
- */
-function setFecha(context) {
-    let sectiontable = context.getPageProxy().getControl('SectionedTable0');
-    let sectionCell = sectiontable.getSection("SectionObjectTable0");
-    
-    const fecha = new Date();
-    const anio = fecha.getFullYear(); // Retorna el año completo
-    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
-    const dia = fecha.getDate().toString().padStart(2, '0');
-    const fechaFormateada = `${anio}-${mes}-${dia}`;
-
-    let qo = `$filter=FECHA eq '${fechaFormateada}'`;
-    let pickspec = sectionCell.getTargetSpecifier();
-    pickspec.setQueryOptions(qo);
-    sectionCell.setTargetSpecifier(pickspec);
-
-    sectionCell.redraw();
-}
-
-
-/***/ }),
-
 /***/ "./build.definitions/application-index.js":
 /*!************************************************!*\
   !*** ./build.definitions/application-index.js ***!
@@ -2651,6 +18,7 @@ function setFecha(context) {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 let application_app = __webpack_require__(/*! ./Application.app */ "./build.definitions/Application.app")
+let skycm_v3_actions_actions_errorarchive_errorarchive_unknownaffectedentity_action = __webpack_require__(/*! ./Skycm_v3/Actions/Actions/ErrorArchive/ErrorArchive_UnknownAffectedEntity.action */ "./build.definitions/Skycm_v3/Actions/Actions/ErrorArchive/ErrorArchive_UnknownAffectedEntity.action")
 let skycm_v3_actions_application_appupdate_action = __webpack_require__(/*! ./Skycm_v3/Actions/Application/AppUpdate.action */ "./build.definitions/Skycm_v3/Actions/Application/AppUpdate.action")
 let skycm_v3_actions_application_appupdatefailuremessage_action = __webpack_require__(/*! ./Skycm_v3/Actions/Application/AppUpdateFailureMessage.action */ "./build.definitions/Skycm_v3/Actions/Application/AppUpdateFailureMessage.action")
 let skycm_v3_actions_application_appupdateprogressbanner_action = __webpack_require__(/*! ./Skycm_v3/Actions/Application/AppUpdateProgressBanner.action */ "./build.definitions/Skycm_v3/Actions/Application/AppUpdateProgressBanner.action")
@@ -2716,9 +84,11 @@ let skycm_v3_actions_jornadalaboral_close_modal_jornada_action = __webpack_requi
 let skycm_v3_actions_jornadalaboral_create_jornada_action = __webpack_require__(/*! ./Skycm_v3/Actions/JornadaLaboral/create_Jornada.action */ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/create_Jornada.action")
 let skycm_v3_actions_jornadalaboral_download_jornada_action = __webpack_require__(/*! ./Skycm_v3/Actions/JornadaLaboral/Download_jornada.action */ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/Download_jornada.action")
 let skycm_v3_actions_jornadalaboral_msj_confirmacioncheck_out_action = __webpack_require__(/*! ./Skycm_v3/Actions/JornadaLaboral/msj_ConfirmacionCheck_out.action */ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/msj_ConfirmacionCheck_out.action")
+let skycm_v3_actions_jornadalaboral_msj_jornada_finalizada_action = __webpack_require__(/*! ./Skycm_v3/Actions/JornadaLaboral/msj_jornada_finalizada.action */ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/msj_jornada_finalizada.action")
 let skycm_v3_actions_jornadalaboral_msj_jornadafinalizada_action = __webpack_require__(/*! ./Skycm_v3/Actions/JornadaLaboral/msj_JornadaFinalizada.action */ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/msj_JornadaFinalizada.action")
 let skycm_v3_actions_jornadalaboral_msj_jornadalaboralactiva_action = __webpack_require__(/*! ./Skycm_v3/Actions/JornadaLaboral/msj_JornadaLaboralActiva.action */ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/msj_JornadaLaboralActiva.action")
 let skycm_v3_actions_jornadalaboral_msj_jornadalaboraliniciada_action = __webpack_require__(/*! ./Skycm_v3/Actions/JornadaLaboral/msj_JornadaLaboralIniciada.action */ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/msj_JornadaLaboralIniciada.action")
+let skycm_v3_actions_jornadalaboral_msj_visita_activa_action = __webpack_require__(/*! ./Skycm_v3/Actions/JornadaLaboral/msj_visita_activa.action */ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/msj_visita_activa.action")
 let skycm_v3_actions_jornadalaboral_nav_chekin_jornada_action = __webpack_require__(/*! ./Skycm_v3/Actions/JornadaLaboral/nav_ChekIn_jornada.action */ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/nav_ChekIn_jornada.action")
 let skycm_v3_actions_jornadalaboral_nav_detallejornadalaboral_action = __webpack_require__(/*! ./Skycm_v3/Actions/JornadaLaboral/nav_DetalleJornadaLaboral.action */ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/nav_DetalleJornadaLaboral.action")
 let skycm_v3_actions_jornadalaboral_nav_historicojornada_action = __webpack_require__(/*! ./Skycm_v3/Actions/JornadaLaboral/nav_HistoricoJornada.action */ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/nav_HistoricoJornada.action")
@@ -2745,6 +115,7 @@ let skycm_v3_actions_service_uploadoffline_action = __webpack_require__(/*! ./Sk
 let skycm_v3_actions_service_uploadonly_action = __webpack_require__(/*! ./Skycm_v3/Actions/Service/UploadOnly.action */ "./build.definitions/Skycm_v3/Actions/Service/UploadOnly.action")
 let skycm_v3_actions_updateentitysuccessmessage_action = __webpack_require__(/*! ./Skycm_v3/Actions/UpdateEntitySuccessMessage.action */ "./build.definitions/Skycm_v3/Actions/UpdateEntitySuccessMessage.action")
 let skycm_v3_actions_uploadonlyv_action = __webpack_require__(/*! ./Skycm_v3/Actions/UploadonlyV.action */ "./build.definitions/Skycm_v3/Actions/UploadonlyV.action")
+let skycm_v3_actions_visitas_borravisita_action = __webpack_require__(/*! ./Skycm_v3/Actions/Visitas/BorraVisita.action */ "./build.definitions/Skycm_v3/Actions/Visitas/BorraVisita.action")
 let skycm_v3_actions_visitas_check_prospecto_action = __webpack_require__(/*! ./Skycm_v3/Actions/Visitas/check_prospecto.action */ "./build.definitions/Skycm_v3/Actions/Visitas/check_prospecto.action")
 let skycm_v3_actions_visitas_chek_objetivovisita_action = __webpack_require__(/*! ./Skycm_v3/Actions/Visitas/chek_ObjetivoVisita.action */ "./build.definitions/Skycm_v3/Actions/Visitas/chek_ObjetivoVisita.action")
 let skycm_v3_actions_visitas_createclienteprospecto_action = __webpack_require__(/*! ./Skycm_v3/Actions/Visitas/CreateClienteProspecto.action */ "./build.definitions/Skycm_v3/Actions/Visitas/CreateClienteProspecto.action")
@@ -2840,6 +211,7 @@ let skycm_v3_rules_application_appupdatefailure_js = __webpack_require__(/*! ./S
 let skycm_v3_rules_application_appupdatesuccess_js = __webpack_require__(/*! ./Skycm_v3/Rules/Application/AppUpdateSuccess.js */ "./build.definitions/Skycm_v3/Rules/Application/AppUpdateSuccess.js")
 let skycm_v3_rules_application_clientismultiusermode_js = __webpack_require__(/*! ./Skycm_v3/Rules/Application/ClientIsMultiUserMode.js */ "./build.definitions/Skycm_v3/Rules/Application/ClientIsMultiUserMode.js")
 let skycm_v3_rules_application_ejecutarmensaje_js = __webpack_require__(/*! ./Skycm_v3/Rules/Application/EjecutarMensaje.js */ "./build.definitions/Skycm_v3/Rules/Application/EjecutarMensaje.js")
+let skycm_v3_rules_application_errorarchive_decidewhicheditpage_js = __webpack_require__(/*! ./Skycm_v3/Rules/Application/ErrorArchive_DecideWhichEditPage.js */ "./build.definitions/Skycm_v3/Rules/Application/ErrorArchive_DecideWhichEditPage.js")
 let skycm_v3_rules_application_get_pernrscp_js = __webpack_require__(/*! ./Skycm_v3/Rules/Application/Get_PernrScp.js */ "./build.definitions/Skycm_v3/Rules/Application/Get_PernrScp.js")
 let skycm_v3_rules_application_getanio_js = __webpack_require__(/*! ./Skycm_v3/Rules/Application/GetAnio.js */ "./build.definitions/Skycm_v3/Rules/Application/GetAnio.js")
 let skycm_v3_rules_application_getclientsupportversions_js = __webpack_require__(/*! ./Skycm_v3/Rules/Application/GetClientSupportVersions.js */ "./build.definitions/Skycm_v3/Rules/Application/GetClientSupportVersions.js")
@@ -2870,6 +242,7 @@ let skycm_v3_rules_consultas_paises_restpedidopais_js = __webpack_require__(/*! 
 let skycm_v3_rules_consultas_prueba_js = __webpack_require__(/*! ./Skycm_v3/Rules/consultas/prueba.js */ "./build.definitions/Skycm_v3/Rules/consultas/prueba.js")
 let skycm_v3_rules_consultas_resultinventario_js = __webpack_require__(/*! ./Skycm_v3/Rules/consultas/ResultInventario.js */ "./build.definitions/Skycm_v3/Rules/consultas/ResultInventario.js")
 let skycm_v3_rules_consultas_rule_rest_inventario_js = __webpack_require__(/*! ./Skycm_v3/Rules/consultas/Rule_Rest_Inventario.js */ "./build.definitions/Skycm_v3/Rules/consultas/Rule_Rest_Inventario.js")
+let skycm_v3_rules_consultas_searchcustom_js = __webpack_require__(/*! ./Skycm_v3/Rules/consultas/searchCustom.js */ "./build.definitions/Skycm_v3/Rules/consultas/searchCustom.js")
 let skycm_v3_rules_consultas_validarconsultasociedad_js = __webpack_require__(/*! ./Skycm_v3/Rules/consultas/ValidarConsultaSociedad.js */ "./build.definitions/Skycm_v3/Rules/consultas/ValidarConsultaSociedad.js")
 let skycm_v3_rules_consultas_visibilidad_inventario_js = __webpack_require__(/*! ./Skycm_v3/Rules/consultas/visibilidad_inventario.js */ "./build.definitions/Skycm_v3/Rules/consultas/visibilidad_inventario.js")
 let skycm_v3_rules_consultas_visulisacioncampo_js = __webpack_require__(/*! ./Skycm_v3/Rules/consultas/visulisacionCampo.js */ "./build.definitions/Skycm_v3/Rules/consultas/visulisacionCampo.js")
@@ -2883,6 +256,7 @@ let skycm_v3_rules_logging_togglelogging_js = __webpack_require__(/*! ./Skycm_v3
 let skycm_v3_rules_logging_tracecategories_js = __webpack_require__(/*! ./Skycm_v3/Rules/Logging/TraceCategories.js */ "./build.definitions/Skycm_v3/Rules/Logging/TraceCategories.js")
 let skycm_v3_rules_logging_userlogsetting_js = __webpack_require__(/*! ./Skycm_v3/Rules/Logging/UserLogSetting.js */ "./build.definitions/Skycm_v3/Rules/Logging/UserLogSetting.js")
 let skycm_v3_rules_visitas_calcularduracionvisita_js = __webpack_require__(/*! ./Skycm_v3/Rules/Visitas/CalcularDuracionVisita.js */ "./build.definitions/Skycm_v3/Rules/Visitas/CalcularDuracionVisita.js")
+let skycm_v3_rules_visitas_cerrarvisita_js = __webpack_require__(/*! ./Skycm_v3/Rules/Visitas/CerrarVisita.js */ "./build.definitions/Skycm_v3/Rules/Visitas/CerrarVisita.js")
 let skycm_v3_rules_visitas_generaridprospecto_js = __webpack_require__(/*! ./Skycm_v3/Rules/Visitas/GenerarIdProspecto.js */ "./build.definitions/Skycm_v3/Rules/Visitas/GenerarIdProspecto.js")
 let skycm_v3_rules_visitas_generaridvisita_js = __webpack_require__(/*! ./Skycm_v3/Rules/Visitas/GenerarIdVisita.js */ "./build.definitions/Skycm_v3/Rules/Visitas/GenerarIdVisita.js")
 let skycm_v3_rules_visitas_geo_rule_js = __webpack_require__(/*! ./Skycm_v3/Rules/Visitas/Geo.rule.js */ "./build.definitions/Skycm_v3/Rules/Visitas/Geo.rule.js")
@@ -2894,6 +268,7 @@ let skycm_v3_rules_visitas_rectificarlatylong_js = __webpack_require__(/*! ./Sky
 let skycm_v3_rules_visitas_validardistancia_js = __webpack_require__(/*! ./Skycm_v3/Rules/Visitas/ValidarDistancia.js */ "./build.definitions/Skycm_v3/Rules/Visitas/ValidarDistancia.js")
 let skycm_v3_rules_visitas_validarjornadalaboralvisita_js = __webpack_require__(/*! ./Skycm_v3/Rules/Visitas/ValidarJornadalaboralVisita.js */ "./build.definitions/Skycm_v3/Rules/Visitas/ValidarJornadalaboralVisita.js")
 let skycm_v3_rules_visitas_validarvisitaactiva_js = __webpack_require__(/*! ./Skycm_v3/Rules/Visitas/ValidarVisitaActiva.js */ "./build.definitions/Skycm_v3/Rules/Visitas/ValidarVisitaActiva.js")
+let skycm_v3_rules_visitas_validarvisitaactivajor_js = __webpack_require__(/*! ./Skycm_v3/Rules/Visitas/ValidarVisitaActivaJor.js */ "./build.definitions/Skycm_v3/Rules/Visitas/ValidarVisitaActivaJor.js")
 let skycm_v3_services_dest_skycm_productivo_service = __webpack_require__(/*! ./Skycm_v3/Services/Dest_SkyCM_Productivo.service */ "./build.definitions/Skycm_v3/Services/Dest_SkyCM_Productivo.service")
 let skycm_v3_services_online_skycm_service = __webpack_require__(/*! ./Skycm_v3/Services/Online_skycm.service */ "./build.definitions/Skycm_v3/Services/Online_skycm.service")
 let skycm_v3_services_rest_inventario_service = __webpack_require__(/*! ./Skycm_v3/Services/Rest_Inventario.service */ "./build.definitions/Skycm_v3/Services/Rest_Inventario.service")
@@ -2908,6 +283,7 @@ let version_mdkbundlerversion = __webpack_require__(/*! ./version.mdkbundlervers
 
 module.exports = {
 	application_app : application_app,
+	skycm_v3_actions_actions_errorarchive_errorarchive_unknownaffectedentity_action : skycm_v3_actions_actions_errorarchive_errorarchive_unknownaffectedentity_action,
 	skycm_v3_actions_application_appupdate_action : skycm_v3_actions_application_appupdate_action,
 	skycm_v3_actions_application_appupdatefailuremessage_action : skycm_v3_actions_application_appupdatefailuremessage_action,
 	skycm_v3_actions_application_appupdateprogressbanner_action : skycm_v3_actions_application_appupdateprogressbanner_action,
@@ -2973,9 +349,11 @@ module.exports = {
 	skycm_v3_actions_jornadalaboral_create_jornada_action : skycm_v3_actions_jornadalaboral_create_jornada_action,
 	skycm_v3_actions_jornadalaboral_download_jornada_action : skycm_v3_actions_jornadalaboral_download_jornada_action,
 	skycm_v3_actions_jornadalaboral_msj_confirmacioncheck_out_action : skycm_v3_actions_jornadalaboral_msj_confirmacioncheck_out_action,
+	skycm_v3_actions_jornadalaboral_msj_jornada_finalizada_action : skycm_v3_actions_jornadalaboral_msj_jornada_finalizada_action,
 	skycm_v3_actions_jornadalaboral_msj_jornadafinalizada_action : skycm_v3_actions_jornadalaboral_msj_jornadafinalizada_action,
 	skycm_v3_actions_jornadalaboral_msj_jornadalaboralactiva_action : skycm_v3_actions_jornadalaboral_msj_jornadalaboralactiva_action,
 	skycm_v3_actions_jornadalaboral_msj_jornadalaboraliniciada_action : skycm_v3_actions_jornadalaboral_msj_jornadalaboraliniciada_action,
+	skycm_v3_actions_jornadalaboral_msj_visita_activa_action : skycm_v3_actions_jornadalaboral_msj_visita_activa_action,
 	skycm_v3_actions_jornadalaboral_nav_chekin_jornada_action : skycm_v3_actions_jornadalaboral_nav_chekin_jornada_action,
 	skycm_v3_actions_jornadalaboral_nav_detallejornadalaboral_action : skycm_v3_actions_jornadalaboral_nav_detallejornadalaboral_action,
 	skycm_v3_actions_jornadalaboral_nav_historicojornada_action : skycm_v3_actions_jornadalaboral_nav_historicojornada_action,
@@ -3002,6 +380,7 @@ module.exports = {
 	skycm_v3_actions_service_uploadonly_action : skycm_v3_actions_service_uploadonly_action,
 	skycm_v3_actions_updateentitysuccessmessage_action : skycm_v3_actions_updateentitysuccessmessage_action,
 	skycm_v3_actions_uploadonlyv_action : skycm_v3_actions_uploadonlyv_action,
+	skycm_v3_actions_visitas_borravisita_action : skycm_v3_actions_visitas_borravisita_action,
 	skycm_v3_actions_visitas_check_prospecto_action : skycm_v3_actions_visitas_check_prospecto_action,
 	skycm_v3_actions_visitas_chek_objetivovisita_action : skycm_v3_actions_visitas_chek_objetivovisita_action,
 	skycm_v3_actions_visitas_createclienteprospecto_action : skycm_v3_actions_visitas_createclienteprospecto_action,
@@ -3097,6 +476,7 @@ module.exports = {
 	skycm_v3_rules_application_appupdatesuccess_js : skycm_v3_rules_application_appupdatesuccess_js,
 	skycm_v3_rules_application_clientismultiusermode_js : skycm_v3_rules_application_clientismultiusermode_js,
 	skycm_v3_rules_application_ejecutarmensaje_js : skycm_v3_rules_application_ejecutarmensaje_js,
+	skycm_v3_rules_application_errorarchive_decidewhicheditpage_js : skycm_v3_rules_application_errorarchive_decidewhicheditpage_js,
 	skycm_v3_rules_application_get_pernrscp_js : skycm_v3_rules_application_get_pernrscp_js,
 	skycm_v3_rules_application_getanio_js : skycm_v3_rules_application_getanio_js,
 	skycm_v3_rules_application_getclientsupportversions_js : skycm_v3_rules_application_getclientsupportversions_js,
@@ -3127,6 +507,7 @@ module.exports = {
 	skycm_v3_rules_consultas_prueba_js : skycm_v3_rules_consultas_prueba_js,
 	skycm_v3_rules_consultas_resultinventario_js : skycm_v3_rules_consultas_resultinventario_js,
 	skycm_v3_rules_consultas_rule_rest_inventario_js : skycm_v3_rules_consultas_rule_rest_inventario_js,
+	skycm_v3_rules_consultas_searchcustom_js : skycm_v3_rules_consultas_searchcustom_js,
 	skycm_v3_rules_consultas_validarconsultasociedad_js : skycm_v3_rules_consultas_validarconsultasociedad_js,
 	skycm_v3_rules_consultas_visibilidad_inventario_js : skycm_v3_rules_consultas_visibilidad_inventario_js,
 	skycm_v3_rules_consultas_visulisacioncampo_js : skycm_v3_rules_consultas_visulisacioncampo_js,
@@ -3140,6 +521,7 @@ module.exports = {
 	skycm_v3_rules_logging_tracecategories_js : skycm_v3_rules_logging_tracecategories_js,
 	skycm_v3_rules_logging_userlogsetting_js : skycm_v3_rules_logging_userlogsetting_js,
 	skycm_v3_rules_visitas_calcularduracionvisita_js : skycm_v3_rules_visitas_calcularduracionvisita_js,
+	skycm_v3_rules_visitas_cerrarvisita_js : skycm_v3_rules_visitas_cerrarvisita_js,
 	skycm_v3_rules_visitas_generaridprospecto_js : skycm_v3_rules_visitas_generaridprospecto_js,
 	skycm_v3_rules_visitas_generaridvisita_js : skycm_v3_rules_visitas_generaridvisita_js,
 	skycm_v3_rules_visitas_geo_rule_js : skycm_v3_rules_visitas_geo_rule_js,
@@ -3151,6 +533,7 @@ module.exports = {
 	skycm_v3_rules_visitas_validardistancia_js : skycm_v3_rules_visitas_validardistancia_js,
 	skycm_v3_rules_visitas_validarjornadalaboralvisita_js : skycm_v3_rules_visitas_validarjornadalaboralvisita_js,
 	skycm_v3_rules_visitas_validarvisitaactiva_js : skycm_v3_rules_visitas_validarvisitaactiva_js,
+	skycm_v3_rules_visitas_validarvisitaactivajor_js : skycm_v3_rules_visitas_validarvisitaactivajor_js,
 	skycm_v3_services_dest_skycm_productivo_service : skycm_v3_services_dest_skycm_productivo_service,
 	skycm_v3_services_online_skycm_service : skycm_v3_services_online_skycm_service,
 	skycm_v3_services_rest_inventario_service : skycm_v3_services_rest_inventario_service,
@@ -3162,6 +545,2615 @@ module.exports = {
 	skycm_v3_styles_styles_light_nss : skycm_v3_styles_styles_light_nss,
 	tsconfig_json : tsconfig_json,
 	version_mdkbundlerversion : version_mdkbundlerversion
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/Actualizar_interval.js":
+/*!*****************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/Actualizar_interval.js ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Actualizar_interval)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function Actualizar_interval(context) {
+  setInterval(function () {
+    context.executeAction('/Skycm_v3/Rules/Application/ValidarCambios.js');
+  }, 150000);
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/AppUpdateFailure.js":
+/*!**************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/AppUpdateFailure.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ AppUpdateFailure)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function AppUpdateFailure(clientAPI) {
+  let result = clientAPI.actionResults.AppUpdate.error.toString();
+  var message;
+  console.log(result);
+  if (result.startsWith('Error: Uncaught app extraction failure:')) {
+    result = 'Error: Uncaught app extraction failure:';
+  }
+  if (result.startsWith('Error: LCMS GET Version Response Error Response Status: 404 | Body: 404 Not Found: Requested route')) {
+    result = 'Application instance is not up or running';
+  }
+  if (result.startsWith('Error: LCMS GET Version Response Error Response Status: 404 | Body')) {
+    result = 'Service instance not found.';
+  }
+  switch (result) {
+    case 'Service instance not found.':
+      message = 'Mobile App Update feature is not assigned or not running for your application. Please add the Mobile App Update feature, deploy your application, and try again.';
+      break;
+    case 'Error: LCMS GET Version Response Error Response Status: 404 | Body: Failed to find a matched endpoint':
+      message = 'Mobile App Update feature is not assigned to your application. Please add the Mobile App Update feature, deploy your application, and try again.';
+      break;
+    case 'Error: LCMS GET Version Response failed: Error: Optional(OAuth2Error.tokenRejected: The newly acquired or refreshed token got rejected.)':
+      message = 'The Mobile App Update feature is not assigned to your application or there is no Application metadata deployed. Please check your application in Mobile Services and try again.';
+      break;
+    case 'Error: Uncaught app extraction failure:':
+      message = 'Error extracting metadata. Please redeploy and try again.';
+      break;
+    case 'Application instance is not up or running':
+      message = 'Communication failure. Verify that the BindMobileApplicationRoutesToME Application route is running in your BTP space cockpit.';
+      break;
+    default:
+      message = result;
+      break;
+  }
+  return clientAPI.getPageProxy().executeAction({
+    "Name": "/Skycm_v3/Actions/Application/AppUpdateFailureMessage.action",
+    "Properties": {
+      "Duration": 0,
+      "Message": message
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/AppUpdateSuccess.js":
+/*!**************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/AppUpdateSuccess.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ AppUpdateSuccess)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function sleep(ms) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      resolve();
+    }, ms);
+  });
+}
+function AppUpdateSuccess(clientAPI) {
+  var message;
+  // Force a small pause to let the progress banner show in case there is no new version available
+  return sleep(500).then(function () {
+    let result = clientAPI.actionResults.AppUpdate.data;
+    console.log(result);
+    let versionNum = result.split(': ')[1];
+    if (result.startsWith('Current version is already up to date')) {
+      return clientAPI.getPageProxy().executeAction({
+        "Name": "/Skycm_v3/Actions/Application/AppUpdateSuccessMessage.action",
+        "Properties": {
+          "Message": `You are already using the latest version: ${versionNum}`,
+          "NumberOfLines": 2
+        }
+      });
+    } else if (result === 'AppUpdate feature is not enabled or no new revision found.') {
+      message = 'No Application metadata found. Please deploy your application and try again.';
+      return clientAPI.getPageProxy().executeAction({
+        "Name": "/Skycm_v3/Actions/Application/AppUpdateSuccessMessage.action",
+        "Properties": {
+          "Duration": 5,
+          "Message": message,
+          "NumberOfLines": 2
+        }
+      });
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/ClientIsMultiUserMode.js":
+/*!*******************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/ClientIsMultiUserMode.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ClientIsMultiUserMode)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function ClientIsMultiUserMode(clientAPI) {
+  return clientAPI.isAppInMultiUserMode();
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/EjecutarMensaje.js":
+/*!*************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/EjecutarMensaje.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ EjecutarMensaje)
+/* harmony export */ });
+function EjecutarMensaje(context) {
+  //var dialog = context.nativescript.uiDialogsModule;
+  var pernr = context.evaluateTargetPath("#Application/#ClientData/#Property:UserId");
+  var hoy = new Date();
+  var horaactual = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+  return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'HISTV', [], `$filter=ESTADO eq 'ACTIVA' and EMAIL_VEND eq '${pernr}'`).then(result => {
+    if (result && result.length > 0) {
+      let datos = result.getItem(0);
+      let hora = datos.HORA;
+      var hora1 = horaactual.toString().split(":"),
+        // campo hora_fin
+        hora2 = hora.toString().split(":"),
+        // campo hora_inicio
+        t1 = new Date(),
+        t2 = new Date();
+      t1.setHours(hora1[0], hora1[1], hora1[2]);
+      t2.setHours(hora2[0], hora2[1], hora2[2]);
+
+      //Aquí hago la resta
+      t1.setHours(t1.getHours() - t2.getHours(), t1.getMinutes() - t2.getMinutes(), t1.getSeconds() - t2.getSeconds());
+
+      //Imprimo el resultado
+      var resultado = (t1.getHours() < 10 ? "0" + t1.getHours() : "" + t1.getHours()) + ":" + (t1.getMinutes() < 10 ? "0" + t1.getMinutes() : "" + t1.getMinutes()) + ":" + (t1.getSeconds() < 10 ? "0" + t1.getSeconds() : "" + t1.getSeconds());
+      var Horas = parseInt(resultado.slice(0, 2));
+      if (Horas > 0) {
+        return context.executeAction('/Skycm_v3/Actions/Application/MsjSeguirVisita.action');
+      } else {
+        return true;
+      }
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/ErrorArchive_DecideWhichEditPage.js":
+/*!******************************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/ErrorArchive_DecideWhichEditPage.js ***!
+  \******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ErrorArchive_DecideWhichEditPage)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function ErrorArchive_DecideWhichEditPage(context) {
+  //Current binding's root is the errorArchiveEntity:
+  // Current binding's root is the errorArchiveEntity:
+  let errorArchiveEntity = context.currentPage.context.binding;
+  // Get the affectedEntity object out of it
+  let affectedEntity = errorArchiveEntity.AffectedEntity;
+  console.log("Affected Entity Is:");
+  console.log(affectedEntity);
+  let id = affectedEntity["@odata.id"]; // e.g. SalesOrderHeaders(12345)
+  let affectedEntityType = "Unknown Entity Set";
+  if (id.indexOf("(") > 0) {
+    // Extracting the entity set type from @odata.id e.g. SalesOrderHeaders
+    var patt = /\/?(.+)\(/i;
+    var result = id.match(patt);
+    affectedEntityType = result[1];
+  }
+  console.log("Affected Entity Type Is:");
+  console.log(affectedEntityType);
+  switch (affectedEntityType) {
+    case "HISTV":
+      // Establecer el binding para la acción de borrado
+      context.getPageProxy().setActionBinding(affectedEntity);
+      // Ejecutar la acción de borrado
+      return context.executeAction("/Skycm_v3/Actions/Visitas/BorraVisita.action");
+    default:
+      // Guardar el tipo de entidad no manejado para mostrar un toast
+      context.getPageProxy().getClientData().AffectedEntityType = affectedEntityType;
+      return context.executeAction("/Skycm_v3/Actions/Actions/ErrorArchive/ErrorArchive_UnknownAffectedEntity.action");
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/GetAnio.js":
+/*!*****************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/GetAnio.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ GetAnio)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function GetAnio(clientAPI) {
+  const fechaActual = new Date(); // Obtiene la fecha actual
+  const anio = fechaActual.getFullYear(); // Obtiene el año completo
+  return anio.toString();
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/GetClientSupportVersions.js":
+/*!**********************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/GetClientSupportVersions.js ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ GetClientSupportVersions)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function GetClientSupportVersions(clientAPI) {
+  let versionInfo = clientAPI.getVersionInfo();
+  let versionStr = '';
+  Object.keys(versionInfo).forEach(function (key, index) {
+    // key: the name of the object key
+    // index: the ordinal position of the key within the object
+    //console.log(`Key: ${key}   Index: ${index}`);
+    if (key != 'Application Version') {
+      versionStr += `${key}: ${versionInfo[key]}\n`;
+    }
+  });
+  return versionStr;
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/GetClientVersion.js":
+/*!**************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/GetClientVersion.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ GetClientVersion)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function GetClientVersion(clientAPI) {
+  let versionInfo = clientAPI.getVersionInfo();
+  if (versionInfo.hasOwnProperty('Application Version')) {
+    return versionInfo['Application Version'];
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/GetFecha.js":
+/*!******************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/GetFecha.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ GetFecha)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function GetFecha(clientAPI) {
+  let currentDate = new Date();
+  return currentDate.toISOString().split('T')[0]; // Retorna la fecha en formato YYYY-MM-DD
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/GetHora.js":
+/*!*****************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/GetHora.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ GetHora)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function GetHora(clientAPI) {
+  let currentTime = new Date();
+  return currentTime.toTimeString().split(' ')[0]; // Retorna solo la hora, minuto y segundo
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/GetMes.js":
+/*!****************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/GetMes.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ GetMes)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function GetMes(clientAPI) {
+  const fechaActual = new Date(); // Obtiene la fecha actual
+  const mes = fechaActual.getMonth() + 1; // getMonth() es base 0; añade 1 para obtener el mes correcto
+  const mesConDosDigitos = mes.toString().padStart(2, '0'); // Asegura dos dígitos
+  return mesConDosDigitos;
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/Get_PernrScp.js":
+/*!**********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/Get_PernrScp.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Get_PernrScp)
+/* harmony export */ });
+function Get_PernrScp(context) {
+  var dialog = context.nativescript.uiDialogsModule;
+  let clientData = context.evaluateTargetPathForAPI('#Page:GestionVisitas').getClientData();
+  let id = context.evaluateTargetPath("#Application/#ClientData/#Property:UserId");
+  if (id) {
+    var pernr2 = id.toUpperCase();
+    return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'VENDORINFO', [], `$filter=USRID eq '${pernr2}'`).then(results => {
+      if (results && results.length > 0) {
+        let prod = results.getItem(0);
+        var pernr_scp = prod.PERNR_SCP;
+        //dialog.alert(pernr_scp);
+        return pernr_scp;
+      } else {
+        console.log("no se hizo la consulta");
+        return "n/a";
+      }
+    }).catch(error => {
+      console.error('Error during read: ', error);
+      return "n/e";
+    });
+  } else {
+    console.log("User ID is not defined");
+    return 0;
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/JornadaLaboral/CalcularDuracionJornada.js":
+/*!************************************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/JornadaLaboral/CalcularDuracionJornada.js ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ CalcularDuracionJornada)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function CalcularDuracionJornada(clientAPI) {
+  // Obtener las horas de inicio y fin
+  let ini = clientAPI.evaluateTargetPath("#Page:DetalleJornadaLaboral/#Control:FCHORAINIDETALLE/#Value");
+  let finis = clientAPI.evaluateTargetPath("#Page:DetalleJornadaLaboral/#Control:FC_HORAFINJOR/#Value");
+
+  // Convertir las horas a objetos Date
+  let horaInicio = ini.split(":");
+  let horaFin = finis.split(":");
+  let t1 = new Date();
+  let t2 = new Date();
+  t1.setHours(horaInicio[0], horaInicio[1], horaInicio[2]);
+  t2.setHours(horaFin[0], horaFin[1], horaFin[2]);
+
+  // Calcular la diferencia en milisegundos
+  let diferencia = t2 - t1;
+
+  // Convertir la diferencia en horas, minutos y segundos
+  let horas = Math.floor(diferencia / (1000 * 60 * 60));
+  let minutos = Math.floor(diferencia / (1000 * 60) % 60);
+  let segundos = Math.floor(diferencia / 1000 % 60);
+
+  // Formatear el resultado a hh:mm:ss
+  let resultado = (horas < 10 ? "0" + horas : horas) + ":" + (minutos < 10 ? "0" + minutos : minutos) + ":" + (segundos < 10 ? "0" + segundos : segundos);
+  console.log("esta es la duracion de la jornada: ", resultado);
+  return resultado;
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/JornadaLaboral/GenerarIDJornada.js":
+/*!*****************************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/JornadaLaboral/GenerarIDJornada.js ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ GenerarIDJornada)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+/*export default function GenerarIDJornada(clientAPI) {
+
+    function generateUUID() {
+        let d = new Date().getTime();
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            let r = (d + Math.random() * 16) % 16 | 0;
+            d = Math.floor(d / 16);
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
+
+    let randomUUID = generateUUID();
+    
+    return 'Jor-' + randomUUID;
+}*/
+
+function GenerarIDJornada(clientAPI) {
+  function generateUUID() {
+    let cryptoObj = typeof crypto !== "undefined" ? crypto : null;
+    if (cryptoObj && cryptoObj.getRandomValues) {
+      // Método más seguro con crypto
+      let buffer = new Uint8Array(16);
+      cryptoObj.getRandomValues(buffer);
+
+      // Ajustar bits para cumplir estándar UUID v4
+      buffer[6] = buffer[6] & 0x0f | 0x40;
+      buffer[8] = buffer[8] & 0x3f | 0x80;
+      return [...buffer].map((b, i) => {
+        let s = b.toString(16).padStart(2, "0");
+        // Insertar guiones en posiciones estándar
+        return i === 4 || i === 6 || i === 8 || i === 10 ? "-" + s : s;
+      }).join("");
+    } else {
+      // Fallback si no hay crypto disponible
+      let d = new Date().getTime();
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        let r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c === 'x' ? r : r & 0x3 | 0x8).toString(16);
+      });
+    }
+  }
+  return generateUUID();
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/JornadaLaboral/ValiadarjornadaLaboral.js":
+/*!***********************************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/JornadaLaboral/ValiadarjornadaLaboral.js ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ValiadarjornadaLaboral)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function ValiadarjornadaLaboral(context) {
+  let pernr_scp = context.evaluateTargetPath("#Application/#AppData/UserId");
+  let fecha = context.evaluateTargetPath("#Page:Main/#Control:FC_fechaini/#Value");
+  //var dialog = context.nativescript.uiDialogsModule;
+
+  return context.count('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'WORKDAY', `$filter=ESTADO eq 'ACTIVO' and EMAIL_VEND eq '${pernr_scp}' and FECHA eq '${fecha}'`).then(count => {
+    context.getPageProxy().getClientData().EquipmentTotalCount = count;
+    // If “Customers” Entity set is availale, then it return the total customers
+    if (count > 0) {
+      //dialog.alert(pernr_scp)
+      return context.executeAction('/Skycm_v3/Actions/JornadaLaboral/msj_JornadaLaboralActiva.action');
+    } else {
+      return true;
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/OnWillUpdate.js":
+/*!**********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/OnWillUpdate.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ OnWillUpdate)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function OnWillUpdate(clientAPI) {
+  /* return clientAPI.executeAction('/Skycm_v3/Actions/Application/OnWillUpdate.action').then((result) => {
+       if (result.data) {*/
+  return clientAPI.executeAction('/Skycm_v3/Actions/Service/CloseOffline.action').then(success => Promise.resolve(success), failure => Promise.reject('Offline Odata Close Failed ' + failure));
+  /* } else {
+       return Promise.reject('User Deferred');
+   }
+  });*/
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/ResetAppSettingsAndLogout.js":
+/*!***********************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/ResetAppSettingsAndLogout.js ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ResetAppSettingsAndLogout)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function ResetAppSettingsAndLogout(clientAPI) {
+  let logger = clientAPI.getLogger();
+  let platform = clientAPI.nativescript.platformModule;
+  let appSettings = clientAPI.nativescript.appSettingsModule;
+  var appId;
+  if (platform && (platform.isIOS || platform.isAndroid)) {
+    appId = clientAPI.evaluateTargetPath('#Application/#AppData/MobileServiceAppId');
+  } else {
+    appId = 'WindowsClient';
+  }
+  try {
+    // Remove any other app specific settings
+    appSettings.getAllKeys().forEach(key => {
+      if (key.substring(0, appId.length) === appId) {
+        appSettings.remove(key);
+      }
+    });
+  } catch (err) {
+    logger.log(`ERROR: AppSettings cleanup failure - ${err}`, 'ERROR');
+  } finally {
+    // Logout 
+    return clientAPI.getPageProxy().executeAction('/Skycm_v3/Actions/Application/Reset.action');
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Application/ValidarCambios.js":
+/*!************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Application/ValidarCambios.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ValidarCambios)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function ValidarCambios(context) {
+  var xhr = new XMLHttpRequest();
+  var file = "https://www.google.com/";
+  var randomNum = Math.round(Math.random() * 10000);
+  var dialog = context.nativescript.uiDialogsModule;
+  xhr.open('HEAD', file + "?rand=" + randomNum, true);
+  xhr.send();
+  xhr.addEventListener("readystatechange", processRequest, false);
+  function processRequest(e) {
+    var provider = context.getODataProvider('/Skycm_v3/Services/Dest_SkyCM_Productivo.service');
+    if (xhr.readyState == 4) {
+      if (xhr.status >= 200 && xhr.status < 304) {
+        if (provider.isRequestQueueEmpty() == false) {
+          return context.executeAction('/Skycm_v3/Actions/Service/SyncStartedMessage.action');
+        } else {
+          //dialog.alert("No hay cambios pendientes");
+        }
+      } else {
+        //dialog.alert("No tienes conexion a internet!");
+      }
+    }
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/ErrorArchive/ErrorArchive_CheckForSyncError.js":
+/*!*****************************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/ErrorArchive/ErrorArchive_CheckForSyncError.js ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ CheckForSyncError)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} context
+ */
+function CheckForSyncError(context) {
+  context.count('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'ErrorArchive', '').then(errorCount => {
+    if (errorCount > 0) {
+      return context.getPageProxy().executeAction('/Skycm_v3/Actions/ErrorArchive/ErrorArchive_SyncFailure.action').then(function () {
+        return Promise.reject(false);
+      });
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Logging/LogLevels.js":
+/*!***************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Logging/LogLevels.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ LogLevels)
+/* harmony export */ });
+function LogLevels(clientAPI) {
+  var levels = [];
+  levels.push({
+    'DisplayValue': 'Error',
+    'ReturnValue': 'Error'
+  });
+  levels.push({
+    'DisplayValue': 'Warning',
+    'ReturnValue': 'Warn'
+  });
+  levels.push({
+    'DisplayValue': 'Info',
+    'ReturnValue': 'Info'
+  });
+  levels.push({
+    'DisplayValue': 'Debug',
+    'ReturnValue': 'Debug'
+  });
+  levels.push({
+    'DisplayValue': 'Trace',
+    'ReturnValue': 'Trace'
+  });
+  return levels;
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Logging/SetTraceCategories.js":
+/*!************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Logging/SetTraceCategories.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SetTraceCategories)
+/* harmony export */ });
+function SetTraceCategories(clientAPI) {
+  var logger = clientAPI.getLogger();
+  const sectionedTable = clientAPI.getPageProxy().getControl('SectionedTable');
+  const fcsection = sectionedTable.getSection('FormCellSection0');
+  const traceCategory = fcsection.getControl('TracingCategoriesListPicker');
+  const odataTrace = fcsection.getControl('odataTrace');
+  try {
+    if (traceCategory.getValue()) {
+      var values = traceCategory.getValue();
+      var categories = [];
+      if (values && values.length) {
+        categories = values.map(value => {
+          return 'mdk.trace.' + value.ReturnValue;
+        });
+      }
+      clientAPI.setDebugSettings(odataTrace.getValue(), true, categories);
+    }
+  } catch (exception) {
+    logger.log(String(exception), 'Error');
+    return undefined;
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Logging/SetUserLogLevel.js":
+/*!*********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Logging/SetUserLogLevel.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SetUserLogLevel)
+/* harmony export */ });
+function SetUserLogLevel(clientAPI) {
+  try {
+    if (clientAPI.getValue() && clientAPI.getValue()[0]) {
+      var logger = clientAPI.getLogger();
+      var listPickerValue = clientAPI.getValue()[0].ReturnValue;
+      if (listPickerValue) {
+        switch (listPickerValue) {
+          case 'Debug':
+            logger.setLevel('Debug');
+            ShowTraceOptions(clientAPI, false);
+            break;
+          case 'Error':
+            logger.setLevel('Error');
+            ShowTraceOptions(clientAPI, false);
+            break;
+          case 'Warn':
+            logger.setLevel('Warn');
+            ShowTraceOptions(clientAPI, false);
+            break;
+          case 'Info':
+            logger.setLevel('Info');
+            ShowTraceOptions(clientAPI, false);
+            break;
+          case 'Trace':
+            logger.setLevel('Trace');
+            ShowTraceOptions(clientAPI, true);
+            break;
+          default:
+            // eslint-disable-next-line no-console
+            console.log(`unrecognized key ${listPickerValue}`);
+        }
+        return listPickerValue;
+      }
+    }
+  } catch (exception) {
+    logger.log(String(exception), 'Error');
+    return undefined;
+  }
+}
+function ShowTraceOptions(clientAPI, tracingEnabled) {
+  let categories = clientAPI.getPageProxy().getControl('SectionedTable').getControl('TracingCategoriesListPicker');
+  let odataTrace = clientAPI.getPageProxy().getControl('SectionedTable').getControl('odataTrace');
+  categories.setVisible(tracingEnabled);
+  odataTrace.setVisible(tracingEnabled);
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Logging/ToggleLogging.js":
+/*!*******************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Logging/ToggleLogging.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ToggleLogging)
+/* harmony export */ });
+function ToggleLogging(clientAPI) {
+  try {
+    var logger = clientAPI.getLogger();
+    const sectionedTable = clientAPI.getPageProxy().getControl('SectionedTable');
+    const fcsection = sectionedTable.getSection('FormCellSection0');
+    const enableLogSwitch = fcsection.getControl('EnableLogSwitch');
+    const logLevelListPicker = fcsection.getControl('LogLevelListPicker');
+    let switchValue = enableLogSwitch.getValue();
+    if (switchValue) {
+      logger.on();
+      logLevelListPicker.setVisible(true);
+      logLevelListPicker.setEditable(true);
+      logLevelListPicker.redraw();
+    } else {
+      logger.off();
+      logLevelListPicker.setEditable(false);
+      logLevelListPicker.setVisible(false);
+      logLevelListPicker.redraw();
+    }
+    return switchValue;
+  } catch (exception) {
+    logger.log(String(exception), 'Error');
+    return undefined;
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Logging/TraceCategories.js":
+/*!*********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Logging/TraceCategories.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ TraceCategories)
+/* harmony export */ });
+function TraceCategories(clientAPI) {
+  var categories = ['action', 'api', 'app', 'binding', 'branding', 'core', 'i18n', 'lcms', 'logging', 'odata', 'onboarding', 'profiling', 'push', 'restservice', 'settings', 'targetpath', 'ui'];
+  var values = [];
+  categories.forEach(category => {
+    values.push({
+      'DisplayValue': category,
+      'ReturnValue': category
+    });
+  });
+  return values;
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Logging/UserLogSetting.js":
+/*!********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Logging/UserLogSetting.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ UserLogSetting)
+/* harmony export */ });
+function UserLogSetting(clientAPI) {
+  try {
+    var logger = clientAPI.getLogger();
+    const sectionedTable = clientAPI.getControl('SectionedTable');
+    const fcsection = sectionedTable.getSection('FormCellSection0');
+    const enableLogSwitch = fcsection.getControl('EnableLogSwitch');
+    const logLevelListPicker = fcsection.getControl('LogLevelListPicker');
+    const traceCategory = fcsection.getControl('TracingCategoriesListPicker');
+    const odataTrace = fcsection.getControl('odataTrace');
+
+    //Persist the user logging preferences
+    if (logger) {
+      console.log("in logger state");
+      if (logger.isTurnedOn()) {
+        if (enableLogSwitch) {
+          enableLogSwitch.setValue(true);
+        }
+        if (logLevelListPicker) {
+          logLevelListPicker.setEditable(true);
+        }
+      } else {
+        if (enableLogSwitch) {
+          enableLogSwitch.setValue(false);
+        }
+        if (logLevelListPicker) {
+          logLevelListPicker.setEditable(false);
+        }
+      }
+      var logLevel = logger.getLevel();
+      if (logLevel) {
+        if (logLevelListPicker) {
+          logLevelListPicker.setValue([logLevel]);
+        }
+      }
+      if (logLevel === 'Trace') {
+        traceCategory.setVisible(true);
+        odataTrace.setVisible(true);
+      }
+
+      //Upon selecting a value in the List picker and clicking the back button 
+      //will enable the onload page rule. This will set the selected value
+      //in the control
+      if (logLevelListPicker.getValue()[0]) {
+        var returnValue = logLevelListPicker.getValue()[0].ReturnValue;
+        if (returnValue) {
+          logLevelListPicker.setValue([returnValue]);
+          logger.setLevel(returnValue);
+        }
+      }
+    }
+  } catch (exception) {
+    // eslint-disable-next-line no-console
+    console.log(String(exception), 'Error User Logger could not be set');
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/CalcularDuracionVisita.js":
+/*!****************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/CalcularDuracionVisita.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ CalcularDuracionVisita)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function CalcularDuracionVisita(context) {
+  // Obtener los valores de las horas de inicio y fin
+  var HoraInicio = context.evaluateTargetPath('#Page:DetalleVisitaActiva/#Control:Fc_horainicio/#Value');
+  var HoraFin = context.evaluateTargetPath('#Page:DetalleVisitaActiva/#Control:fc_horafin/#Value');
+
+  // Convertir las horas de inicio y fin en minutos
+  let parteIni = HoraInicio.split(":");
+  let minutosInicio = parseInt(parteIni[0], 10) * 60 + parseInt(parteIni[1], 10);
+  let parteFin = HoraFin.split(":");
+  let minutosFin = parseInt(parteFin[0], 10) * 60 + parseInt(parteFin[1], 10);
+
+  // Calcular la diferencia en minutos
+  let diferencia = minutosFin - minutosInicio;
+
+  // Ajustar si la diferencia es negativa (cruce de medianoche)
+  if (diferencia < 0) {
+    diferencia += 24 * 60;
+  }
+
+  // Convertir la diferencia de nuevo a HH:mm:ss
+  const horas = Math.floor(diferencia / 60);
+  const minutos = diferencia % 60;
+  var result = `${horas < 10 ? '0' : ''}${horas}:${minutos < 10 ? '0' : ''}${minutos}:00`;
+  console.log(result);
+  return result;
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/CerrarVisita.js":
+/*!******************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/CerrarVisita.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ CerrarVisita)
+/* harmony export */ });
+function CerrarVisita(context) {
+  let dialog = context.nativescript.uiDialogsModule;
+  let idVisita = context.evaluateTargetPath("#Page:DetalleVisitaActiva/#Control:FC_idvisitadetalle/#Value");
+  let kunnr = context.evaluateTargetPath("#Page:DetalleVisitaActiva/#Control:fc_Kunnr/#Value");
+  if (!idVisita || !kunnr) {
+    return dialog.alert("Faltan datos clave para cerrar la visita.");
+  }
+  let sNewReadLink = `HISTV(ID_VISITA='${idVisita}',KUNNR='${kunnr}')`;
+  return context.executeAction({
+    "Name": "/Skycm_v3/Actions/Visitas/TerminarVisitaActiva.action",
+    "Properties": {
+      "Target": {
+        "ReadLink": sNewReadLink
+      }
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/GenerarIdProspecto.js":
+/*!************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/GenerarIdProspecto.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ GenerarIdProspecto)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function GenerarIdProspecto(clientAPI) {
+  function generateUUID() {
+    let d = new Date().getTime();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx'.replace(/[xy]/g, function (c) {
+      let r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c === 'x' ? r : r & 0x3 | 0x8).toString(16);
+    });
+  }
+  let randomUUID = generateUUID();
+  return 'PROS-' + randomUUID;
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/GenerarIdVisita.js":
+/*!*********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/GenerarIdVisita.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ GenerarIdVisita)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function GenerarIdVisita(clientAPI) {
+  // 1) Mejor opción: API nativa
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+
+  // 2) getRandomValues y formato manual
+  if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+    const buf = new Uint8Array(16);
+    crypto.getRandomValues(buf);
+    // version (4) y variant (RFC 4122)
+    buf[6] = buf[6] & 0x0f | 0x40;
+    buf[8] = buf[8] & 0x3f | 0x80;
+    const hex = [...buf].map(b => b.toString(16).padStart(2, "0")).join("");
+    // 8-4-4-4-12
+    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+  }
+
+  // 3) Fallback sin crypto: añade entropía y respeta el formato v4
+  const rnd = new Uint8Array(16);
+  let t = Date.now();
+  let p = typeof performance !== "undefined" && typeof performance.now === "function" ? performance.now() : 0;
+  for (let i = 0; i < 16; i++) {
+    // mezcla timestamp, perf y random
+    t = (t + Math.random() * 256 + p) % 256;
+    rnd[i] = t | 0;
+    p = (p * 1103515245 + 12345) % 0x100000000; // simple LCG para perturbar
+  }
+  rnd[6] = rnd[6] & 0x0f | 0x40; // version
+  rnd[8] = rnd[8] & 0x3f | 0x80; // variant
+
+  const hex = [...rnd].map(b => b.toString(16).padStart(2, "0")).join("");
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/Geo.rule.js":
+/*!**************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/Geo.rule.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Geo)
+/* harmony export */ });
+/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nativescript/geolocation */ "webpack/sharing/consume/default/@nativescript/geolocation");
+/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nativescript/core */ "webpack/sharing/consume/default/@nativescript/core");
+/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nativescript_core__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function Geo(clientAPI) {
+  var lati, longi;
+  lati = clientAPI.evaluateTargetPath('#Control:fc_latitud');
+  longi = clientAPI.evaluateTargetPath('#Control:fc_longitud');
+  var logger = clientAPI.getLogger();
+  console.log("ingrese a la georreferenciacion");
+  console.log("Current Log Level: " + logger.getLevel());
+  return _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.enableLocationRequest().then(() => {
+    _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.getCurrentLocation({
+      desiredAccuracy: _nativescript_core__WEBPACK_IMPORTED_MODULE_1__.CoreTypes.Accuracy.high,
+      maximumAge: 5000,
+      timeout: 20000
+    }).then(currentLocation => {
+      console.log('My current latitude: ', currentLocation.latitude);
+      console.log('My current longitude: ', currentLocation.longitude);
+      var lt = currentLocation.latitude;
+      var lg = currentLocation.longitude;
+      lati.setValue(lt.toString());
+      longi.setValue(lg.toString()); // Added longitude for more completeness
+    }).catch(error => {
+      console.error('Error getting location: ', error);
+    });
+  }).catch(error => {
+    console.error('Error enabling location request: ', error);
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/Longitud.rule.js":
+/*!*******************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/Longitud.rule.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Geo)
+/* harmony export */ });
+/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nativescript/geolocation */ "webpack/sharing/consume/default/@nativescript/geolocation");
+/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nativescript/core */ "webpack/sharing/consume/default/@nativescript/core");
+/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nativescript_core__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function Geo(clientAPI) {
+  var logger = clientAPI.getLogger();
+  console.log("Current Log Level: " + logger.getLevel());
+  if (!_nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.isEnabled()) {
+    _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.enableLocationRequest();
+  }
+  return _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.getCurrentLocation({
+    desiredAccuracy: _nativescript_core__WEBPACK_IMPORTED_MODULE_1__.CoreTypes.Accuracy.high,
+    updateDistance: 5,
+    timeout: 11000
+  }).then(function (loc) {
+    if (loc) {
+      console.log(loc);
+      console.log('\nCurrent Location: (' + loc.latitude + ',' + loc.longitude + ')');
+      logger.log(loc.toString());
+      var locMessage = loc.longitude;
+      logger.log('Current Location: ' + locMessage, 'INFO');
+      var result = loc.longitude.toString();
+      return result;
+    }
+  }, function (e) {
+    logger.log(e.message, 'ERROR');
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/RectificarLatyLong.js":
+/*!************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/RectificarLatyLong.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Geo)
+/* harmony export */ });
+/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nativescript/geolocation */ "webpack/sharing/consume/default/@nativescript/geolocation");
+/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nativescript/core */ "webpack/sharing/consume/default/@nativescript/core");
+/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nativescript_core__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function Geo(clientAPI) {
+  var campolat = clientAPI.evaluateTargetPath("#Page:VisitaClienteConfirmar/#Control:fc_LatitudCliente/#Value");
+  var valorlat = clientAPI.evaluateTargetPath("#Page:VisitaClienteConfirmar/#Control:fc_latitudVendor/#Value");
+  var valorlong = clientAPI.evaluateTargetPath("#Page:VisitaClienteConfirmar/#Control:fc_longitudCliente/#Value");
+  var campolong = clientAPI.evaluateTargetPath("#Page:VisitaClienteConfirmar/#Control:fc_longitudVendor/#Value");
+  if (valorlat == "" || valorlong == "" || valorlat === null || valorlong === null) {
+    var logger = clientAPI.getLogger();
+    console.log("Current Log Level: " + logger.getLevel());
+    var locationIsEnabled = _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.isEnabled();
+    if (!locationIsEnabled) {
+      _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.enableLocationRequest();
+    }
+    return _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.getCurrentLocation({
+      //desiredAccuracy: Accuracy.high,
+      desiredAccuracy: _nativescript_core__WEBPACK_IMPORTED_MODULE_1__.CoreTypes.Accuracy.high,
+      updateDistance: 5,
+      timeout: 11000
+    }).then(function (loc) {
+      if (loc) {
+        console.log(loc);
+        console.log('\nCurrent Location: (' + loc.latitude + ',' + loc.longitude + ')');
+        logger.log(loc.toString());
+        var locMessage = loc.latitude;
+        logger.log('Current Location: ' + locMessage, 'INFO');
+        var result = loc.latitude.toString();
+        campolat.setValue(result);
+        var result2 = loc.longitude.toString();
+        campolong.setValue(result2);
+        // alert("se lleno lat y long")
+        return clientAPI.executeAction('/Skycm_v3/Actions/Visitas/ProgressCalculandoUbicacion.action');
+      }
+    }, function (e) {
+      logger.log(e.message, 'ERROR');
+    });
+  } else {
+    return clientAPI.executeAction('/Skycm_v3/Actions/Visitas/ProgressCalculandoUbicacion.action');
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/ValidarDistancia.js":
+/*!**********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/ValidarDistancia.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ validardistancia)
+/* harmony export */ });
+/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @nativescript/geolocation */ "webpack/sharing/consume/default/@nativescript/geolocation");
+/* harmony import */ var _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nativescript/core */ "webpack/sharing/consume/default/@nativescript/core");
+/* harmony import */ var _nativescript_core__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nativescript_core__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function validardistancia(clientAPI) {
+  let dialogs = clientAPI.nativescript.uiDialogsModule;
+  let logger = clientAPI.getLogger();
+  console.log("Current Log Level: " + logger.getLevel());
+  let lati = parseFloat(clientAPI.evaluateTargetPath('#Page:VisitaClienteConfirmar/#Control:fc_LatitudCliente/#Value'));
+  let longi = parseFloat(clientAPI.evaluateTargetPath('#Page:VisitaClienteConfirmar/#Control:fc_longitudCliente/#Value'));
+  return _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.isEnabled().then(enabled => {
+    if (!enabled) {
+      return _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.enableLocationRequest();
+    }
+  }).then(() => {
+    return _nativescript_geolocation__WEBPACK_IMPORTED_MODULE_0__.getCurrentLocation({
+      desiredAccuracy: _nativescript_core__WEBPACK_IMPORTED_MODULE_1__.CoreTypes.Accuracy.high,
+      updateDistance: 1,
+      timeout: 11000
+    });
+  }).then(loc => {
+    if (loc && loc.latitude && loc.longitude) {
+      clientAPI.executeAction('/Skycm_v3/Actions/Visitas/pro_calculando_distancia.action');
+
+      // Debug: imprimir coordenadas actuales y del cliente
+      console.log(`Ubicación actual: (${loc.latitude}, ${loc.longitude})`);
+      console.log(`Ubicación cliente: (${lati}, ${longi})`);
+      let calculaDistancia = () => {
+        let graRad = grados => grados * Math.PI / 180;
+        let lat1 = graRad(loc.latitude);
+        let lon1 = graRad(loc.longitude);
+        let lat2 = graRad(lati);
+        let lon2 = graRad(longi);
+        let dLat = lat2 - lat1;
+        let dLon = lon2 - lon1;
+        let a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        let R = 6371000; // Radio de la Tierra en metros
+
+        return R * c; // Retorna en metros
+      };
+      let distanciaNum = calculaDistancia();
+      let distancia = distanciaNum.toFixed(2);
+      console.log(`Distancia calculada: ${distancia} m`);
+      if (distanciaNum <= 10000) {
+        return clientAPI.executeAction('/Skycm_v3/Actions/Visitas/CreateVisita.action');
+      } else {
+        return dialogs.confirm({
+          title: "¡Ubicación Fuera de Rango!",
+          message: `Indique el motivo, distancia del cliente: (${distancia} m)`,
+          okButtonText: "Motivos ->"
+        }).then(respuesta => {
+          if (respuesta) {
+            return clientAPI.executeAction('/Skycm_v3/Actions/Visitas/nav_justificacionGeo.action');
+          }
+        });
+      }
+    }
+  }).catch(error => {
+    console.error('Error:', error);
+    logger.log('Error: ' + error.message, 'ERROR');
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/ValidarJornadalaboralVisita.js":
+/*!*********************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/ValidarJornadalaboralVisita.js ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ValidarJornadalaboral)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function ValidarJornadalaboral(context) {
+  let pernr_scp = context.evaluateTargetPath("#Application/#AppData/UserId");
+  //var dialog = context.nativescript.uiDialogsModule;
+
+  return context.count('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'WORKDAY', `$filter=ESTADO eq 'ACTIVO' and EMAIL_VEND eq '${pernr_scp}'`).then(count => {
+    context.getPageProxy().getClientData().EquipmentTotalCount = count;
+    // If “Customers” Entity set is availale, then it return the total customers
+    if (count > 0) {
+      //dialog.alert(pernr_scp)
+      return true;
+    } else {
+      return context.executeAction('/Skycm_v3/Actions/Visitas/msj_AdvertenciaVisitarCliente.action');
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/ValidarVisitaActiva.js":
+/*!*************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/ValidarVisitaActiva.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ValidarVisitaActiva)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function ValidarVisitaActiva(context) {
+  let pernr_scp = context.evaluateTargetPath("#Application/#AppData/UserId");
+  let fecha = context.evaluateTargetPath("#Page:Main/#Control:FC_fechaini/#Value");
+  //var dialog = context.nativescript.uiDialogsModule;
+
+  return context.count('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'HISTV', `$filter=ESTADO eq 'ACTIVA' and EMAIL_VEND eq '${pernr_scp}' and FECHA eq '${fecha}'`).then(count => {
+    context.getPageProxy().getClientData().EquipmentTotalCount = count;
+    // If “Customers” Entity set is availale, then it return the total customers
+    if (count > 0) {
+      //dialog.alert(pernr_scp)
+      return context.executeAction('/Skycm_v3/Actions/Visitas/msj_VisitaActivaAdver.action');
+    } else {
+      return true;
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/ValidarVisitaActivaJor.js":
+/*!****************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/ValidarVisitaActivaJor.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ValidarVisitaActivaJor)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function ValidarVisitaActivaJor(context) {
+  let pernr_scp = context.evaluateTargetPath("#Application/#AppData/UserId");
+  let fecha = context.evaluateTargetPath("#Page:Main/#Control:FC_fechaini/#Value");
+  var dialog = context.nativescript.uiDialogsModule;
+  return context.count('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'HISTV', `$filter=ESTADO eq 'ACTIVA' and EMAIL_VEND eq '${pernr_scp}' and FECHA eq '${fecha}'`).then(count => {
+    context.getPageProxy().getClientData().EquipmentTotalCount = count;
+    // If “Customers” Entity set is availale, then it return the total customers
+    if (count > 0) {
+      context.executeAction('/Skycm_v3/Actions/JornadaLaboral/msj_visita_activa.action');
+    } else {
+      context.executeAction('/Skycm_v3/Actions/JornadaLaboral/msj_ConfirmacionCheck_out.action');
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/get_pernOnly.js":
+/*!******************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/get_pernOnly.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ getPernr)
+/* harmony export */ });
+function getPernr(context) {
+  let id = context.evaluateTargetPath("#Application/#ClientData/#Property:UserId");
+  if (id) {
+    var correo = id.toUpperCase();
+    return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'VENDORINFO', [], `$filter=USRID eq '${correo}'`).then(results => {
+      if (results && results.length > 0) {
+        let prod = results.getItem(0);
+        return prod.PERNR;
+      } else {
+        return 0;
+      }
+    }).catch(error => {
+      console.error('Error during read: ', error);
+      return 0;
+    });
+  } else {
+    console.log("User ID is not defined");
+    return 0;
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/get_pernScponly.js":
+/*!*********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/get_pernScponly.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ getPernr)
+/* harmony export */ });
+function getPernr(context) {
+  let id = context.evaluateTargetPath("#Application/#ClientData/#Property:UserId");
+  if (id) {
+    var correo = id.toUpperCase();
+    return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'VENDORINFO', [], `$filter=USRID eq '${correo}'`).then(results => {
+      if (results && results.length > 0) {
+        let prod = results.getItem(0);
+        return prod.PERNR_SCP;
+      } else {
+        return 0;
+      }
+    }).catch(error => {
+      console.error('Error during read: ', error);
+      return 0;
+    });
+  } else {
+    console.log("User ID is not defined");
+    return 0;
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/Visitas/porcentaje_visitas.js":
+/*!************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/Visitas/porcentaje_visitas.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ porcentaje_visitas)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+async function porcentaje_visitas(context) {
+  const hoy = new Date();
+  const mes = ("0" + (hoy.getMonth() + 1)).slice(-2);
+  const anio = hoy.getFullYear();
+
+  // Obtener visitas del mes y año actual
+  const resultadosVisitas = await context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'HISTV', [], `$filter=MES eq '${mes}' and ANO eq '${anio}'`);
+  let clientesVisitados = resultadosVisitas.map(v => v.KUNNR);
+  let clientesUnicos = [...new Set(clientesVisitados)];
+  let numVisitas = clientesUnicos.length;
+
+  // Obtener información total de clientes
+  const resultadosClientes = await context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'CLIENTEINFO', []);
+  let totalClientes = resultadosClientes.map(v => v.KUNNR);
+  let totalClientesUnicos = [...new Set(totalClientes)];
+  let numTotalClientes = totalClientesUnicos.length;
+
+  // Calcular el porcentaje
+  let porcentaje = 0;
+  if (numTotalClientes > 0) {
+    porcentaje = Math.round(numVisitas / numTotalClientes * 100);
+  }
+  return porcentaje;
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/BarcodeScanResult.js":
+/*!*************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/BarcodeScanResult.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ BarcodeScanResult)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function BarcodeScanResult(context) {
+  var dialog = context.nativescript.uiDialogsModule;
+  function ejecutar() {
+    context.executeAction('/Skycm_v3/Actions/Consultas/chek_referenciainventario.action');
+  }
+  var actionResult = context.getActionResult('BarcodeScanner');
+  var scannedResult = actionResult.data;
+  const splitString = scannedResult.split(";");
+  let referencia = splitString[0].split("-")[0];
+  let color = splitString[1];
+  let Referencia = context.evaluateTargetPath("#Page:ConsultaInventario/#Control:fc_referencias");
+  let colorcampo = context.evaluateTargetPath("#Page:ConsultaInventario/#Control:fc_color");
+  Referencia.setValue(referencia);
+  colorcampo.setValue(color);
+  setTimeout(ejecutar, 1501);
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/InventarioCampos.js":
+/*!************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/InventarioCampos.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ InventarioCampos)
+/* harmony export */ });
+function InventarioCampos(context) {
+  var dialog = context.nativescript.uiDialogsModule;
+  var sociedad = context.evaluateTargetPath("#Page:ConsultaInventario/#Control:fc_sociedad/#Value");
+  var Prima1 = context.evaluateTargetPath("#Control:FC_librePrima");
+  var Prima2 = context.evaluateTargetPath("#Control:FC_transPrima");
+  var Mex1 = context.evaluateTargetPath("#Control:FC_transitoMex");
+  var precio = context.evaluateTargetPath("#Control:FC_Precio");
+
+  //dialog.alert("consultando inventario")
+
+  switch (sociedad) {
+    case "1000":
+      Prima1.setVisible(true);
+      Prima2.setVisible(true);
+      break;
+    case "6000":
+      Mex1.setVisible(true);
+      break;
+    case "5000":
+      Mex1.setVisible(true);
+      break;
+    case "2000":
+      viene.setVisible(true);
+      precio.setVisible(true);
+      break;
+    default:
+      console.log("no hay sociedad");
+      break;
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/ResultInventario.js":
+/*!************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/ResultInventario.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ResultInventario)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function ResultInventario(context) {
+  let target = context.evaluateTargetPath('#Page:Main/#ClientData/#Property:Inventario');
+  //let searchString = context.searchString;
+  let color = context.evaluateTargetPath('#Page:ConsultaInventario/#Control:fc_color/#Value').trimStart();
+  color.toUpperCase();
+  if (color) {
+    let searchResult1 = target.filter(prod => {
+      return prod.Color.includes(color);
+    });
+    return searchResult1;
+  }
+  /*else if (searchString) {
+      let searchResult = target.filter(prod => { return prod.Color.includes(searchString)});
+      target = searchResult;
+  }*/
+
+  return '#Page:Main/#ClientData/#Property:Inventario';
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/Rule_Rest_Inventario.js":
+/*!****************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/Rule_Rest_Inventario.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Rule_Rest_Inventario)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function Rule_Rest_Inventario(context) {
+  var actionResult = context.getActionResult("ResultRest");
+  var resultado = actionResult.data;
+  let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
+  var dialog = context.nativescript.uiDialogsModule;
+  //	var listpickerRef= context.evaluateTargetPath('#Page:Inventario/#Control:FC_List_Referencia/#SelectedValue');
+  var referencia = resultado?.Referencia;
+  var sociedad = context.evaluateTargetPath('#Page:ConsultaInventario/#Control:fc_sociedad/#Value');
+  var listpick = context.evaluateTargetPath("#Page:ConsultaInventario/#Control:fc_referencias/#SelectedValue");
+  //	if(referencia == listpickerRef && resultado.length>0){
+  var error = resultado.T_Mensaje.TipoMsj;
+  var errorTextoMensaje = resultado.T_Mensaje.TextoMsj;
+  var listpickerOrden = context.evaluateTargetPath('#Page:ConsultaInventario/#Control:Fc_ordenar/#SelectedValue'); //LINO
+  //let color = context.evaluateTargetPath('#Page:ConsultaInventario/#Control:fc_color/#Value').trimStart();
+  //color.toUpperCase();
+  var Listado = resultado?.T_Detalle;
+  clientData.ListadoDes = resultado.T_Detalle;
+  clientData.Referencia = referencia;
+  if (!Listado) {
+    dialog.alert({
+      title: 'Atención!',
+      message: `La referencia (${listpick}) no se encuentra asignada a su portafolio`,
+      okButtonText: 'OK',
+      cancelable: true
+    });
+  } else {
+    if (resultado && error != "E") {
+      if (sociedad == '2000') {
+        Listado.forEach(function (item) {
+          if (item.Userdet5 < 1) {
+            item.Userdet5 = '';
+          } else {
+            item.Userdet5 = 'VIENE';
+          }
+        });
+      }
+
+      /*if (sociedad != '2000') {
+      	Listado.forEach(function (item) {
+      		if (item.CantDisponible < 1) {
+      			item.status = 'Agotado';
+      		} else {
+      			item.status = '';
+      		}
+      	})
+      }*/
+
+      switch (listpickerOrden) {
+        case "Color":
+          clientData.Inventario = Listado.sort(GetSortOrder("Color"));
+          return context.executeAction('/Skycm_v3/Actions/Consultas/nav_NavToInvColor.action');
+          break;
+        case "Disponibilidad":
+          clientData.Inventario = Listado.sort(SortNumeros("CantDisponible"));
+          return context.executeAction('/Skycm_v3/Actions/Consultas/nav_NavToInvDispo.action');
+          break;
+        case "Predeterminado":
+          clientData.Inventario = Listado;
+          //dialog.alert("ESTE ES EL INVENTARIO : ", Listado)
+          return context.executeAction('/Skycm_v3/Actions/Consultas/nav_NavToInvenDesordenado.action');
+          break;
+        default:
+          clientData.Inventario = Listado;
+          return context.executeAction('/Skycm_v3/Actions/Consultas/nav_NavToInvenDesordenado.action');
+      }
+    } else {
+      var message = ` ¡${errorTextoMensaje}!`;
+      return context.executeAction({
+        "Name": "/Skycm_v3/Actions/Consultas/msj_InventarioNoExiste.action",
+        "Properties": {
+          "Message": message
+        }
+      });
+    }
+  }
+  function GetSortOrder(prop) {
+    return function (a, b) {
+      if (a[prop] > b[prop]) {
+        return 1;
+      } else if (a[prop] < b[prop]) {
+        return -1;
+      }
+      return 0;
+    };
+  }
+  function SortNumeros(prop) {
+    return function (a, b) {
+      return b[prop] - a[prop];
+    };
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/ValidarConsultaSociedad.js":
+/*!*******************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/ValidarConsultaSociedad.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ValidarConsultaSociedad)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function ValidarConsultaSociedad(clientAPI) {
+  var sociedad = clientAPI.evaluateTargetPath("#Page:MenuConsultas/#Control:fc_sociedad/#Value");
+  var pageProxy = clientAPI.getPageProxy();
+  var dialog = clientAPI.nativescript.uiDialogsModule;
+  var namePage = pageProxy._page.id;
+  var raiz = "/Skycm_v3/Actions/Consultas/rest/";
+  var RestCol = "";
+  var RestPaises = "";
+  switch (namePage) {
+    case "ConsultaInventario":
+      RestCol = raiz + "afs/Rest_Inventario.action";
+      RestPaises = raiz + "paises/Rest_inventario_pais.action";
+      break;
+    case "ConsultaCartera":
+      RestCol = raiz + "afs/Rest_Cartera.action";
+      RestPaises = raiz + "paises/Rest_CarteraPaises.action";
+      break;
+    case "ConsultaPedido":
+      RestCol = raiz + "afs/Rest_Pedidos.action";
+      RestPaises = raiz + "paises/Rest_PedidoPaises.action";
+      break;
+  }
+  if (sociedad == '1000' || sociedad == '2000') {
+    //dialog.alert("colombia" + sociedad);
+    //dialog.alert(namePage + " - Colombia - " + RestCol)
+    return clientAPI.executeAction(RestCol);
+  } else {
+    //dialog.alert(namePage + " - Paises - " + RestPaises)
+    //dialog.alert("paises" + sociedad);
+    return clientAPI.executeAction(RestPaises);
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/afs/RestPedidos.js":
+/*!***********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/afs/RestPedidos.js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ RestPedidos)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function RestPedidos(context) {
+  //Instancio el modulo para poder emitir alertas en la aplicacion.
+  var dialog = context.nativescript.uiDialogsModule;
+
+  //Creo una variable global clientData para poder acceder a cualquier dato. Siempre se debe instanciar en el menu principal YA  QUE ES LA PAGINA QUE PRIMERO SE CARGA.
+  let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
+
+  //  utilizando el context.getpaggeprxy le digo que lleve la informacion a la pagina que se llama detalle pedido
+  let pageProxy = context.getPageProxy('#Page:DetallePedido');
+  //	let pageProxyFactura= context.getPageProxy('#Page:DetallePedido');
+
+  //Aqui capturo el resultado de la accion REST que se llama resultRest
+  var actionResult = context.getActionResult("ResultRest");
+
+  //Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
+  var resultado = actionResult.data;
+
+  //Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
+  //var resultadoFactura= resultado.T_Factura.Factura;
+  const error = resultado?.T_Mensaje?.[0]?.TipoMsj || resultado?.T_Mensaje?.TipoMsj;
+  var Listado = resultado.T_Detalle;
+  var TextoMensaje = resultado.T_Mensaje.TextoMsj;
+  if (resultado && error != "E") {
+    //E Es el resultado que arroja el servicio rest cuando no encuentra el pedido
+    clientData.NoFactura = resultado.T_Factura;
+
+    //le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
+    pageProxy.setActionBinding(resultado);
+    clientData.Pedido = Listado;
+    //dialog.alert(JSON.stringify(clientData.Pedido));
+    return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
+  } else {
+    return context.executeAction("/Skycm_v3/Actions/Consultas/rest/afs/Rest_pedidos2.action");
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/afs/RestPedidos2.js":
+/*!************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/afs/RestPedidos2.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ RestPedidos2)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function RestPedidos2(context) {
+  //Instancio el modulo para poder emitir alertas en la aplicacion.
+  var dialog = context.nativescript.uiDialogsModule;
+
+  //Creo una variable global clientData para poder acceder a cualquier dato. Siempre se debe instanciar en el menu principal YA  QUE ES LA PAGINA QUE PRIMERO SE CARGA.
+  let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
+
+  //  utilizando el context.getpaggeprxy le digo que lleve la informacion a la pagina que se llama detalle pedido
+  let pageProxy = context.getPageProxy('#Page:DetallePedido');
+  //	let pageProxyFactura= context.getPageProxy('#Page:DetallePedido');
+
+  //Aqui capturo el resultado de la accion REST que se llama resultRest
+  var actionResult = context.getActionResult("ResultRest");
+
+  //Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
+  var resultado = actionResult.data;
+
+  //Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
+  //var resultadoFactura= resultado.T_Factura.Factura;
+  const error = resultado?.T_Mensaje?.[0]?.TipoMsj || resultado?.T_Mensaje?.TipoMsj;
+  var Listado = resultado.T_Detalle;
+  var TextoMensaje = resultado.T_Mensaje.TextoMsj;
+  if (resultado && error != "E") {
+    //E Es el resultado que arroja el servicio rest cuando no encuentra el pedido
+    clientData.NoFactura = resultado.T_Factura;
+
+    //le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
+    pageProxy.setActionBinding(resultado);
+    clientData.Pedido = Listado;
+    //dialog.alert(JSON.stringify(clientData.Pedido));
+    return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
+  } else {
+    return context.executeAction("/Skycm_v3/Actions/Consultas/rest/afs/Rest_pedido3.action");
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/afs/RestPedidos3.js":
+/*!************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/afs/RestPedidos3.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ RestPedidos)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function RestPedidos(context) {
+  //Instancio el modulo para poder emitir alertas en la aplicacion.
+  var dialog = context.nativescript.uiDialogsModule;
+
+  //Creo una variable global clientData para poder acceder a cualquier dato. Siempre se debe instanciar en el menu principal YA  QUE ES LA PAGINA QUE PRIMERO SE CARGA.
+  let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
+
+  //  utilizando el context.getpaggeprxy le digo que lleve la informacion a la pagina que se llama detalle pedido
+  let pageProxy = context.getPageProxy('#Page:DetallePedido');
+  //	let pageProxyFactura= context.getPageProxy('#Page:DetallePedido');
+
+  //Aqui capturo el resultado de la accion REST que se llama resultRest
+  var actionResult = context.getActionResult("ResultRest");
+
+  //Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
+  var resultado = actionResult.data;
+
+  //Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
+  //var resultadoFactura= resultado.T_Factura.Factura;
+  const error = resultado?.T_Mensaje?.[0]?.TipoMsj || resultado?.T_Mensaje?.TipoMsj;
+  var Listado = resultado.T_Detalle;
+  var TextoMensaje = resultado?.T_Mensaje[0]?.TextoMsj || resultado?.T_Mensaje?.TextoMsj;
+  if (resultado && error != "E") {
+    //E Es el resultado que arroja el servicio rest cuando no encuentra el pedido
+    clientData.NoFactura = resultado.T_Factura;
+
+    //le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
+    pageProxy.setActionBinding(resultado);
+    clientData.Pedido = Listado;
+    //dialog.alert(JSON.stringify(clientData.Pedido));
+    return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
+  } else {
+    dialog.alert(JSON.stringify(TextoMensaje));
+    message = `¡${TextoMensaje}!`;
+    return context.executeAction({
+      "Name": "/Skycm_v3/Actions/Consultas/msj_InventarioNoExiste.action",
+      "Properties": {
+        "Message": message
+      }
+    });
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/filterinventario.js":
+/*!************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/filterinventario.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ filterinventario)
+/* harmony export */ });
+function filterinventario(context) {
+  let search = context.searchString;
+  let qoB = context.dataQueryBuilder();
+  let pernr = context.evaluateTargetPath("#Page:MenuConsultas/#Control:fc_pernr/#Value");
+  // Filtro por defecto para el campo PERNR
+  let pernrFilter = qoB.filterTerm(`PERNR eq '${pernr}'`);
+  if (search && search != '') {
+    let upperCaseSearch = search.toUpperCase();
+    // Filtro dinámico para el campo MATNR utilizando contains y mayúsculas
+    let matnrFilter = qoB.filterTerm(`MATNR eq '${upperCaseSearch}'`);
+    let defaultSearch = qoB.mdkSearch(upperCaseSearch);
+
+    // Combinamos los filtros con OR para MATNR y el defaultSearch, y agregamos el filtro PERNR con AND
+    qoB.filter().and(pernrFilter).and(qoB.or(matnrFilter, defaultSearch));
+  } else {
+    // Si no hay búsqueda, simplemente aplicamos el filtro por defecto de PERNR
+    qoB.filter(pernrFilter);
+  }
+  return qoB;
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/getPernr.js":
+/*!****************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/getPernr.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ getPernr)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function getPernr(context) {
+  let id = context.evaluateTargetPath("#Application/#ClientData/#Property:UserId");
+  let pernr = context.evaluateTargetPath("#Control:fc_pernr");
+  let sociedad = context.evaluateTargetPath("#Control:fc_sociedad");
+  if (id) {
+    var correo = id.toUpperCase();
+    return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'VENDORINFO', [], `$filter=USRID eq '${correo}'`).then(results => {
+      if (results && results.length > 0) {
+        let prod = results.getItem(0);
+        pernr.setValue(prod.PERNR);
+        sociedad.setValue(prod.VKORG == '2001' ? "2000" : prod.VKORG);
+        return prod.PERNR;
+      } else {
+        return 0;
+      }
+    }).catch(error => {
+      console.error('Error during read: ', error);
+      return 0;
+    });
+  } else {
+    console.log("User ID is not defined");
+    return 0;
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/getPernr2.js":
+/*!*****************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/getPernr2.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ getPernr)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function getPernr(context) {
+  let id = context.evaluateTargetPath("#Application/#ClientData/#Property:UserId");
+  if (id) {
+    var correo = id.toUpperCase();
+    return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'VENDORINFO', [], `$filter=USRID eq '${correo}'`).then(results => {
+      if (results && results.length > 0) {
+        let prod = results.getItem(1);
+        if (prod) {
+          return prod.PERNR;
+        } else {
+          return '0';
+        }
+      } else {
+        return 0;
+      }
+    }).catch(error => {
+      console.error('Error during read: ', error);
+      return 0;
+    });
+  } else {
+    console.log("User ID is not defined");
+    return 0;
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/getdataCliente.js":
+/*!**********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/getdataCliente.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ getdataCliente)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function getdataCliente(context) {
+  var kunnr = context.getValue()[0].ReturnValue;
+  var sociedad = context.getPageProxy().evaluateTargetPath("#Control:fc_sociedad");
+  var pernr = context.getPageProxy().evaluateTargetPath("#Control:FC_PERNR");
+  //alert("si se llamo la regla")
+  return context.read('/Skycm_v3/Services/Dest_SkyCM_Productivo.service', 'CLIENTEINFO', [], `$filter=KUNNR eq '${kunnr}'`).then(results => {
+    if (results && results.length > 0) {
+      var prod = results.getItem(0);
+      sociedad.setValue(prod.BUKRS);
+      pernr.setValue(prod.PERNR);
+      //alert("si se hace la consulta")
+      return 1; // Indica éxito
+    } else {
+      console.log("No se encontraron datos para el cliente.");
+      return 0; // Indica fallo o ausencia de datos
+    }
+  }).catch(error => {
+    console.error("Error al leer la información del cliente:", error);
+    return 0; // Manejo de errores
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/getdataInven.js":
+/*!********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/getdataInven.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ getdataCliente)
+/* harmony export */ });
+/**
+* Describe this function...
+* @param {IClientAPI} clientAPI
+*/
+function getdataCliente(context) {
+  var matnr = context.getPageProxy().evaluateTargetPath("#Control:fc_referencias/#SelectedValue");
+  var invent = context.getPageProxy().evaluateTargetPath("#Control:fc_invent");
+  return context.read('/Skycm_v3/Services/Online_skycm.service', 'INVENTARIO', [], `$filter=MATNR eq '${matnr}'`).then(results => {
+    if (results && results.length > 0) {
+      var prod = results.getItem(0);
+      if (prod.PROVG) {
+        invent.setValue(prod.PROVG);
+        invent.setVisible(true);
+      } else {
+        invent.setVisible(false);
+        invent.setValue('');
+      }
+      return 1; // Indica éxito
+    } else {
+      console.log("No se encontraron datos para el cliente.");
+      return 0; // Indica fallo o ausencia de datos
+    }
+  }).catch(error => {
+    console.error("Error al leer la información del cliente:", error);
+    return 0; // Manejo de errores
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/paises/Rest_Cartera.js":
+/*!***************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/paises/Rest_Cartera.js ***!
+  \***************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Rest_Cartera)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function Rest_Cartera(context) {
+  var dialog = context.nativescript.uiDialogsModule;
+  //	let pageProxy = context.getPageProxy('#Page:DetallePedido');
+
+  var actionResult = context.getActionResult("ResultRest");
+  var resultado = actionResult.data;
+  //dialog.alert(JSON.stringify(resultado));
+  //var error = resultado.T_Mensaje.TipoMsj;
+  var errorTextoMensaje = resultado.texto_msj;
+  var message = ` ¡${errorTextoMensaje}!`;
+  return context.executeAction({
+    "Name": "/Skycm_v3/Actions/Consultas/msj_InventarioNoExiste.action",
+    "Properties": {
+      "Message": message
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/paises/Restpedidopais.js":
+/*!*****************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/paises/Restpedidopais.js ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Restpedidopais)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function Restpedidopais(context) {
+  var dialog = context.nativescript.uiDialogsModule;
+
+  //Creo una variable global clientData para poder acceder a cualquier dato. Siempre se debe instanciar en el menu principal YA  QUE ES LA PAGINA QUE PRIMERO SE CARGA.
+  let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
+
+  //  utilizando el context.getpaggeprxy le digo que lleve la informacion a la pagina que se llama detalle pedido
+  let pageProxy = context.getPageProxy('#Page:DetallePedido');
+  //	let pageProxyFactura= context.getPageProxy('#Page:DetallePedido');
+
+  //Aqui capturo el resultado de la accion REST que se llama resultRest
+  var actionResult = context.getActionResult("ResultRest");
+
+  //Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
+  var resultado = actionResult.data;
+
+  //Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
+  //var resultadoFactura= resultado.T_Factura.Factura;
+  var error = resultado.T_Mensaje.TipoMsj;
+  var Listado = resultado.T_Detalle;
+  var TextoMensaje = resultado.T_Mensaje.TextoMsj;
+  if (resultado && error != "E") {
+    //E Es el resultado que arroja el servicio rest cuando no encuentra el pedido
+    clientData.NoFactura = resultado.T_Factura;
+
+    //le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
+    pageProxy.setActionBinding(resultado);
+    clientData.Pedido = Listado;
+    return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
+  } else {
+    return context.executeAction("/Skycm_v3/Actions/Consultas/rest/paises/Rest_PedidoPaises2.action");
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/paises/Restpedidopais2.js":
+/*!******************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/paises/Restpedidopais2.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Restpedidopais)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function Restpedidopais(context) {
+  var dialog = context.nativescript.uiDialogsModule;
+
+  //Creo una variable global clientData para poder acceder a cualquier dato. Siempre se debe instanciar en el menu principal YA  QUE ES LA PAGINA QUE PRIMERO SE CARGA.
+  let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
+
+  //  utilizando el context.getpaggeprxy le digo que lleve la informacion a la pagina que se llama detalle pedido
+  let pageProxy = context.getPageProxy('#Page:DetallePedido');
+  //	let pageProxyFactura= context.getPageProxy('#Page:DetallePedido');
+
+  //Aqui capturo el resultado de la accion REST que se llama resultRest
+  var actionResult = context.getActionResult("ResultRest");
+
+  //Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
+  var resultado = actionResult.data;
+
+  //Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
+  //var resultadoFactura= resultado.T_Factura.Factura;
+  var error = resultado.T_Mensaje.TipoMsj;
+  var Listado = resultado.T_Detalle;
+  var TextoMensaje = resultado.T_Mensaje.TextoMsj;
+  if (resultado && error != "E") {
+    //E Es el resultado que arroja el servicio rest cuando no encuentra el pedido
+    clientData.NoFactura = resultado.T_Factura;
+
+    //le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
+    pageProxy.setActionBinding(resultado);
+    clientData.Pedido = Listado;
+    return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
+  } else {
+    return context.executeAction("/Skycm_v3/Actions/Consultas/rest/paises/Rest_PedidoPaises3.action");
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/paises/Restpedidopais3.js":
+/*!******************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/paises/Restpedidopais3.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Restpedidopais)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function Restpedidopais(context) {
+  var dialog = context.nativescript.uiDialogsModule;
+
+  //Creo una variable global clientData para poder acceder a cualquier dato. Siempre se debe instanciar en el menu principal YA  QUE ES LA PAGINA QUE PRIMERO SE CARGA.
+  let clientData = context.evaluateTargetPathForAPI('#Page:Main').getClientData();
+
+  //  utilizando el context.getpaggeprxy le digo que lleve la informacion a la pagina que se llama detalle pedido
+  let pageProxy = context.getPageProxy('#Page:DetallePedido');
+  //	let pageProxyFactura= context.getPageProxy('#Page:DetallePedido');
+
+  //Aqui capturo el resultado de la accion REST que se llama resultRest
+  var actionResult = context.getActionResult("ResultRest");
+
+  //Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
+  var resultado = actionResult.data;
+
+  //Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
+  //var resultadoFactura= resultado.T_Factura.Factura;
+  var error = resultado.T_Mensaje.TipoMsj;
+  var Listado = resultado.T_Detalle;
+  var TextoMensaje = resultado.T_Mensaje.TextoMsj;
+  if (resultado && error != "E") {
+    //E Es el resultado que arroja el servicio rest cuando no encuentra el pedido
+    clientData.NoFactura = resultado.T_Factura;
+
+    //le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
+    pageProxy.setActionBinding(resultado);
+    clientData.Pedido = Listado;
+    return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
+  } else {
+    dialog.alert(JSON.stringify(TextoMensaje));
+    message = `¡${TextoMensaje}!`;
+    return context.executeAction({
+      "Name": "/Skycm_v3/Actions/Consultas/msj_InventarioNoExiste.action",
+      "Properties": {
+        "Message": message
+      }
+    });
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/prueba.js":
+/*!**************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/prueba.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ prueba)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function prueba(clientAPI) {}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/searchCustom.js":
+/*!********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/searchCustom.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ searchCustom)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function searchCustom(clientAPI) {
+  var dialog = clientAPI.nativescript.uiDialogsModule;
+  let pernr = clientAPI.evaluateTargetPath("#Page:MenuConsultas/#Control:fc_pernr/#Value");
+
+  // Obtener el texto de búsqueda
+  let searchString = clientAPI.searchString || '';
+
+  // Crear el constructor de consulta
+  let qob = clientAPI.dataQueryBuilder();
+
+  // Establecer el código predeterminado - por ejemplo, mostrar solo registros activos
+  let defaultFilter = `PERNR eq '${pernr}'`;
+  if (!searchString) {
+    // Si no hay texto de búsqueda, aplicar solo el filtro predeterminado
+    qob.filter(defaultFilter);
+    return qob;
+  }
+
+  // Convertir el texto de búsqueda a mayúsculas
+  let upperCaseSearch = searchString.toUpperCase();
+
+  // Filtro para buscar registros del vendedor
+  // Asumiendo que hay un campo 'Vendedor' en tus datos
+  let vendedorSearch = qob.filterTerm(`contains(MATNR, '${upperCaseSearch}')`);
+
+  // Combinar el filtro predeterminado con la búsqueda del vendedor
+  qob.filter().and(defaultFilter, vendedorSearch);
+
+  //dialog.alert({qob})
+
+  return qob;
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/visibilidad_inventario.js":
+/*!******************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/visibilidad_inventario.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ visibilidad_inventario)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function visibilidad_inventario(clientAPI) {
+  var sociedad = clientAPI.evaluateTargetPath("#Control:fc_sociedad/#Value");
+  switch (sociedad) {
+    case "1000":
+      return 'Transito :$(N,{Userdet2})';
+      break;
+    case "2000":
+      return '';
+      break;
+    case "6000":
+      return 'Transito :$(N,{Userdet1})';
+      break;
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/consultas/visulisacionCampo.js":
+/*!*************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/consultas/visulisacionCampo.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ visualizacion)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function visualizacion(context) {
+  var matnr = context.getPageProxy().evaluateTargetPath("#Page:ConsultaInventario/#Control:fc_invent/#Value");
+  let control = context.getPageProxy().getControl("#Control:fc_title");
+  if (matnr.length > 0) {
+    control.setVisible(true);
+    return true;
+  } else {
+    control.setVisible(false);
+    return false;
+  }
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/gestionVisitas/getdatecalendar.js":
+/*!****************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/gestionVisitas/getdatecalendar.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ getdatecalendar)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function getdatecalendar(context) {
+  let sectiontable = context.getPageProxy().getControl('SectionedTable0');
+  let sectionCell = sectiontable.getSection("SectionObjectTable0");
+  let fechaString = sectiontable.getSection('SectionCalendar0').getSelectedDate();
+
+  //Convertir la cadena a un objeto Date
+  const fecha = new Date(fechaString);
+
+  // Extraer el año, mes y día
+  const anio = fecha.getFullYear(); // 2024
+  const mes = fecha.getMonth() + 1; // Mes es 0-index, por lo tanto, sumamos 1
+  const dia = fecha.getDate(); // 23
+
+  // Asegurar que el mes y el día tengan dos dígitos
+  const mesFormateado = mes.toString().padStart(2, '0');
+  const diaFormateado = dia.toString().padStart(2, '0');
+
+  // Concatenar para obtener el formato deseado
+  const fechaFormateada = `${anio}-${mesFormateado}-${diaFormateado}`;
+  let qo = `$filter=FECHA eq '${fechaFormateada}'`;
+  let pickspec = sectionCell.getTargetSpecifier();
+  pickspec.setQueryOptions(qo);
+  sectionCell.setTargetSpecifier(pickspec);
+  sectionCell.redraw();
+  console.log(fechaFormateada); // 2024-05-23
+}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Rules/gestionVisitas/setFecha.js":
+/*!*********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Rules/gestionVisitas/setFecha.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ setFecha)
+/* harmony export */ });
+/**
+ * Describe this function...
+ * @param {IClientAPI} clientAPI
+ */
+function setFecha(context) {
+  let sectiontable = context.getPageProxy().getControl('SectionedTable0');
+  let sectionCell = sectiontable.getSection("SectionObjectTable0");
+  const fecha = new Date();
+  const anio = fecha.getFullYear(); // Retorna el año completo
+  const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+  const dia = fecha.getDate().toString().padStart(2, '0');
+  const fechaFormateada = `${anio}-${mes}-${dia}`;
+  let qo = `$filter=FECHA eq '${fechaFormateada}'`;
+  let pickspec = sectionCell.getTargetSpecifier();
+  pickspec.setQueryOptions(qo);
+  sectionCell.setTargetSpecifier(pickspec);
+  sectionCell.redraw();
 }
 
 /***/ }),
@@ -3677,7 +3669,7 @@ module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Typ
   \****************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"validationProperties":{"SeparatorBackgroundColor":"#07f9ad","SeparatorIsHidden":false,"ValidationViewIsHidden":true},"_Type":"Control.Type.FormCell.ListPicker","_Name":"fc_referencias","IsVisible":true,"Separator":true,"AllowMultipleSelection":false,"AllowEmptySelection":true,"Caption":"Referencias","DataPaging":{"ShowLoadingIndicator":false,"PageSize":50},"PickerPrompt":"Seleccione una referencia","HelperText":"Seleccione una referencia","OnValueChange":"/Skycm_v3/Rules/consultas/getdataInven.js","IsSelectedSectionEnabled":false,"IsPickerDismissedOnSelection":true,"IsSearchCancelledAfterSelection":true,"AllowDefaultValueIfOneItem":false,"IsEditable":true,"Search":{"Enabled":true,"BarcodeScanner":true},"PickerItems":{"Target":{"Service":"/Skycm_v3/Services/Online_skycm.service","EntitySet":"INVENTARIO","QueryOptions":"$filter=PERNR eq '{{#Page:MenuConsultas/#Control:fc_pernr/#Value}}'"},"DisplayValue":"$(PLT,{MATNR},{MINUS},null)","ReturnValue":"{MATNR}"}},{"validationProperties":{"SeparatorBackgroundColor":"#fc0713"},"_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_invent","IsVisible":false,"Separator":true,"Enabled":true,"IsEditable":false},{"_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_color","IsVisible":true,"Separator":true,"Caption":"Color","Enabled":true,"IsEditable":false},{"Value":"#Page:MenuConsultas/#Control:fc_sociedad/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_sociedad","IsVisible":false,"Separator":true,"Caption":"Sociedad","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true},{"Value":"#Page:MenuConsultas/#Control:fc_pernr/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_pernr","IsVisible":false,"Separator":true,"Caption":"Pernr","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true},{"validationProperties":{"ValidationViewIsHidden":true},"Value":["Predeterminado"],"_Type":"Control.Type.FormCell.ListPicker","_Name":"Fc_ordenar","IsVisible":true,"Separator":true,"AllowMultipleSelection":false,"AllowEmptySelection":true,"Caption":"ordenar por:","DataPaging":{"ShowLoadingIndicator":false,"PageSize":50},"PickerPrompt":"Ordenar por","IsSelectedSectionEnabled":false,"IsPickerDismissedOnSelection":false,"IsSearchCancelledAfterSelection":false,"AllowDefaultValueIfOneItem":false,"IsEditable":true,"FilterProperty":"''","PickerItems":["Color","Disponibilidad","Predeterminado"]}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":false,"HeaderSeparator":false,"FooterSeparator":false,"ControlSeparator":false},"Controls":[{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton1","IsVisible":true,"Separator":true,"Styles":{"Button":"MyCustomerButton"},"Title":"Consultar","Alignment":"Center","ButtonType":"Text","Semantic":"Normal","Image":"/Skycm_v3/Images/search.png","ImagePosition":"Leading","ImageSize":{"Height":30,"Width":30},"Enabled":true,"OnPress":"/Skycm_v3/Actions/Consultas/chek_referenciainventario.action"},{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton0","IsVisible":true,"Separator":false,"Alignment":"Center","ButtonType":"Text","Semantic":"Tint","Image":"/Skycm_v3/Images/qr-code.png","ImagePosition":"Leading","ImageSize":{"Height":60,"Width":60},"Enabled":true,"OnPress":"/Skycm_v3/Actions/Consultas/Scan_QR.action"}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell1"}]}],"_Type":"Page","_Name":"ConsultaInventario","Caption":"Inventario","PrefersLargeCaption":true}
+module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"validationProperties":{"SeparatorBackgroundColor":"#07f9ad","SeparatorIsHidden":false,"ValidationViewIsHidden":true},"_Type":"Control.Type.FormCell.ListPicker","_Name":"fc_referencias","RequiredIndicator":false,"IsVisible":true,"Separator":true,"AllowMultipleSelection":false,"AllowEmptySelection":true,"Caption":"Referencias","DataPaging":{"ShowLoadingIndicator":false,"PageSize":50},"PickerPrompt":"Seleccione una referencia","HelperText":"Seleccione una referencia","OnValueChange":"/Skycm_v3/Rules/consultas/getdataInven.js","IsSelectedSectionEnabled":false,"IsPickerDismissedOnSelection":true,"IsSearchCancelledAfterSelection":true,"AllowDefaultValueIfOneItem":false,"IsEditable":true,"Search":{"Enabled":true,"BarcodeScanner":true},"PickerItems":{"Target":{"Service":"/Skycm_v3/Services/Online_skycm.service","EntitySet":"INVENTARIO","QueryOptions":"/Skycm_v3/Rules/consultas/searchCustom.js"},"DisplayValue":"{MATNR}","ReturnValue":"{MATNR}"}},{"validationProperties":{"SeparatorBackgroundColor":"#fc0713"},"_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_invent","RequiredIndicator":false,"IsVisible":false,"Separator":true,"Enabled":true,"IsEditable":false},{"_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_color","RequiredIndicator":false,"IsVisible":true,"Separator":true,"Caption":"Color","Enabled":true,"IsEditable":false},{"Value":"#Page:MenuConsultas/#Control:fc_sociedad/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_sociedad","RequiredIndicator":false,"IsVisible":false,"Separator":true,"Caption":"Sociedad","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true},{"Value":"#Page:MenuConsultas/#Control:fc_pernr/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_pernr","RequiredIndicator":false,"IsVisible":false,"Separator":true,"Caption":"Pernr","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true},{"validationProperties":{"ValidationViewIsHidden":true},"Value":["Predeterminado"],"_Type":"Control.Type.FormCell.ListPicker","_Name":"Fc_ordenar","RequiredIndicator":false,"IsVisible":true,"Separator":true,"AllowMultipleSelection":false,"AllowEmptySelection":true,"Caption":"ordenar por:","DataPaging":{"ShowLoadingIndicator":false,"PageSize":50},"PickerPrompt":"Ordenar por","IsSelectedSectionEnabled":false,"IsPickerDismissedOnSelection":false,"IsSearchCancelledAfterSelection":false,"AllowDefaultValueIfOneItem":false,"IsEditable":true,"FilterProperty":"''","PickerItems":["Color","Disponibilidad","Predeterminado"]}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":false,"HeaderSeparator":false,"FooterSeparator":false,"ControlSeparator":false},"Controls":[{"RequiredIndicator":false,"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton1","IsVisible":true,"Separator":true,"Styles":{"Button":"MyCustomerButton"},"Title":"Consultar","Alignment":"Center","ButtonType":"Text","Semantic":"Normal","Image":"/Skycm_v3/Images/search.png","ImagePosition":"Leading","ImageSize":{"Height":30,"Width":30},"Enabled":true,"OnPress":"/Skycm_v3/Actions/Consultas/chek_referenciainventario.action"},{"RequiredIndicator":false,"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton0","IsVisible":true,"Separator":false,"Alignment":"Center","ButtonType":"Text","Semantic":"Tint","Image":"/Skycm_v3/Images/qr-code.png","ImagePosition":"Leading","ImageSize":{"Height":60,"Width":60},"Enabled":true,"OnPress":"/Skycm_v3/Actions/Consultas/Scan_QR.action"}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell1"}]}],"_Type":"Page","_Name":"ConsultaInventario","Caption":"Inventario","PrefersLargeCaption":true,"ActionBar":{"Items":[],"_Name":"ActionBar1"}}
 
 /***/ }),
 
@@ -3687,7 +3679,7 @@ module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Typ
   \************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_nopedido","IsVisible":true,"Separator":true,"Caption":"Codigo pedido","PlaceHolder":"Digite el codigo de su pedido","Enabled":true,"IsEditable":true},{"Value":"#Page:MenuConsultas/#Control:fc_pernr/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_pernr","IsVisible":false,"Separator":true,"Caption":"Pernr1","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true},{"Value":"#Page:MenuConsultas/#Control:fc_pernr2/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_pernr2","IsVisible":false,"Separator":true,"Caption":"Pernr2","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true},{"Value":"#Page:MenuConsultas/#Control:fc_sociedad/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_sociedad","IsVisible":false,"Separator":true,"Caption":"Sociedad","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton0","IsVisible":true,"Separator":true,"Styles":{"Button":"MyCustomerButton"},"Title":"Buscar","Alignment":"Center","ButtonType":"Primary","Semantic":"Tint","Image":"/Skycm_v3/Images/search.png","ImagePosition":"Leading","ImageSize":{"Height":15,"Width":15},"Enabled":true,"OnPress":"/Skycm_v3/Rules/consultas/ValidarConsultaSociedad.js"}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell1"}]}],"DesignTimeTarget":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"VENDORINFO","QueryOptions":"$filter=contains(USRID, '{{#Application/#AppData/UserId}}')"},"_Type":"Page","_Name":"ConsultaPedido","Caption":"Consulta Pedido","PrefersLargeCaption":true}
+module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_nopedido","RequiredIndicator":false,"IsVisible":true,"Separator":true,"Caption":"Codigo pedido","PlaceHolder":"Digite el codigo de su pedido","Enabled":true,"IsEditable":true},{"Value":"#Page:MenuConsultas/#Control:fc_pernr/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_pernr","RequiredIndicator":false,"IsVisible":false,"Separator":true,"Caption":"Pernr1","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true},{"Value":"#Page:MenuConsultas/#Control:fc_pernr2/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_pernr2","RequiredIndicator":false,"IsVisible":false,"Separator":true,"Caption":"Pernr2","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true},{"Value":"#Page:MenuConsultas/#Control:fc_sociedad/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_sociedad","RequiredIndicator":false,"IsVisible":false,"Separator":true,"Caption":"Sociedad","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"RequiredIndicator":false,"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton0","IsVisible":true,"Separator":true,"Styles":{"Button":"MyCustomerButton"},"Title":"Buscar","Alignment":"Center","ButtonType":"Primary","Semantic":"Tint","Image":"/Skycm_v3/Images/search.png","ImagePosition":"Leading","ImageSize":{"Height":15,"Width":15},"Enabled":true,"OnPress":"/Skycm_v3/Rules/consultas/ValidarConsultaSociedad.js"}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell1"}]}],"DesignTimeTarget":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"VENDORINFO","QueryOptions":"$filter=contains(USRID, '{{#Application/#AppData/UserId}}')"},"_Type":"Page","_Name":"ConsultaPedido","Caption":"Consulta Pedido","PrefersLargeCaption":true,"ActionBar":{"Items":[],"_Name":"ActionBar1"}}
 
 /***/ }),
 
@@ -3777,7 +3769,7 @@ module.exports = {"Controls":[{"_Type":"Control.Type.SectionedTable","_Name":"Se
   \********************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"Controls":[{"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable","Sections":[{"KeyAndValues":[{"Value":"{Message}","_Name":"KeyValue0","KeyName":"Error","Visible":true},{"Value":"{RequestBody}","_Name":"KeyValue1","KeyName":"Request Body","Visible":true},{"Value":"{RequestURL}","_Name":"KeyValue2","KeyName":"Request URL","Visible":true},{"Value":"{HTTPStatusCode}","_Name":"KeyValue3","KeyName":"HTTP Status Code","Visible":true},{"Value":"{RequestMethod}","_Name":"KeyValue4","KeyName":"Request Method","Visible":true}],"MaxItemCount":1,"_Type":"Section.Type.KeyValue","_Name":"SectionKeyValue0","Visible":true,"EmptySection":{"FooterVisible":false},"Layout":{"NumberOfColumns":1}}]}],"_Type":"Page","_Name":"ErrorArchive_Detail","Caption":"Details","PrefersLargeCaption":true}
+module.exports = {"Controls":[{"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable","Sections":[{"_Type":"Section.Type.ObjectTable","Target":"{AffectedEntity}","_Name":"SectionObjectTable0","Header":{"_Type":"SectionCommon.Type.Header","_Name":"SectionCommonTypeHeader0","AccessoryType":"None","UseTopPadding":true,"Caption":"Entidad: {#Page:-Current/AffectedEntity/@odata.type}"},"Visible":true,"EmptySection":{"FooterVisible":false},"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"ObjectCell":{"Title":"Editar Error","Subhead":"{@odata.id}","DisplayDescriptionInMobile":true,"PreserveIconStackSpacing":false,"AccessoryType":"DisclosureIndicator","Tags":[],"AvatarStack":{"Avatars":[],"ImageIsCircular":true,"ImageHasBorder":false},"AvatarGrid":{"Avatars":[],"ImageIsCircular":true},"OnPress":"/Skycm_v3/Rules/Application/ErrorArchive_DecideWhichEditPage.js","Selected":false,"ContextMenu":{"Items":[],"PerformFirstActionWithFullSwipe":true,"LeadingItems":[],"TrailingItems":[]}},"DataPaging":{"ShowLoadingIndicator":false,"PageSize":50},"Grouping":{"GroupingProperties":[],"Header":{"Items":[]}},"HighlightSelectedItem":false,"Selection":{"ExitOnLastDeselect":true,"LongPressToEnable":"None","Mode":"None"}},{"KeyAndValues":[{"Value":"{Message}","_Name":"KeyValue0","KeyName":"Error","Visible":true},{"Value":"{RequestBody}","_Name":"KeyValue1","KeyName":"Request Body","Visible":true},{"Value":"{RequestURL}","_Name":"KeyValue2","KeyName":"Request URL","Visible":true},{"Value":"{HTTPStatusCode}","_Name":"KeyValue3","KeyName":"HTTP Status Code","Visible":true},{"Value":"{RequestMethod}","_Name":"KeyValue4","KeyName":"Request Method","Visible":true}],"MaxItemCount":1,"_Type":"Section.Type.KeyValue","_Name":"SectionKeyValue0","Visible":true,"EmptySection":{"FooterVisible":false},"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Layout":{"NumberOfColumns":1}}],"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"}}],"_Type":"Page","_Name":"ErrorArchive_Detail","Caption":"Details","PrefersLargeCaption":true,"ActionBar":{"Items":[],"_Name":"ActionBar1"}}
 
 /***/ }),
 
@@ -3837,7 +3829,7 @@ module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Typ
   \**************************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"/Skycm_v3/Rules/Application/JornadaLaboral/GenerarIDJornada.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_IDJORNADA","IsVisible":true,"Separator":true,"Caption":"ID","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Visitas/get_pernScponly.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_pernr_scp","IsVisible":true,"Separator":true,"Caption":"PERNR_SCP","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetFecha.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_FECHAJORNADA","IsVisible":true,"Separator":true,"Caption":"FECHA","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetHora.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_HORAJORNADA","IsVisible":true,"Separator":true,"Caption":"HORA","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton0","IsVisible":true,"Separator":true,"Title":"Iniciar Jornada","Alignment":"Center","ButtonType":"Text","Semantic":"Tint","Image":"sap-icon://initiative","ImagePosition":"Leading","Enabled":true,"OnPress":"/Skycm_v3/Actions/JornadaLaboral/create_Jornada.action"}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"}]}],"_Type":"Page","_Name":"ConfirmarJornadaLaboral","Caption":"ConfirmarJornadaLaboral","PrefersLargeCaption":true}
+module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"/Skycm_v3/Rules/Application/JornadaLaboral/GenerarIDJornada.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_IDJORNADA","IsVisible":true,"Separator":false,"Caption":"ID","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Visitas/get_pernScponly.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_pernr_scp","IsVisible":true,"Separator":false,"Caption":"PERNR_SCP","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetFecha.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_FECHAJORNADA","IsVisible":true,"Separator":false,"Caption":"FECHA","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetHora.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_HORAJORNADA","IsVisible":true,"Separator":false,"Caption":"HORA","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton0","IsVisible":true,"Separator":true,"Title":"Iniciar Jornada","Alignment":"Center","ButtonType":"Text","Semantic":"Tint","Image":"sap-icon://initiative","ImagePosition":"Leading","Enabled":true,"OnPress":"/Skycm_v3/Actions/JornadaLaboral/create_Jornada.action"}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"}]}],"_Type":"Page","_Name":"ConfirmarJornadaLaboral","Caption":"ConfirmarJornadaLaboral","PrefersLargeCaption":true,"ActionBar":{"Items":[],"_Name":"ActionBar1"}}
 
 /***/ }),
 
@@ -3847,7 +3839,7 @@ module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Typ
   \************************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"{ID_JORNADA}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_IDJORDETALLE","IsVisible":true,"Separator":true,"Caption":"ID","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{HORA_INICIO}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FCHORAINIDETALLE","IsVisible":true,"Separator":true,"Caption":"Hora inicio","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetHora.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_HORAFINJOR","IsVisible":true,"Separator":true,"Caption":"Hora fin","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/JornadaLaboral/CalcularDuracionJornada.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FCDURACIONJOR","IsVisible":true,"Separator":true,"Caption":"DURACION","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"}]}],"DesignTimeTarget":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"WORKDAY"},"_Type":"Page","_Name":"DetalleJornadaLaboral","Caption":"Detalle Jornada","PrefersLargeCaption":true,"ActionBar":{"Items":[{"_Name":"ActionBarItem0","Caption":"Check-Out","Position":"Right","IsIconCircular":false,"Visible":true,"OnPress":"/Skycm_v3/Actions/JornadaLaboral/msj_ConfirmacionCheck_out.action"}],"_Name":"ActionBar1"}}
+module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"{ID_JORNADA}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_IDJORDETALLE","IsVisible":true,"Separator":false,"Caption":"ID","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{HORA_INICIO}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FCHORAINIDETALLE","IsVisible":true,"Separator":false,"Caption":"Hora inicio","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetHora.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_HORAFINJOR","IsVisible":true,"Separator":false,"Caption":"Hora fin","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/JornadaLaboral/CalcularDuracionJornada.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FCDURACIONJOR","IsVisible":false,"Separator":false,"Caption":"DURACION","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"}]}],"DesignTimeTarget":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"WORKDAY"},"_Type":"Page","_Name":"DetalleJornadaLaboral","Caption":"Detalle Jornada","PrefersLargeCaption":true,"ActionBar":{"Items":[{"_Name":"ActionBarItem0","Caption":"Check-Out","Position":"Right","IsIconCircular":false,"Visible":true,"OnPress":"/Skycm_v3/Rules/Visitas/ValidarVisitaActivaJor.js"}],"_Name":"ActionBar0"}}
 
 /***/ }),
 
@@ -3867,7 +3859,7 @@ module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":true,"_Type
   \***********************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":false,"HeaderSeparator":true,"FooterSeparator":false,"ControlSeparator":false},"_Type":"Section.Type.ContactCell","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"WORKDAY","QueryOptions":"$top=1&$filter=ESTADO eq 'ACTIVO' and EMAIL_VEND eq '{{#Application/#AppData/UserId}}'"},"_Name":"SectionContactCell0","Visible":true,"EmptySection":{"Caption":"No tiene jornadas activas...","FooterVisible":false},"ContactCell":{"Visible":true,"ContextMenu":{"PerformFirstActionWithFullSwipe":true},"DetailImage":"/Skycm_v3/Images/busy.png","Headline":"{FECHA}","Subheadline":"{ESTADO}","Description":"","OnPress":"/Skycm_v3/Actions/JornadaLaboral/nav_DetalleJornadaLaboral.action"},"DataPaging":{"ShowLoadingIndicator":false,"PageSize":50}},{"Visible":true,"EmptySection":{"FooterVisible":false},"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0","Controls":[{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton0","IsVisible":true,"Separator":true,"Title":"Iniciar mi jornada","Alignment":"Center","ButtonType":"Text","Semantic":"Tint","Image":"sap-icon://checklist-2","ImagePosition":"Leading","Enabled":true,"OnPress":"/Skycm_v3/Actions/JornadaLaboral/nav_ChekIn_jornada.action"},{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton1","IsVisible":true,"Separator":true,"Title":"Historico","Alignment":"Center","ButtonType":"Text","Semantic":"Tint","Image":"sap-icon://bookmark","ImagePosition":"Leading","Enabled":true,"OnPress":"/Skycm_v3/Actions/JornadaLaboral/nav_HistoricoJornada.action"}]}]}],"_Type":"Page","_Name":"InicioJornadalaboral","Caption":"Jornada Laboral","PrefersLargeCaption":true,"OnLoaded":"/Skycm_v3/Actions/JornadaLaboral/Download_jornada.action"}
+module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":false,"HeaderSeparator":true,"FooterSeparator":false,"ControlSeparator":false},"_Type":"Section.Type.ContactCell","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"WORKDAY","QueryOptions":"$top=1&$filter=ESTADO eq 'ACTIVO' and EMAIL_VEND eq '{{#Application/#AppData/UserId}}' and FECHA eq '{{#Page:Main/#Control:FC_fechaini/#Value}}'"},"_Name":"SectionContactCell0","Visible":true,"EmptySection":{"Caption":"No tiene jornadas activas...","FooterVisible":false},"ContactCell":{"Visible":true,"DetailImage":"/Skycm_v3/Images/busy.png","Headline":"{FECHA}","Subheadline":"{ESTADO}","Description":"","OnPress":"/Skycm_v3/Actions/JornadaLaboral/nav_DetalleJornadaLaboral.action","ContextMenu":{"PerformFirstActionWithFullSwipe":true}},"DataPaging":{"ShowLoadingIndicator":false,"PageSize":50}},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton0","IsVisible":true,"Separator":true,"Title":"Iniciar mi jornada","Alignment":"Center","ButtonType":"Text","Semantic":"Tint","Image":"sap-icon://checklist-2","ImagePosition":"Leading","Enabled":true,"OnPress":"/Skycm_v3/Actions/JornadaLaboral/nav_ChekIn_jornada.action"},{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton1","IsVisible":true,"Separator":true,"Title":"Historico","Alignment":"Center","ButtonType":"Text","Semantic":"Tint","Image":"sap-icon://bookmark","ImagePosition":"Leading","Enabled":true,"OnPress":"/Skycm_v3/Actions/JornadaLaboral/nav_HistoricoJornada.action"}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"}]}],"_Type":"Page","_Name":"InicioJornadalaboral","Caption":"Jornada Laboral","PrefersLargeCaption":true,"OnLoaded":"/Skycm_v3/Actions/JornadaLaboral/Download_jornada.action","ActionBar":{"Items":[],"_Name":"ActionBar1"}}
 
 /***/ }),
 
@@ -3877,7 +3869,7 @@ module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Typ
   \****************************************************/
 /***/ ((module) => {
 
-module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"ObjectHeader":{"Subhead":"Gestione y administre sus visitas a clientes","Footnote":"3.0.2","DetailImage":"/Skycm_v3/Images/playstore.png","DetailImageIsCircular":false,"Tags":[{"Color":"Green","Text":"#Application/#AppData/UserId"},{"Color":"Mango","Text":"/Skycm_v3/Rules/Visitas/get_pernScponly.js"}],"BodyText":"Sistema para casos B2B","HeadlineText":"Commercial Management","StatusPosition":"Stacked","StatusImagePosition":"Leading","SubstatusImagePosition":"Trailing","Styles":{"ObjectHeader":"objectHeaderBackground","BodyText":"objectHeaderBodyText","Description":"objectHeaderDescription","Subhead":"objectHeaderSubhead"}},"_Type":"Section.Type.ObjectHeader","_Name":"SectionObjectHeader0","Visible":true},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":false,"HeaderSeparator":false,"FooterSeparator":true,"ControlSeparator":true},"_Type":"Section.Type.ContactCell","_Name":"SectionContactCell4","Visible":true,"EmptySection":{"FooterVisible":false,"Style":"ObjectTableTitle"},"ContactCells":[{"ContactCell":{"_Name":"ContactCellItem0","DetailImage":"/Skycm_v3/Images/busy.png","Headline":"Jornada laboral","Subheadline":"Registre el inicio de su jornada laboral","Description":"","Visible":true,"OnPress":"/Skycm_v3/Actions/JornadaLaboral/nav_InicioJornadaLaboral.action"}},{"ContactCell":{"_Name":"ContactCellItem1","DetailImage":"/Skycm_v3/Images/handshake.png","Headline":"Visita a cliente","Subheadline":"Cree una nueva visita a cliente","Description":"","Visible":true,"OnPress":"/Skycm_v3/Actions/Visitas/nav_VisitaCliente.action"}},{"ContactCell":{"_Name":"ContactCellItem2","DetailImage":"/Skycm_v3/Images/search.png","Headline":"Consultas","Subheadline":"Consulte, estado de pedido, inventario y cartera","Description":"","Visible":true,"OnPress":"/Skycm_v3/Actions/Consultas/Nav_menuconsultas.action"}},{"ContactCell":{"_Name":"ContactCellItem3","DetailImage":"/Skycm_v3/Images/labour-day.png","Headline":"Gestion de visitas","Subheadline":"Consulte informacion detallada de sus visitas","Description":"","Visible":true,"OnPress":"/Skycm_v3/Actions/GestionVisitas/nav_gestionvisitas.action"}},{"ContactCell":{"_Name":"ContactCellItem4","DetailImage":"/Skycm_v3/Images/profile.png","Headline":"Cuenta","Subheadline":"Configuracion de la cuenta","Description":"","Visible":false,"OnPress":"/Skycm_v3/Actions/Application/NavToAbout.action"}}]}]}],"_Type":"Page","_Name":"Main","PrefersLargeCaption":true,"OnLoaded":"/Skycm_v3/Rules/Application/Actualizar_interval.js","OnActivityBackPressed":"/Skycm_v3/Rules/Application/EjecutarMensaje.js","ActionBar":{"Items":[{"_Name":"ActionBarItem0","Caption":"User Menu","Icon":"sap-icon://customer","Position":"Right","IsIconCircular":false,"Visible":true,"OnPress":"/Skycm_v3/Actions/Application/UserMenuPopover.action"}],"_Name":"ActionBar1"}}
+module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"ObjectHeader":{"Subhead":"Gestione y administre sus visitas a clientes","Footnote":"3.0.12","DetailImage":"/Skycm_v3/Images/playstore.png","DetailImageIsCircular":false,"Tags":[{"Color":"Green","Text":"#Application/#AppData/UserId"},{"Color":"Mango","Text":"/Skycm_v3/Rules/Visitas/get_pernScponly.js"}],"BodyText":"Sistema para casos B2B","HeadlineText":"Commercial Management","StatusPosition":"Stacked","StatusImagePosition":"Leading","SubstatusImagePosition":"Trailing","Styles":{"ObjectHeader":"objectHeaderBackground","BodyText":"objectHeaderBodyText","Description":"objectHeaderDescription","Subhead":"objectHeaderSubhead"}},"_Type":"Section.Type.ObjectHeader","_Name":"SectionObjectHeader0","Visible":true},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":false,"HeaderSeparator":false,"FooterSeparator":true,"ControlSeparator":true},"_Type":"Section.Type.ContactCell","_Name":"SectionContactCell4","Visible":true,"EmptySection":{"FooterVisible":false,"Style":"ObjectTableTitle"},"ContactCells":[{"ContactCell":{"ContextMenu":{"PerformFirstActionWithFullSwipe":true},"_Name":"ContactCellItem0","DetailImage":"/Skycm_v3/Images/busy.png","Headline":"Jornada laboral","Subheadline":"Registre el inicio de su jornada laboral","Description":"","Visible":true,"OnPress":"/Skycm_v3/Actions/JornadaLaboral/nav_InicioJornadaLaboral.action"}},{"ContactCell":{"ContextMenu":{"PerformFirstActionWithFullSwipe":true},"_Name":"ContactCellItem1","DetailImage":"/Skycm_v3/Images/handshake.png","Headline":"Visita a cliente","Subheadline":"Cree una nueva visita a cliente","Description":"","Visible":true,"OnPress":"/Skycm_v3/Actions/Visitas/nav_VisitaCliente.action"}},{"ContactCell":{"ContextMenu":{"PerformFirstActionWithFullSwipe":true},"_Name":"ContactCellItem2","DetailImage":"/Skycm_v3/Images/search.png","Headline":"Consultas","Subheadline":"Consulte, estado de pedido, inventario y cartera","Description":"","Visible":true,"OnPress":"/Skycm_v3/Actions/Consultas/Nav_menuconsultas.action"}},{"ContactCell":{"ContextMenu":{"PerformFirstActionWithFullSwipe":true},"_Name":"ContactCellItem3","DetailImage":"/Skycm_v3/Images/labour-day.png","Headline":"Gestion de visitas","Subheadline":"Consulte informacion detallada de sus visitas","Description":"","Visible":true,"OnPress":"/Skycm_v3/Actions/GestionVisitas/nav_gestionvisitas.action"}},{"ContactCell":{"ContextMenu":{"PerformFirstActionWithFullSwipe":true},"_Name":"ContactCellItem4","DetailImage":"/Skycm_v3/Images/profile.png","Headline":"Cuenta","Subheadline":"Configuracion de la cuenta","Description":"","Visible":false,"OnPress":"/Skycm_v3/Actions/Application/NavToAbout.action"}}]},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"/Skycm_v3/Rules/Application/GetFecha.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_fechaini","RequiredIndicator":false,"IsVisible":true,"Separator":true,"Caption":"Fecha","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true}],"Visible":false,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"}]}],"_Type":"Page","_Name":"Main","PrefersLargeCaption":true,"OnLoaded":"/Skycm_v3/Rules/Application/Actualizar_interval.js","OnActivityBackPressed":"/Skycm_v3/Rules/Application/EjecutarMensaje.js","ActionBar":{"Items":[{"_Name":"ActionBarItem0","Caption":"User Menu","Icon":"sap-icon://customer","Position":"Right","IsIconCircular":false,"Visible":true,"OnPress":"/Skycm_v3/Actions/Application/UserMenuPopover.action"}],"_Name":"ActionBar1"}}
 
 /***/ }),
 
@@ -3897,7 +3889,7 @@ module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Typ
   \***************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"{ID_VISITA}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_idvisitadetalle","IsVisible":true,"Separator":true,"Caption":"Id visita:","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{KUNNR}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_Kunnr","IsVisible":true,"Separator":true,"Caption":"kunnr","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell1"},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"KeyAndValues":[{"Value":"/Skycm_v3/Rules/Application/GetMes.js","_Name":"KeyValue2","KeyName":"Mes","Visible":true},{"Value":"/Skycm_v3/Rules/Application/GetAnio.js","_Name":"KeyValue4","KeyName":"Año","Visible":true}],"MaxItemCount":1,"_Type":"Section.Type.KeyValue","_Name":"SectionKeyValue0","Visible":true,"EmptySection":{"FooterVisible":false},"Layout":{"NumberOfColumns":1}},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"{HORA}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"Fc_horainicio","IsVisible":true,"Separator":true,"Caption":"Hora Inicio","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetHora.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_horafin","IsVisible":true,"Separator":true,"Caption":"Hora fin","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Visitas/CalcularDuracionVisita.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"Fc_duracionvisita","IsVisible":true,"Separator":true,"Caption":"Duracion","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":false,"_Type":"Control.Type.FormCell.Switch","_Name":"fc_objetivoCumplido","IsVisible":true,"Separator":true,"Caption":"objetivo Cumplido?","IsEditable":true},{"_Type":"Control.Type.FormCell.Note","_Name":"Fc_observacion","IsVisible":true,"Separator":true,"PlaceHolder":"Digite observaciones de la visita...","Enabled":true,"IsEditable":true}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"}]}],"_Type":"Page","_Name":"DetalleVisitaActiva","Caption":"{ID_VISITA}","PrefersLargeCaption":true,"ActionBar":{"Items":[{"_Name":"ActionBarItem0","Caption":"Chek-out","Position":"Right","IsIconCircular":false,"Visible":true,"OnPress":"/Skycm_v3/Actions/Visitas/TerminarVisitaActiva.action"}],"_Name":"ActionBar1"}}
+module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"{ID_VISITA}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_idvisitadetalle","IsVisible":true,"Separator":true,"Caption":"Id visita:","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{KUNNR}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_Kunnr","IsVisible":true,"Separator":true,"Caption":"kunnr","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell1"},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"KeyAndValues":[{"Value":"/Skycm_v3/Rules/Application/GetMes.js","_Name":"KeyValue2","KeyName":"Mes","Visible":true},{"Value":"/Skycm_v3/Rules/Application/GetAnio.js","_Name":"KeyValue4","KeyName":"Año","Visible":true}],"MaxItemCount":1,"_Type":"Section.Type.KeyValue","_Name":"SectionKeyValue0","Visible":true,"EmptySection":{"FooterVisible":false},"Layout":{"NumberOfColumns":1}},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"{HORA}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"Fc_horainicio","IsVisible":true,"Separator":true,"Caption":"Hora Inicio","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetHora.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_horafin","IsVisible":true,"Separator":true,"Caption":"Hora fin","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Visitas/CalcularDuracionVisita.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"Fc_duracionvisita","IsVisible":true,"Separator":true,"Caption":"Duracion","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":false,"_Type":"Control.Type.FormCell.Switch","_Name":"fc_objetivoCumplido","IsVisible":true,"Separator":true,"Caption":"objetivo Cumplido?","IsEditable":true},{"_Type":"Control.Type.FormCell.Note","_Name":"Fc_observacion","IsVisible":true,"Separator":true,"PlaceHolder":"Digite observaciones de la visita...","Enabled":true,"IsEditable":true}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"}]}],"_Type":"Page","_Name":"DetalleVisitaActiva","Caption":"{ID_VISITA}","PrefersLargeCaption":true,"ActionBar":{"Items":[{"_Name":"ActionBarItem0","Caption":"Chek-out","Position":"Right","IsIconCircular":false,"Visible":true,"OnPress":"/Skycm_v3/Rules/Visitas/CerrarVisita.js"}],"_Name":"ActionBar0"}}
 
 /***/ }),
 
@@ -3947,7 +3939,7 @@ module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Typ
   \*********************************************************************/
 /***/ ((module) => {
 
-module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":false,"FooterSeparator":false,"ControlSeparator":false},"_Type":"Section.Type.ContactCell","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"HISTV","QueryOptions":"$top=1&$filter=EMAIL_VEND eq '{{#Application/#AppData/UserId}}' and ESTADO eq 'ACTIVA'"},"_Name":"SectionContactCell0","Visible":true,"EmptySection":{"Caption":"No tienes visitas activas....","FooterVisible":false},"ContactCell":{"Visible":true,"ContextMenu":{"PerformFirstActionWithFullSwipe":true},"DetailImage":"/Skycm_v3/Images/work.png","Headline":"{NAME1}","Subheadline":"{KUNNR}","Description":"","OnPress":"/Skycm_v3/Actions/Visitas/nav_detallevisitaactiva.action"},"DataPaging":{"ShowLoadingIndicator":false,"PageSize":50}},{"Visible":true,"EmptySection":{"FooterVisible":false},"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0","Controls":[{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton0","IsVisible":true,"Separator":true,"Title":"Visitar cliente","Alignment":"Center","ButtonType":"Text","Semantic":"Tint","Image":"sap-icon://visits","ImagePosition":"Leading","Enabled":true,"OnPress":"/Skycm_v3/Actions/Visitas/nav_misclientes.action"},{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton1","IsVisible":true,"Separator":true,"Title":"Visitar cliente prospecto","Alignment":"Center","ButtonType":"Text","Semantic":"Tint","Image":"sap-icon://employee-approvals","ImagePosition":"Leading","Enabled":true,"OnPress":"/Skycm_v3/Actions/Visitas/nav_misclientesprospectos.action"}]}]}],"_Type":"Page","_Name":"VisitaCliente","Caption":"Visita Cliente","PrefersLargeCaption":true,"OnLoaded":"/Skycm_v3/Actions/Visitas/Download_visitas.action"}
+module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":false,"FooterSeparator":false,"ControlSeparator":false},"_Type":"Section.Type.ContactCell","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"HISTV","QueryOptions":"$top=1&$filter=EMAIL_VEND eq '{{#Application/#AppData/UserId}}' and ESTADO eq 'ACTIVA' and FECHA eq '{{#Page:Main/#Control:FC_fechaini/#Value}}'"},"_Name":"SectionContactCell0","Visible":true,"EmptySection":{"Caption":"No tienes visitas activas....","FooterVisible":false},"ContactCell":{"Visible":true,"DetailImage":"/Skycm_v3/Images/work.png","Headline":"{NAME1}","Subheadline":"{KUNNR}","Description":"","OnPress":"/Skycm_v3/Actions/Visitas/nav_detallevisitaactiva.action","ContextMenu":{"PerformFirstActionWithFullSwipe":true}},"DataPaging":{"ShowLoadingIndicator":false,"PageSize":50}},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton0","IsVisible":true,"Separator":true,"Title":"Visitar cliente","Alignment":"Center","ButtonType":"Text","Semantic":"Tint","Image":"sap-icon://visits","ImagePosition":"Leading","Enabled":true,"OnPress":"/Skycm_v3/Actions/Visitas/nav_misclientes.action"},{"_Type":"Control.Type.FormCell.Button","_Name":"FormCellButton1","IsVisible":true,"Separator":true,"Title":"Visitar cliente prospecto","Alignment":"Center","ButtonType":"Text","Semantic":"Tint","Image":"sap-icon://employee-approvals","ImagePosition":"Leading","Enabled":true,"OnPress":"/Skycm_v3/Actions/Visitas/nav_misclientesprospectos.action"}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"}]}],"_Type":"Page","_Name":"VisitaCliente","Caption":"Visita Cliente","PrefersLargeCaption":true,"OnLoaded":"/Skycm_v3/Actions/Visitas/Download_visitas.action","ActionBar":{"Items":[],"_Name":"ActionBar1"}}
 
 /***/ }),
 
@@ -3957,7 +3949,7 @@ module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Typ
   \******************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"CLIENTEINFO","QueryOptions":"$filter=KUNNR eq '{KUNNR}'"},"_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"/Skycm_v3/Rules/Visitas/GenerarIdVisita.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_idVisita","IsVisible":true,"Separator":true,"Caption":"ID","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{KUNNR}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_Destinatario","IsVisible":true,"Separator":true,"Caption":"Destinatario","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false}],"Visible":true,"EmptySection":{"FooterVisible":true},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"},{"Separators":{"TopSectionSeparator":true,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"validationProperties":{"ValidationViewIsHidden":true},"_Type":"Control.Type.FormCell.ListPicker","_Name":"FC_objetivoVisita","IsVisible":true,"Separator":true,"AllowMultipleSelection":false,"AllowEmptySelection":true,"Caption":"Objetivo Visita","DataPaging":{"ShowLoadingIndicator":false,"PageSize":50},"PickerPrompt":"Please select one single item","IsSelectedSectionEnabled":false,"IsPickerDismissedOnSelection":true,"IsSearchCancelledAfterSelection":false,"AllowDefaultValueIfOneItem":false,"IsEditable":true,"FilterProperty":"\"\"","PickerItems":{"Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"OBJEVISIT"},"DisplayValue":"{NOM_OBJE}","ReturnValue":"{ID_OBJE}"}}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell1"},{"Separators":{"TopSectionSeparator":true,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"{BUKRS}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_sociedad","IsVisible":true,"Separator":true,"Caption":"Sociedad: ","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{KUNNR}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_idcliente","IsVisible":true,"Separator":true,"Caption":"ID Cliente:","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{NAME1}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_nombrecliente","IsVisible":true,"Separator":true,"Caption":"Nombre Cliente:","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{ADRNR}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_ADNR","IsVisible":true,"Separator":true,"Caption":"ADNR","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true},{"Value":"{STR_SUPPL3}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_LatitudCliente","IsVisible":true,"Separator":true,"Caption":"Latitud","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{LOCATION}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_longitudCliente","IsVisible":true,"Separator":true,"Caption":"Longitud","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell2"},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"/Skycm_v3/Rules/Application/GetFecha.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"Fc_Fecha","IsVisible":true,"Separator":true,"Caption":"Fecha","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetAnio.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_Anio","IsVisible":true,"Separator":true,"Caption":"Año","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetMes.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_Mes","IsVisible":true,"Separator":true,"Caption":"Mes","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetHora.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_Hora","IsVisible":true,"Separator":true,"Caption":"Hora","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell4"},{"Separators":{"TopSectionSeparator":true,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"#Page:-Previous/#Control:fc_pernrScp/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_s-userVendedor","IsVisible":true,"Separator":true,"Caption":"Pernr_scp","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"#Page:-Previous/#Control:FC_PERNRDETALLE/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"Fc_Pernr","IsVisible":true,"Separator":true,"Caption":"Pernr","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_latitud","IsVisible":true,"Separator":true,"Caption":"Latitud ven","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_longitud","IsVisible":true,"Separator":true,"Caption":"Longitud ven","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell3"}]}],"_Type":"Page","_Name":"VisitaClienteConfirmar","Caption":"Confirmar visita","PrefersLargeCaption":true,"OnLoaded":"/Skycm_v3/Rules/Visitas/Geo.rule.js","ActionBar":{"Items":[{"_Name":"ActionBarItem0","Caption":"Check in","Position":"Right","IsIconCircular":false,"Visible":true,"OnPress":"/Skycm_v3/Actions/Visitas/chek_ObjetivoVisita.action"}],"_Name":"ActionBar0"}}
+module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Type":"Control.Type.FilterFeedbackBar"},"_Type":"Control.Type.SectionedTable","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"CLIENTEINFO","QueryOptions":"$filter=KUNNR eq '{KUNNR}'"},"_Name":"SectionedTable0","Sections":[{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"/Skycm_v3/Rules/Visitas/GenerarIdVisita.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_idVisita","IsVisible":true,"Separator":false,"Caption":"ID","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{KUNNR}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_Destinatario","IsVisible":true,"Separator":false,"Caption":"Destinatario","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false}],"Visible":true,"EmptySection":{"FooterVisible":true},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell0"},{"Separators":{"TopSectionSeparator":true,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"validationProperties":{"ValidationViewIsHidden":true},"_Type":"Control.Type.FormCell.ListPicker","_Name":"FC_objetivoVisita","IsVisible":true,"Separator":true,"AllowMultipleSelection":false,"AllowEmptySelection":true,"Caption":"Objetivo Visita","DataPaging":{"ShowLoadingIndicator":false,"PageSize":50},"PickerPrompt":"Please select one single item","IsSelectedSectionEnabled":false,"IsPickerDismissedOnSelection":true,"IsSearchCancelledAfterSelection":false,"AllowDefaultValueIfOneItem":false,"IsEditable":true,"FilterProperty":"\"\"","PickerItems":{"Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"OBJEVISIT"},"DisplayValue":"{NOM_OBJE}","ReturnValue":"{ID_OBJE}"}}],"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell1"},{"Separators":{"TopSectionSeparator":true,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"{BUKRS}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_sociedad","IsVisible":true,"Separator":false,"Caption":"Sociedad: ","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{KUNNR}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_idcliente","IsVisible":true,"Separator":false,"Caption":"ID Cliente:","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{NAME1}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_nombrecliente","IsVisible":true,"Separator":false,"Caption":"Nombre Cliente:","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{ADRNR}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_ADNR","IsVisible":true,"Separator":false,"Caption":"ADNR","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":true},{"Value":"{STR_SUPPL3}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_LatitudCliente","IsVisible":true,"Separator":false,"Caption":"Latitud","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"{LOCATION}","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_longitudCliente","IsVisible":true,"Separator":true,"Caption":"Longitud","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false}],"Header":{"_Type":"SectionCommon.Type.Header","_Name":"SectionCommonTypeHeader0","AccessoryType":"DisclosureIndicator","UseTopPadding":true,"Caption":"Información cliente:"},"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell2"},{"Separators":{"TopSectionSeparator":false,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"/Skycm_v3/Rules/Application/GetFecha.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"Fc_Fecha","IsVisible":true,"Separator":false,"Caption":"Fecha","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetAnio.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_Anio","IsVisible":true,"Separator":false,"Caption":"Año","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetMes.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_Mes","IsVisible":true,"Separator":false,"Caption":"Mes","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"/Skycm_v3/Rules/Application/GetHora.js","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"FC_Hora","IsVisible":true,"Separator":false,"Caption":"Hora","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false}],"Header":{"_Type":"SectionCommon.Type.Header","_Name":"SectionCommonTypeHeader2","AccessoryType":"DisclosureIndicator","UseTopPadding":true,"Caption":"Información visita:"},"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell4"},{"Separators":{"TopSectionSeparator":true,"BottomSectionSeparator":true,"HeaderSeparator":true,"FooterSeparator":true,"ControlSeparator":true},"Controls":[{"Value":"#Page:-Previous/#Control:fc_pernrScp/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_s-userVendedor","IsVisible":true,"Separator":false,"Caption":"Pernr_scp","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"Value":"#Page:-Previous/#Control:FC_PERNRDETALLE/#Value","_Type":"Control.Type.FormCell.SimpleProperty","_Name":"Fc_Pernr","IsVisible":true,"Separator":false,"Caption":"Pernr","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_latitud","IsVisible":true,"Separator":false,"Caption":"Latitud ven","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false},{"_Type":"Control.Type.FormCell.SimpleProperty","_Name":"fc_longitud","IsVisible":true,"Separator":false,"Caption":"Longitud ven","PlaceHolder":"PlaceHolder","Enabled":true,"IsEditable":false}],"Header":{"_Type":"SectionCommon.Type.Header","_Name":"SectionCommonTypeHeader1","AccessoryType":"DisclosureIndicator","UseTopPadding":true,"Caption":"Información vendedor:"},"Visible":true,"EmptySection":{"FooterVisible":false},"_Type":"Section.Type.FormCell","_Name":"SectionFormCell3"}]}],"_Type":"Page","_Name":"VisitaClienteConfirmar","Caption":"Confirmar visita","PrefersLargeCaption":true,"OnLoaded":"/Skycm_v3/Rules/Visitas/Geo.rule.js","ActionBar":{"Items":[{"_Name":"ActionBarItem2","Caption":"check in","Position":"Right","IsIconCircular":false,"Visible":true,"OnPress":"/Skycm_v3/Actions/Visitas/chek_ObjetivoVisita.action"}],"_Name":"ActionBar1"}}
 
 /***/ }),
 
@@ -3978,6 +3970,16 @@ module.exports = {"Controls":[{"FilterFeedbackBar":{"ShowAllFilters":false,"_Typ
 /***/ ((module) => {
 
 module.exports = {"_Name":"Skycm_v3","Version":"/Skycm_v3/Globals/Application/AppDefinition_Version.global","MainPage":"/Skycm_v3/Pages/Main.page","OnLaunch":["/Skycm_v3/Actions/Service/InitializeOffline.action"],"OnWillUpdate":"/Skycm_v3/Rules/Application/OnWillUpdate.js","OnDidUpdate":"/Skycm_v3/Actions/Service/InitializeOffline.action","Styles":"/Skycm_v3/Styles/Styles.css","Localization":"/Skycm_v3/i18n/i18n.properties","_SchemaVersion":"24.4","StyleSheets":{"Styles":{"css":"/Skycm_v3/Styles/Styles.light.css","ios":"/Skycm_v3/Styles/Styles.light.nss","android":"/Skycm_v3/Styles/Styles.light.json"}},"SDKStyles":{"ios":"/Skycm_v3/Styles/Styles.light.nss","android":"/Skycm_v3/Styles/Styles.light.json"}}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Actions/Actions/ErrorArchive/ErrorArchive_UnknownAffectedEntity.action":
+/*!***********************************************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Actions/Actions/ErrorArchive/ErrorArchive_UnknownAffectedEntity.action ***!
+  \***********************************************************************************************************/
+/***/ ((module) => {
+
+module.exports = {"_Type":"Action.Type.ToastMessage","ActionResult":{"_Name":"ErrorArchive_UnknownAffectedEntity"},"Message":"La entidad afectada {AffectedEntity/@odata.id} no tiene controlador.","Duration":4,"Animated":true}
 
 /***/ }),
 
@@ -4117,7 +4119,7 @@ module.exports = {"_Type":"Action.Type.PopoverMenu","PopoverItems":[{"Enabled":t
   \****************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.Navigation","ActionResult":{"_Name":"nav_MainPage"},"PageToOpen":"/Skycm_v3/Pages/Main.page","BackStackVisible":true,"ClearHistory":true,"NavigationType":"Inner"}
+module.exports = {"_Type":"Action.Type.Navigation","ActionResult":{"_Name":"nav_MainPage"},"PageToOpen":"/Skycm_v3/Pages/Main.page","BackStackVisible":true,"ClearHistory":true,"NavigationType":"Inner","Transition":{"Curve":"Linear","Name":"Fade"}}
 
 /***/ }),
 
@@ -4227,7 +4229,7 @@ module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_Inv
   \**************************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_errorconexionconrest"},"Message":"#ActionResults:ResultRest/error","Title":"Atencion!"}
+module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_errorconexionconrest"},"Message":"#ActionResults:ResultRest/error","Title":"Atencion!","OKCaption":"Ok"}
 
 /***/ }),
 
@@ -4347,7 +4349,7 @@ module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"ErrorPe
   \***********************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{"_Name":"ResultRest"},"OnFailure":"/Skycm_v3/Actions/Consultas/msj_errorconexionconrest.action","OnSuccess":"/Skycm_v3/Rules/consultas/paises/Rest_Cartera.js","ShowActivityIndicator":true,"ActivityIndicatorText":"Enviando estado de cartera...!","Target":{"Service":"/Skycm_v3/Services/Rest_Inventario.service","Path":"/CarteraSkyVMovil","OutputPath":"/MT_CarteraSkyVMovilResp/T_CarteraSkyVMovilResp/0","RequestProperties":{"Method":"PUT","Body":{"T_CarteraSKyVMovil":[{"Cliente":"#Page:ConsultaCartera/#Control:FC_CLIENTE/#SelectedValue","Vendedor":"#Page:ConsultaCartera/#Control:FC_PERNR/#Value","Userdefpr1":"#Page:ConsultaCartera/#Control:FC_ENVIAR_A/#SelectedValue","Userdefpr2":"#Page:ConsultaCartera/#Control:fc_sociedad/#Value"}]}}}}
+module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{"_Name":"ResultRest"},"OnFailure":"/Skycm_v3/Actions/Consultas/msj_errorconexionconrest.action","OnSuccess":"/Skycm_v3/Rules/consultas/paises/Rest_Cartera.js","ShowActivityIndicator":true,"ActivityIndicatorText":"Enviando estado de cartera...!","Target":{"Service":"/Skycm_v3/Services/Rest_Inventario.service","Path":"/carteraskyvmovil/rest","OutputPath":"/mt_cartera_sky_vmovil_resp/t_cartera_sky_vmovil_resp/0","RequestProperties":{"Method":"PUT","Body":{"T_CarteraSKyVMovil":[{"Cliente":"#Page:ConsultaCartera/#Control:FC_CLIENTE/#SelectedValue","Vendedor":"#Page:ConsultaCartera/#Control:FC_PERNR/#Value","Userdefpr1":"#Page:ConsultaCartera/#Control:FC_ENVIAR_A/#SelectedValue","Userdefpr2":"#Page:ConsultaCartera/#Control:fc_sociedad/#Value"}]}}}}
 
 /***/ }),
 
@@ -4357,7 +4359,7 @@ module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{
   \**************************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{"_Name":"ResultRest"},"OnFailure":"/Skycm_v3/Actions/Consultas/msj_errorconexionconrest.action","OnSuccess":"/Skycm_v3/Rules/consultas/Rule_Rest_Inventario.js","ShowActivityIndicator":true,"ActivityIndicatorText":"Realizando Consulta...!","Target":{"Service":"/Skycm_v3/Services/Rest_Inventario.service","Path":"/InvSkyVMovil","OutputPath":"/MT_InvSkyVMovilAfsResp/T_InvSkyVMovilAfsResp/0/T_CabeceraInvSkyVMovil","RequestProperties":{"Method":"PUT","Body":{"T_InvSkyVMovilAfs":[{"Referencia":"#Page:ConsultaInventario/#Control:fc_referencias/#SelectedValue","Vendedor":"#Page:ConsultaInventario/#Control:fc_pernr/#Value","Campocab1":"#Page:ConsultaInventario/#Control:fc_sociedad/#Value"}]},"Headers":{"Content-Type":"application/json"}}}}
+module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{"_Name":"ResultRest"},"OnFailure":"/Skycm_v3/Actions/Consultas/msj_errorconexionconrest.action","OnSuccess":"/Skycm_v3/Rules/consultas/Rule_Rest_Inventario.js","ShowActivityIndicator":true,"ActivityIndicatorText":"Realizando Consulta...!","Target":{"Service":"/Skycm_v3/Services/Rest_Inventario.service","Path":"/inventarioskyvmovil/rest","OutputPath":"/T_InvSkyVMovilAfsResp/T_CabeceraInvSkyVMovil","RequestProperties":{"Method":"PUT","Body":{"T_INVSKYVMOVILAFS":[{"REFERENCIA":"#Page:ConsultaInventario/#Control:fc_referencias/#SelectedValue","VENDEDOR":"#Page:ConsultaInventario/#Control:fc_pernr/#Value","CAMPOCAB1":"#Page:ConsultaInventario/#Control:fc_sociedad/#Value"}]},"Headers":{"Content-Type":"application/json"}}}}
 
 /***/ }),
 
@@ -4367,7 +4369,7 @@ module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{
   \***********************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{"_Name":"ResultRest"},"OnFailure":"/Skycm_v3/Actions/Consultas/rest/ErrorPedido.action","OnSuccess":"/Skycm_v3/Rules/consultas/afs/RestPedidos.js","ShowActivityIndicator":true,"ActivityIndicatorText":"Realizando consulta....","Target":{"Service":"/Skycm_v3/Services/Rest_Inventario.service","Path":"/PedidoVendMovil","OutputPath":"/MT_PedidoVendMovilResp/T_PedidoVendMovilResp/0/T_Cabecera","RequestProperties":{"Method":"PUT","Body":{"T_PedVendMovil":[{"Pedido":"#Page:ConsultaPedido/#Control:fc_nopedido/#Value","Vendedor":"#Page:ConsultaPedido/#Control:fc_pernr/#Value","Campocab1":"#Page:ConsultaPedido/#Control:fc_sociedad/#Value"}]},"Headers":{"Content-Type":"application/json"}}}}
+module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{"_Name":"ResultRest"},"OnFailure":"/Skycm_v3/Actions/Consultas/rest/ErrorPedido.action","OnSuccess":"/Skycm_v3/Rules/consultas/afs/RestPedidos.js","ShowActivityIndicator":true,"ActivityIndicatorText":"Realizando consulta....","Target":{"Service":"/Skycm_v3/Services/Rest_Inventario.service","Path":"/PedVendedor/rest","OutputPath":"/T_PedidoVendMovilResp/T_Cabecera","RequestProperties":{"Method":"PUT","Body":{"T_PED_VEND_MOVIL":{"PEDIDO":"#Page:ConsultaPedido/#Control:fc_nopedido/#Value","VENDEDOR":"#Page:ConsultaPedido/#Control:fc_pernr/#Value"}},"Headers":{"Content-Type":"application/json"}}}}
 
 /***/ }),
 
@@ -4377,7 +4379,7 @@ module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{
   \***********************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{"_Name":"ResultRest"},"OnFailure":"/Skycm_v3/Actions/Consultas/rest/ErrorPedido.action","OnSuccess":"/Skycm_v3/Rules/consultas/afs/RestPedidos3.js","ShowActivityIndicator":true,"ActivityIndicatorText":"Realizando consulta....","Target":{"Service":"/Skycm_v3/Services/Rest_Inventario.service","Path":"/PedidoVendMovil","OutputPath":"/MT_PedidoVendMovilResp/T_PedidoVendMovilResp/0/T_Cabecera","RequestProperties":{"Method":"PUT","Body":{"T_PedVendMovil":[{"Pedido":"#Page:ConsultaPedido/#Control:fc_nopedido/#Value","Vendedor":"#Page:ConsultaPedido/#Control:fc_pernr/#Value","Campocab1":"#Page:ConsultaPedido/#Control:fc_sociedad/#Value"}]},"Headers":{"Content-Type":"application/json"}}}}
+module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{"_Name":"ResultRest"},"OnFailure":"/Skycm_v3/Actions/Consultas/rest/ErrorPedido.action","OnSuccess":"/Skycm_v3/Rules/consultas/afs/RestPedidos3.js","ShowActivityIndicator":true,"ActivityIndicatorText":"Realizando consulta....","Target":{"Service":"/Skycm_v3/Services/Rest_Inventario.service","Path":"/PedVendedor/rest","OutputPath":"/T_PedidoVendMovilResp/T_Cabecera","RequestProperties":{"Method":"PUT","Body":{"T_PED_VEND_MOVIL":{"PEDIDO":"#Page:ConsultaPedido/#Control:fc_nopedido/#Value","VENDEDOR":"#Page:ConsultaPedido/#Control:fc_pernr/#Value"}},"Headers":{"Content-Type":"application/json"}}}}
 
 /***/ }),
 
@@ -4387,7 +4389,7 @@ module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{
   \************************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{"_Name":"ResultRest"},"OnFailure":"/Skycm_v3/Actions/Consultas/rest/ErrorPedido.action","OnSuccess":"/Skycm_v3/Rules/consultas/afs/RestPedidos2.js","ShowActivityIndicator":true,"ActivityIndicatorText":"Realizando consulta 2....","Target":{"Service":"/Skycm_v3/Services/Rest_Inventario.service","Path":"/PedidoVendMovil","OutputPath":"/MT_PedidoVendMovilResp/T_PedidoVendMovilResp/0/T_Cabecera","RequestProperties":{"Method":"PUT","Body":{"T_PedVendMovil":[{"Pedido":"#Page:ConsultaPedido/#Control:fc_nopedido/#Value","Vendedor":"#Page:ConsultaPedido/#Control:fc_pernr2/#Value","Campocab1":"#Page:ConsultaPedido/#Control:fc_sociedad/#Value"}]},"Headers":{"Content-Type":"application/json"}}}}
+module.exports = {"_Type":"Action.Type.RestService.SendRequest","ActionResult":{"_Name":"ResultRest"},"OnFailure":"/Skycm_v3/Actions/Consultas/rest/ErrorPedido.action","OnSuccess":"/Skycm_v3/Rules/consultas/afs/RestPedidos2.js","ShowActivityIndicator":true,"ActivityIndicatorText":"Realizando consulta 2....","Target":{"Service":"/Skycm_v3/Services/Rest_Inventario.service","Path":"/PedVendedor/rest","OutputPath":"/T_PedidoVendMovilResp/T_Cabecera","RequestProperties":{"Method":"PUT","Body":{"T_PED_VEND_MOVIL":{"PEDIDO":"#Page:ConsultaPedido/#Control:fc_nopedido/#Value","VENDEDOR":"#Page:ConsultaPedido/#Control:fc_pernr2/#Value"}},"Headers":{"Content-Type":"application/json"}}}}
 
 /***/ }),
 
@@ -4587,7 +4589,7 @@ module.exports = {"_Type":"Action.Type.Navigation","ActionResult":{"_Name":"nav_
   \*********************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.ODataService.UpdateEntity","ActionResult":{"_Name":"Cerrar_jornada"},"OnSuccess":"/Skycm_v3/Actions/JornadaLaboral/msj_JornadaFinalizada.action","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"WORKDAY","ReadLink":"{@odata.readLink}"},"Properties":{"ID_JORNADA":"#Page:DetalleJornadaLaboral/#Control:FC_IDJORDETALLE/#Value","PERNR":"#Page:DetalleJornadaLaboral/#Control:FCDURACIONJOR/#Value","HORA_FIN":"#Page:DetalleJornadaLaboral/#Control:FC_HORAFINJOR/#Value","ESTADO":"INACTIVO"}}
+module.exports = {"_Type":"Action.Type.ODataService.UpdateEntity","ActionResult":{"_Name":"create_Jornada"},"OnFailure":"/Skycm_v3/Actions/Visitas/msj_errorJornadaLaboral.action","OnSuccess":"/Skycm_v3/Actions/JornadaLaboral/close_modal_jornada.action","ShowActivityIndicator":true,"ActivityIndicatorText":"Finalizando Jornada laboral...","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"WORKDAY","ReadLink":"{@odata.readLink}"},"Properties":{"ID_JORNADA":"#Page:DetalleJornadaLaboral/#Control:FC_IDJORDETALLE/#Value","PERNR":"#Page:DetalleJornadaLaboral/#Control:FCDURACIONJOR/#Value","HORA_FIN":"#Page:DetalleJornadaLaboral/#Control:FC_HORAFINJOR/#Value","ESTADO":"INACTIVO"}}
 
 /***/ }),
 
@@ -4607,7 +4609,7 @@ module.exports = {"_Type":"Action.Type.OfflineOData.Download","ActionResult":{"_
   \**************************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.ClosePage","ActionResult":{"_Name":"close_modal_jornada"},"OnSuccess":"/Skycm_v3/Actions/Service/UploadOnly.action","CancelPendingActions":false,"NavigateBackToPage":"Main"}
+module.exports = {"_Type":"Action.Type.ClosePage","ActionResult":{"_Name":"close_modal_jornada"},"OnSuccess":"/Skycm_v3/Actions/JornadaLaboral/msj_jornada_finalizada.action","DismissModal":"Action.Type.ClosePage.Completed","CancelPendingActions":false,"NavigateBackToPage":"Main"}
 
 /***/ }),
 
@@ -4617,7 +4619,7 @@ module.exports = {"_Type":"Action.Type.ClosePage","ActionResult":{"_Name":"close
   \*********************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.ODataService.CreateEntity","ActionResult":{"_Name":"create_Jornada"},"OnFailure":"/Skycm_v3/Actions/Visitas/msj_errorJornadaLaboral.action","OnSuccess":"/Skycm_v3/Actions/JornadaLaboral/msj_JornadaLaboralIniciada.action","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"WORKDAY"},"Properties":{"ID_JORNADA":"#Page:ConfirmarJornadaLaboral/#Control:FC_IDJORNADA/#Value","PERNR":"0","PERNR_SCP":"#Page:ConfirmarJornadaLaboral/#Control:fc_pernr_scp/#Value","EMAIL_VEND":"#Application/#AppData/UserId","FECHA":"#Page:ConfirmarJornadaLaboral/#Control:FC_FECHAJORNADA/#Value","HORA_INICIO":"#Page:ConfirmarJornadaLaboral/#Control:FC_HORAJORNADA/#Value","ESTADO":"ACTIVO"}}
+module.exports = {"_Type":"Action.Type.ODataService.CreateEntity","ActionResult":{"_Name":"create_Jornada"},"OnFailure":"/Skycm_v3/Actions/Visitas/msj_errorJornadaLaboral.action","OnSuccess":"/Skycm_v3/Actions/JornadaLaboral/msj_JornadaLaboralIniciada.action","ShowActivityIndicator":true,"ActivityIndicatorText":"Iniciando Jornada Laboral...","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"WORKDAY"},"Properties":{"ID_JORNADA":"#Page:ConfirmarJornadaLaboral/#Control:FC_IDJORNADA/#Value","PERNR":"0","PERNR_SCP":"#Page:ConfirmarJornadaLaboral/#Control:fc_pernr_scp/#Value","EMAIL_VEND":"#Application/#AppData/UserId","FECHA":"#Page:ConfirmarJornadaLaboral/#Control:FC_FECHAJORNADA/#Value","HORA_INICIO":"#Page:ConfirmarJornadaLaboral/#Control:FC_HORAJORNADA/#Value","ESTADO":"ACTIVO"}}
 
 /***/ }),
 
@@ -4637,7 +4639,7 @@ module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_Con
   \****************************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.BannerMessage","ActionResult":{"_Name":"msj_JornadaFinalizada"},"OnSuccess":"/Skycm_v3/Actions/JornadaLaboral/close_modal_jornada.action","Message":"Jornada finalizada con exito!!!","Duration":60,"Animated":true}
+module.exports = {"_Type":"Action.Type.BannerMessage","ActionResult":{"_Name":"msj_JornadaFinalizada"},"OnSuccess":"/Skycm_v3/Actions/JornadaLaboral/close_modal_jornada.action","Message":"Jornada finalizada con exito!!!","Duration":100,"Animated":true,"Semantic":"Positive"}
 
 /***/ }),
 
@@ -4657,7 +4659,27 @@ module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_Jor
   \*********************************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.BannerMessage","ActionResult":{"_Name":"msj_JornadaLaboralIniciada"},"OnSuccess":"/Skycm_v3/Actions/Application/nav_MainPage.action","Message":"Jornada Laboral iniciada con exito!!!","Duration":100}
+module.exports = {"_Type":"Action.Type.BannerMessage","ActionResult":{"_Name":"msj_JornadaLaboralIniciada"},"OnSuccess":"/Skycm_v3/Actions/Application/nav_MainPage.action","Message":"Jornada Laboral iniciada con exito!!!","Duration":100,"Semantic":"Positive"}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/msj_jornada_finalizada.action":
+/*!*****************************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Actions/JornadaLaboral/msj_jornada_finalizada.action ***!
+  \*****************************************************************************************/
+/***/ ((module) => {
+
+module.exports = {"_Type":"Action.Type.BannerMessage","ActionResult":{"_Name":"msj_jornada_finalizada"},"OnSuccess":"/Skycm_v3/Actions/Application/nav_MainPage.action","Message":"Jornada Finalizada con exito!!!","Duration":100,"Animated":true,"Semantic":"Positive"}
+
+/***/ }),
+
+/***/ "./build.definitions/Skycm_v3/Actions/JornadaLaboral/msj_visita_activa.action":
+/*!************************************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Actions/JornadaLaboral/msj_visita_activa.action ***!
+  \************************************************************************************/
+/***/ ((module) => {
+
+module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_visita_activa"},"Message":"Tienes una visita activa, debes finalizarla para cerrar tu jornada.","Title":"Visita activa","OKCaption":"Finalizar visita","OnOK":"/Skycm_v3/Actions/Visitas/nav_VisitaCliente.action","CancelCaption":"Cancelar"}
 
 /***/ }),
 
@@ -4921,6 +4943,16 @@ module.exports = {"_Type":"Action.Type.OfflineOData.Upload","ActionResult":{"_Na
 
 /***/ }),
 
+/***/ "./build.definitions/Skycm_v3/Actions/Visitas/BorraVisita.action":
+/*!***********************************************************************!*\
+  !*** ./build.definitions/Skycm_v3/Actions/Visitas/BorraVisita.action ***!
+  \***********************************************************************/
+/***/ ((module) => {
+
+module.exports = {"_Type":"Action.Type.ODataService.DeleteEntity","ActionResult":{"_Name":"BorraVisita"},"OnSuccess":"/Skycm_v3/Actions/Visitas/Nav_vis_main.action","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"HISTV","ReadLink":"{@odata.readLink}"}}
+
+/***/ }),
+
 /***/ "./build.definitions/Skycm_v3/Actions/Visitas/CreateClienteProspecto.action":
 /*!**********************************************************************************!*\
   !*** ./build.definitions/Skycm_v3/Actions/Visitas/CreateClienteProspecto.action ***!
@@ -4997,7 +5029,7 @@ module.exports = {"_Type":"Action.Type.ProgressBanner","OnSuccess":"/Skycm_v3/Ru
   \*******************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.ProgressBanner","OnSuccess":"/Skycm_v3/Actions/Visitas/CreateVisita.action","ShowActivityIndicator":true,"ActivityIndicatorText":"...","Message":"Registrando visita espere un momento...","CompletionMessage":"Visita registrada con éxito!","CompletionTimeout":5}
+module.exports = {"_Type":"Action.Type.ProgressBanner","OnSuccess":"/Skycm_v3/Actions/Visitas/CreateVisita.action","ShowActivityIndicator":true,"ActivityIndicatorText":"...","Message":"Registrando visita espere un momento...","CompletionMessage":"Visita registrada con éxito!","CompletionTimeout":5,"Animated":true}
 
 /***/ }),
 
@@ -5007,7 +5039,7 @@ module.exports = {"_Type":"Action.Type.ProgressBanner","OnSuccess":"/Skycm_v3/Ac
   \********************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.ODataService.UpdateEntity","ActionResult":{"_Name":"TerminarVisitaActiva"},"OnFailure":"/Skycm_v3/Actions/Visitas/msj_errorcerrarvisita.action","OnSuccess":"/Skycm_v3/Actions/Service/closePagevisi.action","ShowActivityIndicator":true,"ActivityIndicatorText":"Cerrando visita....","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"HISTV","QueryOptions":"$filter=ID_VISITA eq '{{#Page:DetalleVisitaActiva/#Control:FC_idvisitadetalle/#Value}}'","ReadLink":"{@odata.readLink}"},"Properties":{"ID_VISITA":"#Page:DetalleVisitaActiva/#Control:FC_idvisitadetalle/#Value","KUNNR":"#Page:DetalleVisitaActiva/#Control:fc_Kunnr/#Value","FIN":"/Skycm_v3/Rules/Application/GetHora.js","DURACION":"/Skycm_v3/Rules/Visitas/CalcularDuracionVisita.js","OBJ_CUMPL":"","OBSERVACION":"#Page:DetalleVisitaActiva/#Control:Fc_observacion/#Value","ESTADO":"INACTIVA"}}
+module.exports = {"_Type":"Action.Type.ODataService.UpdateEntity","ActionResult":{"_Name":"TerminarVisitaActiva"},"OnFailure":"/Skycm_v3/Actions/Visitas/msj_errorcerrarvisita.action","OnSuccess":"/Skycm_v3/Actions/Service/closePagevisi.action","ShowActivityIndicator":true,"ActivityIndicatorText":"Cerrando visita....","Target":{"Service":"/Skycm_v3/Services/Dest_SkyCM_Productivo.service","EntitySet":"HISTV"},"Properties":{"ID_VISITA":"#Page:DetalleVisitaActiva/#Control:FC_idvisitadetalle/#Value","KUNNR":"#Page:DetalleVisitaActiva/#Control:fc_Kunnr/#Value","FIN":"/Skycm_v3/Rules/Application/GetHora.js","DURACION":"/Skycm_v3/Rules/Visitas/CalcularDuracionVisita.js","OBJ_CUMPL":"","OBSERVACION":"#Page:DetalleVisitaActiva/#Control:Fc_observacion/#Value","ESTADO":"INACTIVA"}}
 
 /***/ }),
 
@@ -5067,7 +5099,7 @@ module.exports = {"_Type":"Action.Type.BannerMessage","ActionResult":{"_Name":"m
   \********************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_Errorcrearvisita"},"Message":"{#ActionResults:CreateVisita/error}"}
+module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_Errorcrearvisita"},"Message":"{#ActionResults:CreateVisita/error}","OKCaption":"Ok"}
 
 /***/ }),
 
@@ -5087,7 +5119,7 @@ module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_Vis
   \**********************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.BannerMessage","ActionResult":{"_Name":"msj_Visitacreaconexito"},"OnSuccess":"/Skycm_v3/Actions/Application/nav_MainPage.action","Message":"Visita iniciada con exito!!!","Duration":100,"Animated":true}
+module.exports = {"_Type":"Action.Type.BannerMessage","ActionResult":{"_Name":"msj_Visitacreaconexito"},"OnSuccess":"/Skycm_v3/Actions/Application/nav_MainPage.action","Message":"Visita iniciada con exito!!!","Duration":100,"Animated":true,"Semantic":"Positive"}
 
 /***/ }),
 
@@ -5097,7 +5129,7 @@ module.exports = {"_Type":"Action.Type.BannerMessage","ActionResult":{"_Name":"m
   \***********************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_errorJornadaLaboral"},"Message":"{#ActionResults:create_Jornada/error}","Title":"Error al iniciar la jornada"}
+module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_errorJornadaLaboral"},"Message":"{#ActionResults:create_Jornada/error}","Title":"Error en la jornada"}
 
 /***/ }),
 
@@ -5107,7 +5139,7 @@ module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_err
   \*********************************************************************************/
 /***/ ((module) => {
 
-module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_errorcerrarvisita"},"Message":"#ActionResults:TerminarVisitaActiva/error","Title":"Error al cerrar la visita"}
+module.exports = {"_Type":"Action.Type.Message","ActionResult":{"_Name":"msj_errorcerrarvisita"},"Message":"#ActionResults:TerminarVisitaActiva/error","Title":"Error al cerrar la visita","OKCaption":"Ok"}
 
 /***/ }),
 

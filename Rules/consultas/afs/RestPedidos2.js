@@ -18,10 +18,11 @@ export default function RestPedidos2(context) {
 	
 	//Aqui capturo esa informacion o la data del resulatado del servicio rest en una variable que se llama resultado
 	var resultado = actionResult.data;
-	
+
 	//Segun la estructura del servicio REST podemos acceder a las diferentes raices de la estructura en este caso estoy accediedno a T_Factura
 	//var resultadoFactura= resultado.T_Factura.Factura;
-	var error = resultado.T_Mensaje.TipoMsj;
+	const error = resultado?.T_Mensaje?.[0]?.TipoMsj || resultado?.T_Mensaje?.TipoMsj;
+
 	var Listado = resultado.T_Detalle;
 
 	var TextoMensaje = resultado.T_Mensaje.TextoMsj
@@ -31,6 +32,7 @@ export default function RestPedidos2(context) {
 		//le estoy diciendo que tome toda la informacion de la variable resultado y la lleve a la siguiente pagina
 		pageProxy.setActionBinding(resultado);
 		clientData.Pedido = Listado
+		//dialog.alert(JSON.stringify(clientData.Pedido));
 		return pageProxy.executeAction('/Skycm_v3/Actions/Consultas/nav_detallePedido.action');
 
 	} else {

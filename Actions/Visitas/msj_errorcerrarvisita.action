@@ -4,5 +4,6 @@
 		"_Name": "msj_errorcerrarvisita"
 	},
 	"Message": "#ActionResults:TerminarVisitaActiva/error",
-	"Title": "Error al cerrar la visita"
+	"Title": "Error al cerrar la visita",
+	"OKCaption": "Ok"
 }

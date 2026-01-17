@@ -9,9 +9,7 @@
 	"ActivityIndicatorText": "Cerrando visita....",
 	"Target": {
 		"Service": "/Skycm_v3/Services/Dest_SkyCM_Productivo.service",
-		"EntitySet": "HISTV",
-		"QueryOptions": "$filter=ID_VISITA eq '{{#Page:DetalleVisitaActiva/#Control:FC_idvisitadetalle/#Value}}'",
-		"ReadLink": "{@odata.readLink}"
+		"EntitySet": "HISTV"
 	},
 	"Properties": {
 		"ID_VISITA": "#Page:DetalleVisitaActiva/#Control:FC_idvisitadetalle/#Value",

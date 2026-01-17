@@ -4,5 +4,5 @@
 		"_Name": "msj_errorJornadaLaboral"
 	},
 	"Message": "{#ActionResults:create_Jornada/error}",
-	"Title": "Error al iniciar la jornada"
+	"Title": "Error en la jornada"
 }
