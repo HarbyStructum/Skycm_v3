@@ -18,10 +18,10 @@
 					},
 					"Controls": [
 						{
-							"validationProperties": {
+							"Validation": {
 								"SeparatorBackgroundColor": "#07f9ad",
-								"SeparatorIsHidden": false,
-								"ValidationViewIsHidden": true
+								"SeparatorVisible": false,
+								"Visible": true
 							},
 							"_Type": "Control.Type.FormCell.ListPicker",
 							"_Name": "fc_referencias",
@@ -58,7 +58,7 @@
 							}
 						},
 						{
-							"validationProperties": {
+							"Validation": {
 								"SeparatorBackgroundColor": "#fc0713"
 							},
 							"_Type": "Control.Type.FormCell.SimpleProperty",
@@ -104,8 +104,8 @@
 							"IsEditable": true
 						},
 						{
-							"validationProperties": {
-								"ValidationViewIsHidden": true
+							"Validation": {
+								"Visible": true
 							},
 							"Value": [
 								"Predeterminado"
@@ -205,10 +205,11 @@
 	],
 	"_Type": "Page",
 	"_Name": "ConsultaInventario",
-	"Caption": "Inventario",
-	"PrefersLargeCaption": true,
 	"ActionBar": {
 		"Items": [],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar1",
+		"Caption": "Inventario",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }

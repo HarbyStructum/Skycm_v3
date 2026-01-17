@@ -102,6 +102,9 @@
 	],
 	"_Type": "Page",
 	"_Name": "GestionVisitas",
-	"Caption": "Gestion de Visitas",
-	"PrefersLargeCaption": true
+	"ActionBar": {
+		"Caption": "Gestion de Visitas",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
+	}
 }

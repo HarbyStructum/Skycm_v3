@@ -40,7 +40,8 @@
 						"_Name": "SectionHeader0",
 						"AccessoryType": "None",
 						"UseTopPadding": true,
-						"Caption": "Listado de Visitas:"
+						"Caption": "Listado de Visitas:",
+						"_Type": "SectionCommon.Type.Header"
 					},
 					"Visible": true,
 					"EmptySection": {
@@ -78,8 +79,10 @@
 							"Items": [],
 							"PerformFirstActionWithFullSwipe": true,
 							"LeadingItems": [],
-							"TrailingItems": []
-						}
+							"TrailingItems": [],
+							"_Type": "ObjectCell.Type.ContextMenu"
+						},
+						"_Type": "ObjectTable.Type.ObjectCell"
 					},
 					"DataPaging": {
 						"ShowLoadingIndicator": false,
@@ -97,6 +100,9 @@
 	],
 	"_Type": "Page",
 	"_Name": "HistoricoJornada",
-	"Caption": "Historico Jornada",
-	"PrefersLargeCaption": true
+	"ActionBar": {
+		"Caption": "Historico Jornada",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
+	}
 }

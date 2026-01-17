@@ -48,8 +48,10 @@
 							"Items": [],
 							"PerformFirstActionWithFullSwipe": true,
 							"LeadingItems": [],
-							"TrailingItems": []
-						}
+							"TrailingItems": [],
+							"_Type": "ObjectCell.Type.ContextMenu"
+						},
+						"_Type": "ObjectTable.Type.ObjectCell"
 					},
 					"DataPaging": {
 						"ShowLoadingIndicator": false,
@@ -74,31 +76,36 @@
 							"Value": "{Message}",
 							"_Name": "KeyValue0",
 							"KeyName": "Error",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						},
 						{
 							"Value": "{RequestBody}",
 							"_Name": "KeyValue1",
 							"KeyName": "Request Body",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						},
 						{
 							"Value": "{RequestURL}",
 							"_Name": "KeyValue2",
 							"KeyName": "Request URL",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						},
 						{
 							"Value": "{HTTPStatusCode}",
 							"_Name": "KeyValue3",
 							"KeyName": "HTTP Status Code",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						},
 						{
 							"Value": "{RequestMethod}",
 							"_Name": "KeyValue4",
 							"KeyName": "Request Method",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						}
 					],
 					"MaxItemCount": 1,
@@ -128,10 +135,11 @@
 	],
 	"_Type": "Page",
 	"_Name": "ErrorArchive_Detail",
-	"Caption": "Details",
-	"PrefersLargeCaption": true,
 	"ActionBar": {
 		"Items": [],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar1",
+		"Caption": "Details",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }

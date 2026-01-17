@@ -159,6 +159,9 @@
 	],
 	"_Type": "Page",
 	"_Name": "ConsultaCartera",
-	"Caption": "Cartera",
-	"PrefersLargeCaption": true
+	"ActionBar": {
+		"Caption": "Cartera",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
+	}
 }

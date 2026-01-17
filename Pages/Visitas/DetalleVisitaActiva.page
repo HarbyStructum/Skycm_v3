@@ -60,13 +60,15 @@
 							"Value": "/Skycm_v3/Rules/Application/GetMes.js",
 							"_Name": "KeyValue2",
 							"KeyName": "Mes",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						},
 						{
 							"Value": "/Skycm_v3/Rules/Application/GetAnio.js",
 							"_Name": "KeyValue4",
 							"KeyName": "Año",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						}
 					],
 					"MaxItemCount": 1,
@@ -153,8 +155,6 @@
 	],
 	"_Type": "Page",
 	"_Name": "DetalleVisitaActiva",
-	"Caption": "{ID_VISITA}",
-	"PrefersLargeCaption": true,
 	"ActionBar": {
 		"Items": [
 			{
@@ -163,9 +163,13 @@
 				"Position": "Right",
 				"IsIconCircular": false,
 				"Visible": true,
-				"OnPress": "/Skycm_v3/Rules/Visitas/CerrarVisita.js"
+				"OnPress": "/Skycm_v3/Rules/Visitas/CerrarVisita.js",
+				"_Type": "Control.Type.ActionBarItem"
 			}
 		],
-		"_Name": "ActionBar0"
+		"_Name": "ActionBar0",
+		"Caption": "{ID_VISITA}",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }

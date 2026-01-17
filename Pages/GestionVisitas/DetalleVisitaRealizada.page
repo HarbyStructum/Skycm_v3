@@ -21,37 +21,43 @@
 							"Value": "{ID_VISITA}",
 							"_Name": "KeyValue5",
 							"KeyName": "Id visita",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						},
 						{
 							"Value": "{NAME1}",
 							"_Name": "KeyValue2",
 							"KeyName": "Cliente",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						},
 						{
 							"Value": "{FECHA}",
 							"_Name": "KeyValue1",
 							"KeyName": "Fecha",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						},
 						{
 							"Value": "{HORA}",
 							"_Name": "KeyValue0",
 							"KeyName": "Hora inicio",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						},
 						{
 							"Value": "{FIN}",
 							"_Name": "KeyValue3",
 							"KeyName": "Hora fin",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						},
 						{
 							"Value": "{DURACION}",
 							"_Name": "KeyValue4",
 							"KeyName": "Duracion",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						}
 					],
 					"MaxItemCount": 1,
@@ -105,6 +111,9 @@
 	],
 	"_Type": "Page",
 	"_Name": "DetalleVisitaRealizada",
-	"Caption": "DetalleVisitaRealizada",
-	"PrefersLargeCaption": true
+	"ActionBar": {
+		"Caption": "DetalleVisitaRealizada",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
+	}
 }

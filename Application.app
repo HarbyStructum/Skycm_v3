@@ -9,5 +9,5 @@
 	"OnDidUpdate": "/Skycm_v3/Actions/Service/InitializeOffline.action",
 	"Styles": "/Skycm_v3/Styles/Styles.less",
 	"Localization": "/Skycm_v3/i18n/i18n.properties",
-	"_SchemaVersion": "24.4"
+	"_SchemaVersion": "25.9"
 }

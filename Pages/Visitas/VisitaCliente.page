@@ -94,11 +94,12 @@
 	],
 	"_Type": "Page",
 	"_Name": "VisitaCliente",
-	"Caption": "Visita Cliente",
-	"PrefersLargeCaption": true,
 	"OnLoaded": "/Skycm_v3/Actions/Visitas/Download_visitas.action",
 	"ActionBar": {
 		"Items": [],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar1",
+		"Caption": "Visita Cliente",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }

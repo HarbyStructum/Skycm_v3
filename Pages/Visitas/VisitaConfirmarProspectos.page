@@ -283,8 +283,6 @@
 	],
 	"_Type": "Page",
 	"_Name": "VisitaConfirmarProspectos",
-	"Caption": "VisitaConfirmarProspectos",
-	"PrefersLargeCaption": true,
 	"OnLoaded": "/Skycm_v3/Rules/Visitas/Geo.rule.js",
 	"ActionBar": {
 		"Items": [
@@ -294,9 +292,13 @@
 				"Position": "Right",
 				"IsIconCircular": false,
 				"Visible": true,
-				"OnPress": "/Skycm_v3/Actions/Visitas/CreateVisitaProspecto.action"
+				"OnPress": "/Skycm_v3/Actions/Visitas/CreateVisitaProspecto.action",
+				"_Type": "Control.Type.ActionBarItem"
 			}
 		],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar1",
+		"Caption": "VisitaConfirmarProspectos",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }

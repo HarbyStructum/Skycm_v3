@@ -21,19 +21,22 @@
 							"Value": "{Userdet5}",
 							"_Name": "KeyValue1",
 							"KeyName": "",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						},
 						{
 							"Value": "{Color}",
 							"_Name": "KeyValue0",
 							"KeyName": "Color:",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						},
 						{
 							"Value": "$(N,{CantDisponible})",
 							"_Name": "Cantidad disponible",
 							"KeyName": "cantidad disponible:",
-							"Visible": true
+							"Visible": true,
+							"_Type": "KeyValue.Type.Item"
 						}
 					],
 					"MaxItemCount": 1,
@@ -124,11 +127,12 @@
 	],
 	"_Type": "Page",
 	"_Name": "DetalleInventario",
-	"Caption": "{Referencia}",
-	"PrefersLargeCaption": true,
 	"OnLoaded": "/Skycm_v3/Rules/consultas/InventarioCampos.js",
 	"ActionBar": {
 		"Items": [],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar1",
+		"Caption": "{Referencia}",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }

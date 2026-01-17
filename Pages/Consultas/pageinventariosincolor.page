@@ -32,14 +32,16 @@
 						"PrimaryAction": {
 							"Style": "",
 							"Title": "Primary",
-							"Visible": false
+							"Visible": false,
+							"_Type": "ObjectCard.Type.ActionItem"
 						},
 						"SecondaryAction": {
 							"Style": "",
 							"Title": "Secondary",
-							"Visible": false
+							"Visible": false,
+							"_Type": "ObjectCard.Type.ActionItem"
 						},
-						"_Type": "Control.Type.ObjectCard"
+						"_Type": "ObjectCardCollection.Type.Card"
 					},
 					"Layout": {
 						"LayoutType": "Vertical"
@@ -54,6 +56,9 @@
 	],
 	"_Type": "Page",
 	"_Name": "pageinventariosincolor",
-	"Caption": "pageinventariosincolor",
-	"PrefersLargeCaption": true
+	"ActionBar": {
+		"Caption": "pageinventariosincolor",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
+	}
 }

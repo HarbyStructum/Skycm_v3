@@ -70,7 +70,10 @@
 	],
 	"_Type": "Page",
 	"_Name": "Inven_Ord_Color",
-	"Caption": "Color",
-	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Caption": "Color",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
+	},
 	"OnLoaded": "/Skycm_v3/Rules/consultas/visulisacionCampo.js"
 }

@@ -112,6 +112,9 @@
 	],
 	"_Type": "Page",
 	"_Name": "DetalleCliente",
-	"Caption": "Detalle cliente",
-	"PrefersLargeCaption": true
+	"ActionBar": {
+		"Caption": "Detalle cliente",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
+	}
 }

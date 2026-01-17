@@ -46,7 +46,9 @@
 		{
 			"Title": "Inicializar",
 			"Icon": "sap-icon://accept",
-			"Style": "",
+			"Styles": {
+				"Title": ""
+			},
 			"OnPress": "/Skycm_v3/Actions/Service/InitializeOffline.action",
 			"Visible": true,
 			"Enabled": true
@@ -54,7 +56,9 @@
 		{
 			"Title": "Restaurar",
 			"Icon": "sap-icon://reset",
-			"Style": "",
+			"Styles": {
+				"Title": ""
+			},
 			"OnPress": "/Skycm_v3/Actions/Service/clear_store.action",
 			"Visible": true,
 			"Enabled": true

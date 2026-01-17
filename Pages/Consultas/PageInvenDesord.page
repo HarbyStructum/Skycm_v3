@@ -65,17 +65,19 @@
 						"PrimaryAction": {
 							"Style": "",
 							"Title": "Primary",
-							"Visible": false
+							"Visible": false,
+							"_Type": "ObjectCard.Type.ActionItem"
 						},
 						"SecondaryAction": {
 							"Style": "",
 							"Title": "Secondary",
-							"Visible": false
+							"Visible": false,
+							"_Type": "ObjectCard.Type.ActionItem"
 						},
 						"Styles": {
 							"StatusText": "ObjectCardStatusText"
 						},
-						"_Type": "Control.Type.ObjectCard"
+						"_Type": "ObjectCardCollection.Type.Card"
 					},
 					"Search": {
 						"Enabled": true
@@ -89,11 +91,12 @@
 	],
 	"_Type": "Page",
 	"_Name": "PageInvenDesord",
-	"Caption": "Predeterminado",
-	"PrefersLargeCaption": true,
 	"OnLoaded": "/Skycm_v3/Rules/consultas/visulisacionCampo.js",
 	"ActionBar": {
 		"Items": [],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar1",
+		"Caption": "Predeterminado",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }

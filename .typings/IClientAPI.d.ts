@@ -1,4 +1,4 @@
-/// version: MDK SDK 24.4
+/// version: MDK SDK 25.9
 
 /**
  * A designer-facing interface that provides access to a context.
@@ -193,6 +193,12 @@
    * @returns a promise with a binary data once it is resolved
    */
   base64StringToBinary(base64: string): Promise<any>;
+  /**
+   * This method converts binary data to a base64 string.
+   * @param binary - The binary data as a Uint8Array.
+   * @returns a promise with a string once it is resolved
+   */
+  binaryToBase64String(binary: any): Promise<string>;
   /** 
    * This method formats MDK base64 string with content type
    * @param base64 base64 string
@@ -507,11 +513,16 @@
   /**
    * Determine if it is in demo mode
    */
-  isDemoMode(): Boolean;
+  isDemoMode(): boolean;
   /**
    * Determine if the application is in single or multi user mode.
   */
-   isAppInMultiUserMode(): Boolean;
+  isAppInMultiUserMode(): boolean;
+   /**
+   * This method ensures the device meets compliance standards.
+   * @returns true if the device is compliant, false otherwise.
+   */
+  isDeviceCompliant(): Boolean;
    /**
    * This method is to get AppId used for application in SAP Mobile Services.
    */
@@ -663,16 +674,25 @@
 interface IControlProxy extends IClientAPI {
   /**
    * Applies the validation view, if it's supported for the given control
+   * 
+   * Note: We have Validation property to replace validationProperties in FormCell controls. 
+   * If you are using new Validation property, you can call redraw() on control level to apply validation changes
    */
   applyValidation();
   /**
    * Hides the validaiton view. Shorter version of:
    * clientAPI.setupValidationProperties('ValidationViewIsHidden', true).applyValidation();
+   * 
+   * Note: We have Validation property to replace validationProperties in FormCell controls. 
+   * If you are using new Validation property, you can call setVisible() API in FormCellValidationProxy
    */
   clearValidation();
   // Workaround to BCP 1880677511: Hides the validaiton view while changing value. 
   /**
    * Hides the validaiton view while changing value
+   * 
+   * Note: We have Validation property to replace validationProperties in FormCell controls. 
+   * If you are using new Validation property, you can call setVisible() API in FormCellValidationProxy
    */
   clearValidationOnValueChange();
   /**
@@ -713,12 +733,15 @@ interface IControlProxy extends IClientAPI {
    * @returns {IControlProxy} this - allows chaining
    */
   setEditable(value: boolean);
-  // To apply styles to a control
-  // @param: styleClass: The name of the style class to be applied
-  // @param: subView: The name of the subview to apply the 
-  // style to. If this is '', the style is applied to the entire
-  // control.
-  // See Styles/ docs for details.
+  /**  
+   * To apply styles to a control
+   * 
+   * @param styleClass The name of the style class to be applied
+   * @param subView The name of the subview to apply the style to.
+   * If this is '', the style is applied to the entire control.
+   * If the style format is nested controls, we could combine them with slash '/', such as
+   * 'parent/child'.
+   */
   setStyle(styleClass: string, subView: string);
   /**
    * Sets the validationProperties parameter of the underlying Observable.
@@ -726,6 +749,9 @@ interface IControlProxy extends IClientAPI {
    *
    * This will not cause the UI to rerender. To redraw the form cell, use the applyValidation API.
    *
+   * Note: We have Validation property to replace validationProperties in FormCell controls. 
+   * If you are using new Validation property, you can set properties by calling APIs in FormCellValidationProxy
+   * 
    * @param {string} key the key of the validaiton property
    * Available keys:
    * - SeparatorBackgroundColor (hex color as string e.g.: 'ffffff')
@@ -752,6 +778,121 @@ interface IControlProxy extends IClientAPI {
    * @param redraw true if redraw after set the visible state
    */
   setVisible(value: boolean, redraw: boolean);
+}
+
+/**
+ * A designer-facing interface that provides access to a element.
+ * 
+ * It is passed to rules to provide access to an element for
+ * application specific customizations.
+ */
+interface IElementProxy extends IClientAPI {
+  /**
+   * @returns {IPageProxy} the Page, which the element belongs to 
+   */
+  getPageProxy(): IPageProxy;
+
+  /**
+  * Get element name
+  * @return {string} the name of the button
+  */
+  getName(): string;
+
+  /**
+  * This method returns parent proxy
+  * @return {any}
+  */
+  getParent(): any;
+
+  /**
+  * Get index
+  * @return {number}
+  */
+  getIndex(): number;
+
+  /**
+   * This method returns type
+   * @return {string}
+   */
+  getType(): string;
+}
+
+/**
+ * A designer-facing interface that provides access to a card element.
+ * 
+ * It is passed to rules to provide access to a card element for
+ * application specific customizations.
+ */
+interface ICardElementProxy extends IElementProxy {
+  /**
+   * This method returns CardCollectionSection proxy
+   * @return {ICardCollectionProxy}
+   */
+  getSectionProxy(): ICardCollectionProxy;
+}
+
+/*
+* A designer-facing interface that provides access to FormCellValidation Proxy 
+* in a FormCell control.
+*/
+interface IFormCellValidationProxy extends IElementProxy {
+  /**
+   * Returns parent control proxy
+   * @returns {IFormCellProxy}
+   */
+  getParent(): IFormCellProxy;
+  /**
+   * Returns Message property value in Validation property
+   * @returns {string}
+   */
+  getMessage(): string;
+  /**
+   * Set the Message value in Validation property
+   * 
+   * This will not cause the UI to rerender. To redraw the form cell, use redraw() on control proxy.
+   * @param {string} message Message value to set
+   * @returns {IFormCellValidationProxy}
+   */
+  setMessage(message: string): IFormCellValidationProxy
+  /**
+   * Returns Visible property value in Validation property 
+   * @returns {boolean}
+   */
+  getVisible(): boolean;
+  /**
+   * Set the Visible value in Validation property
+   * 
+   * This will not cause the UI to rerender. To redraw the form cell, use redraw() on control proxy.
+   * @param {boolean} visible Visible value to set
+   * @returns {IFormCellValidationProxy}
+   */
+  setVisible(visible: boolean): IFormCellValidationProxy
+  /**
+   * Returns SeparatorVisible property value in Validation property. Only supported in iOS and WebClient.
+   * @returns {boolean}
+   */
+  getSeparatorVisible(): boolean;
+  /**
+   * Set the SeparatorVisible value in Validation property. Only supported in iOS and WebClient.
+   * 
+   * This will not cause the UI to rerender. To redraw the form cell, use redraw() on control proxy.
+   * @param {boolean} separatorVisible separatorVisible value to set
+   * @returns {IFormCellValidationProxy}
+   */
+  setSeparatorVisible(separatorVisible: boolean): IFormCellValidationProxy
+  /**
+   * Returns Styles property value in Validation property 
+   * @returns {any}
+   */
+  getStyles(): any;
+  /**
+   * Set the Styles value in Validation property
+   * 
+   * This will not cause the UI to rerender. To redraw the form cell, use redraw() on control proxy
+   * @param {boolean} styles Styles value to set
+   * @returns {IFormCellValidationProxy}
+   */
+  setStyles(styles: any): IFormCellValidationProxy
 }
 
 /**
@@ -808,8 +949,9 @@ interface IControlContainerProxy extends IClientAPI {
    * Sets the MinuteInterval property of the FormCell's control.
    * Accepted values are: "Date", "Datetime", "Time"
    * @param {Integer} mode value to set.
+   * @returns {Promise<any>}
    */
-  setMinuteInterval(mode: number) 
+  setMinuteInterval(mode: number): Promise<any>;
 
   /**
    * Returns the MinuteInterval property value defined for the FormCell's control.
@@ -821,8 +963,9 @@ interface IControlContainerProxy extends IClientAPI {
    * Sets the Unit property of the FormCell's control.
    * Accepted values are: "Date", "Datetime", "Time"
    * @param mode value to set.
+   * @returns {Promise<any>}
    */
-  setUnit(mode: string) 
+  setUnit(mode: string): Promise<any>;
 
   /**
    * Returns the Unit property value defined for the FormCell's control.
@@ -841,8 +984,9 @@ interface IControlContainerProxy extends IClientAPI {
    * Sets the Mode property of the FormCell's control.
    * Accepted values are: "Date", "Datetime","Time"
    * @param mode value to set.
+   * @returns {Promise<any>}
    */
-  setMode(mode: string) 
+  setMode(mode: string): Promise<any>;
 
   /**
    * Returns the Mode property value defined for the FormCell's control.
@@ -919,8 +1063,9 @@ interface IFormCellProxy extends IControlProxy {
   /**
    * Sets the Editable property of the FormCell's control.
    * @param {boolean} isEditable true if this form cell is editable. False otherwise.
+   * @returns {Promise<any>}
    */
-  setEditable(isEditable: boolean): void;
+  setEditable(isEditable: boolean): Promise<any>;
 
   /**
    * Returns the Editable property value defined for the control.
@@ -931,14 +1076,16 @@ interface IFormCellProxy extends IControlProxy {
   /**
    * Sets the Enable property of the FormCell's control.
    * @param {boolean} isEnable true enables and false disables.
+   * @returns {Promise<any>}
    */
-   setEnable(isEnable: boolean): void;
+   setEnable(isEnable: boolean): Promise<any>;
 
    /**
    * Sets the Enabled property of the FormCell's control.
    * @param {boolean} isEnabled true enables and false disables.
+   * @returns {Promise<any>}
    */
-  setEnabled(isEnabled: boolean): void;
+  setEnabled(isEnabled: boolean): Promise<any>;
 
   /**
    * Returns the Enable property value defined for the control.
@@ -955,8 +1102,9 @@ interface IFormCellProxy extends IControlProxy {
   /**
    * Sets the Caption property of the FormCell's control.
    * @param {string} caption value to set.
+   * @returns {Promise<any>}
    */
-  setCaption(caption: string): void;
+  setCaption(caption: string): Promise<any>;
   
   /**
    * Returns the Caption property value defined for the control.
@@ -967,8 +1115,9 @@ interface IFormCellProxy extends IControlProxy {
   /**
    * Sets the HelperText property of the FormCell's control.
    * @param {string}  helperText value to set.
+   * @returns {Promise<any>}
    */
-  setHelperText(helperText: string): void;
+  setHelperText(helperText: string): Promise<any>;
 
   /**
    * Returns the HelperText property value defined for the control.
@@ -981,6 +1130,37 @@ interface IFormCellProxy extends IControlProxy {
    * @returns {boolean} returns true if the control is visible otherwise false. 
    */
   getVisible(): boolean;
+
+  getValidation(): IFormCellValidationProxy;
+
+     /**
+   * Sets the RequiredIndicator property of the FormCell's control.
+     * Can be either Boolean or a Character. 
+     * Defaults to an asterisk `*` if a string longer than 1 character is passed in.
+   * @param {string} indicator value to set.
+   * @returns {Promise<any>}
+   */
+   setRequiredIndicator(indicator: string): Promise<any>;
+
+   /**
+    * Returns the RequiredIndicator property value defined for the FormCell's control.
+    * Can be either Boolean or a String. 
+    * @return {string}
+    */
+   getRequiredIndicator(): string;
+
+   /**
+   * Sets the Styles.RequiredIndicator property value defined for the FormCell's control.
+   * @param {string} requiredIndicatorStyle Style's classname value to set.
+   * @returns {Promise<any>}
+   */
+  setRequiredIndicatorStyle(requiredIndicatorStyle: string): Promise<any>;
+
+  /**
+   * Returns the Styles.RequiredIndicator property value defined for the FormCell's control.
+   * @return {string}
+   */
+  getRequiredIndicatorStyle(): string;
 
   /**
    * Create an object for attachment entry
@@ -999,6 +1179,15 @@ interface IFormCellProxy extends IControlProxy {
 }
 
 /**
+ * IMultiSorterFormCellProxy is a developer-facing interface that provides access to a
+ * Note control and allows customizations.
+ * In addition it provides access to the IFormCellProxy interface.
+ */
+interface IMultiSorterFormCellProxy extends IFormCellProxy {
+  
+}
+
+/**
  * NoteFormCellControlProxy is a developer-facing interface that provides access to a
  * Note control and allows customizations.
  * In addition it provides access to the IFormCellProxy interface.
@@ -1008,8 +1197,9 @@ interface IFormCellProxy extends IControlProxy {
   /**
    * Sets the MaxNumberOfLines property of the FormCell's control.
    * @param {number} maxNumberOfLines value to set.
+   * @returns {Promise<any>}
    */
-  setMaxNumberOfLines(MaxNumberOfLines: number) 
+  setMaxNumberOfLines(MaxNumberOfLines: number): Promise<any>;
 
   /**
    * Returns the MaxNumberOfLines property value defined for the FormCell's control.
@@ -1020,8 +1210,9 @@ interface IFormCellProxy extends IControlProxy {
   /**
    * Sets the MinNumberOfLines property of the FormCell's control.
    * @param {number} minNumberOfLines  value to set.
+   * @returns {Promise<any>}
    */
-  setMinNumberOfLines(minNumberOfLines: number);
+  setMinNumberOfLines(minNumberOfLines: number): Promise<any>;
 
   /**
    * Returns the MinNumberOfLines property value defined for the FormCell's control.
@@ -1032,8 +1223,9 @@ interface IFormCellProxy extends IControlProxy {
   /**
    * Sets the PlaceHolder property of the FormCell's FormCell's control.
    * @param {string} placeHolder {string} value to set.
+   * @returns {Promise<any>}
    */
-  setPlaceHolder(title: string): void;
+  setPlaceHolder(title: string): Promise<any>;
 
   /**
    * Returns the PlaceHolder property value defined for the FormCell's control.
@@ -1050,11 +1242,25 @@ interface IFormCellProxy extends IControlProxy {
  interface IInlineSignatureCaptureFormCellProxy extends IFormCellProxy {
 
   /**
+   * Sets the InitialStatusText property of the FormCell's control.
+   * @param {string} initialStatusText  value to set.
+   * @returns {Promise<any>}
+   */
+  setInitialStatusText(initialStatusText: string): Promise<any>;
+
+  /**
+   * Returns the InitialStatusText property value defined for the FormCell's control.
+   * @return {string}
+   */
+  getInitialStatusText(): string;
+
+  /**
    * Sets the ShowTimestampInImage property of the FormCell's FormCell's control.
    * On iOS not supported.
    * @param {boolean} showTimestampInImage value to set.
+   * @returns {Promise<any>}
    */
-  setShowTimestampInImage(showTimestampInImage: boolean): void;
+  setShowTimestampInImage(showTimestampInImage: boolean): Promise<any>;
 
   /**
    * Returns the ShowTimestampInImage property value defined for the FormCell's control.
@@ -1067,8 +1273,9 @@ interface IFormCellProxy extends IControlProxy {
    * Sets the ShowUnderline property of the FormCell's FormCell's control.
    * On iOS not supported.
    * @param {boolean} showUnderline value to set.
+   * @returns {Promise<any>}
    */
-  setShowUnderline(Underline: boolean);
+  setShowUnderline(Underline: boolean): Promise<any>;
 
   /**
    * Returns the ShowUnderline property value defined for the FormCell's control.
@@ -1081,8 +1288,9 @@ interface IFormCellProxy extends IControlProxy {
    * Sets the ShowXMark property of the FormCell's FormCell's control.
    * On iOS not supported.
    * @param {boolean} showXMark value to set.
+   * @returns {Promise<any>}
    */
-  setShowXMark(showXMark: boolean);
+  setShowXMark(showXMark: boolean): Promise<any>;
 
   /**
    * Returns the ShowXMark property value defined for the FormCell's control.
@@ -1094,8 +1302,9 @@ interface IFormCellProxy extends IControlProxy {
   /**
    * Sets the TimestampFormatter property of the FormCell's control.
    * @param {string} timestampFormatter  value to set.
+   * @returns {Promise<any>}
    */
-  setTimestampFormatter(timestampFormatter: string);
+  setTimestampFormatter(timestampFormatter: string): Promise<any>;
 
   /**
    * Returns the TimestampFormatter property value defined for the FormCell's control.
@@ -1106,8 +1315,9 @@ interface IFormCellProxy extends IControlProxy {
   /**
    * Sets the WatermarkText property of the FormCell's control.
    * @param {string} watermarkText  value to set.
+   * @returns {Promise<any>}
    */
-  setWatermarkText(watermarkText: string);
+  setWatermarkText(watermarkText: string): Promise<any>;
 
   /**
    * Returns the WatermarkText property value defined for the FormCell's control.
@@ -1118,8 +1328,9 @@ interface IFormCellProxy extends IControlProxy {
   /**
    * Sets the WatermarkTextMaxLines property of the FormCell's control.
    * @param {number} watermarkTextMaxLines value to set.
+   * @returns {Promise<any>}
    */
-  setWatermarkTextMaxLines(watermarkTextMaxLines: number)
+  setWatermarkTextMaxLines(watermarkTextMaxLines: number): Promise<any>;
 
   /**
    * Returns the WatermarkTextMaxLines property value defined for the FormCell's control.
@@ -1138,10 +1349,37 @@ interface IFormCellProxy extends IControlProxy {
 interface ISignatureCaptureFormCellProxy extends IFormCellProxy {
 
   /**
+   * Sets the CapturedStatusText property of the FormCell's control.
+   * @param {string} capturedStatusText value to set.
+   * @returns {Promise<any>}
+   */
+  setCapturedStatusText(capturedStatusText: string): Promise<any>;
+
+  /**
+   * Returns the CapturedStatusText property value defined for the FormCell's control.
+   * @return {string}
+   */
+  getCapturedStatusText(): string;
+
+  /**
+   * Sets the InitialStatusText property of the FormCell's control.
+   * @param {string} initialStatusText  value to set.
+   * @returns {Promise<any>}
+   */
+  setInitialStatusText(initialStatusText: string): Promise<any>;
+
+  /**
+   * Returns the InitialStatusText property value defined for the FormCell's control.
+   * @return {string}
+   */
+  getInitialStatusText(): string;
+
+  /**
    * Sets the ShowTimestampInImage property of the FormCell's FormCell's control.
    * @param {boolean} showTimestampInImage value to set.
+   * @returns {Promise<any>}
    */
-  setShowTimestampInImage(showTimestampInImage: boolean): void;
+  setShowTimestampInImage(showTimestampInImage: boolean): Promise<any>;
 
   /**
    * Returns the ShowTimestampInImage property value defined for the FormCell's control.
@@ -1152,8 +1390,9 @@ interface ISignatureCaptureFormCellProxy extends IFormCellProxy {
   /**
    * Sets the ShowUnderline property of the FormCell's FormCell's control.
    * @param {boolean} showUnderline value to set.
+   * @returns {Promise<any>}
    */
-  setShowUnderline(Underline: boolean);
+  setShowUnderline(Underline: boolean): Promise<any>;
 
   /**
    * Returns the ShowUnderline property value defined for the FormCell's control.
@@ -1164,8 +1403,9 @@ interface ISignatureCaptureFormCellProxy extends IFormCellProxy {
   /**
    * Sets the ShowXMark property of the FormCell's FormCell's control.
    * @param {boolean} showXMark value to set.
+   * @returns {Promise<any>}
    */
-  setShowXMark(showXMark: boolean);
+  setShowXMark(showXMark: boolean): Promise<any>;
 
   /**
    * Returns the ShowXMark property value defined for the FormCell's control.
@@ -1176,8 +1416,9 @@ interface ISignatureCaptureFormCellProxy extends IFormCellProxy {
   /**
    * Sets the TimestampFormatter property of the FormCell's control.
    * @param {string} timestampFormatter  value to set.
+   * @returns {Promise<any>}
    */
-  setTimestampFormatter(timestampFormatter: string);
+  setTimestampFormatter(timestampFormatter: string): Promise<any>;
 
   /**
    * Returns the TimestampFormatter property value defined for the FormCell's control.
@@ -1188,8 +1429,9 @@ interface ISignatureCaptureFormCellProxy extends IFormCellProxy {
   /**
    * Sets the WatermarkText property of the FormCell's control.
    * @param {string} watermarkText  value to set.
+   * @returns {Promise<any>}
    */
-  setWatermarkText(watermarkText: string);
+  setWatermarkText(watermarkText: string): Promise<any>;
 
   /**
    * Returns the WatermarkText property value defined for the FormCell's control.
@@ -1200,8 +1442,9 @@ interface ISignatureCaptureFormCellProxy extends IFormCellProxy {
   /**
    * Sets the WatermarkTextMaxLines property of the FormCell's control.
    * @param {number} watermarkTextMaxLines value to set.
+   * @returns {Promise<any>}
    */
-  setWatermarkTextMaxLines(watermarkTextMaxLines: number)
+  setWatermarkTextMaxLines(watermarkTextMaxLines: number): Promise<any>;
 
   /**
    * Returns the WatermarkTextMaxLines property value defined for the FormCell's control.
@@ -1223,8 +1466,9 @@ interface ISignatureCaptureFormCellProxy extends IFormCellProxy {
    * the value of the AttachmentTitle property. The default value is 'Attachment (%d)', where %d
    * is substituted by tha actual count of the attachments.
    * @param {string} title value to set.
+   * @returns {Promise<any>}
    */
-    setAttachmentTitle(title: string);
+    setAttachmentTitle(title: string): Promise<any>;
   
     /**
      * Returns the AttachmentTitle property value defined for the FormCell's control.
@@ -1236,8 +1480,9 @@ interface ISignatureCaptureFormCellProxy extends IFormCellProxy {
      * This method is for setting the title bar of the add attachment menu, i.e. for 
      * changing the value of the AttachmentAddTitle property. The default value is 'Add Attachment'.
      * @param {string} addTitle value to set.
+     * @returns {Promise<any>}
      */
-    setAttachmentAddTitle(addTitle: string);
+    setAttachmentAddTitle(addTitle: string): Promise<any>;
   
     /**
      * Returns the AttachmentAddTitle property value defined for the FormCell's control.
@@ -1249,8 +1494,9 @@ interface ISignatureCaptureFormCellProxy extends IFormCellProxy {
      * This method is for setting the title of the cancel button on the add attachment menu, i.e. for changing 
      * the value of the AttachmentCancelTitle property. The default value is 'Cancel'.
      * @param {string} cancelTitle value to set.
+     * @returns {Promise<any>}
      */
-    setAttachmentCancelTitle(cancelTitle: string);
+    setAttachmentCancelTitle(cancelTitle: string): Promise<any>;
   
     /**
      * Returns the AttachmentCancelTitle property value defined for the FormCell's control.
@@ -1264,8 +1510,9 @@ interface ISignatureCaptureFormCellProxy extends IFormCellProxy {
      * are supported as attachment sources, so the value can contain just the values 'AddPhoto'
      * and/or "TakePhoto" and/or "SelectFile".
      * @param {string[]} fileType value to set.
+     * @returns {Promise<any>}
      */
-    setAttachmentActionType(actionType: [string]);
+    setAttachmentActionType(actionType: [string]): Promise<any>;
   
     /**
      * Returns the AttachmentActionType property value defined for the FormCell's control.
@@ -1278,14 +1525,39 @@ interface ISignatureCaptureFormCellProxy extends IFormCellProxy {
      * If no specified value for this the AllowedFileTypes property, it allow user select any type of file;
      * this property can contain the values just like ["pdf","jpg", "..."].
      * @param {string[]} fileType value to set.
+     * @returns {Promise<any>}
      */
-    setAllowedFileTypes(fileType: [string]);
+    setAllowedFileTypes(fileType: [string]): Promise<any>;
   
     /**
      * Returns the AllowedFileTypes property value defined for the FormCell's control.
      * @return {string[]}
      */
     getAllowedFileTypes(): string[];
+
+    /**
+    * Sets the maximum number of attachments that can be uploaded.
+    * @returns {Promise<any>}
+    */
+   setMaxAttachments(maxNumber: number): Promise<any>;
+
+  /**
+   * Returns the maximum number of attachments that can be uploaded.
+   * @return {number}
+   */
+   getMaxAttachments(): number;
+
+   /**
+   * Sets the maximum file size (in megabytes) allowed for each attachment.
+   * @returns {Promise<any>}
+   */
+   setMaxFileSize(maxNumber: number): Promise<any>;
+
+   /**
+   * Returns the maximum file size (in megabytes) allowed for each attachment.
+   * @return {number}
+   */
+   getMaxFileSize(): number;
 
     /**
      * Open the item of the specified attachment at given index
@@ -1307,7 +1579,7 @@ interface ISignatureCaptureFormCellProxy extends IFormCellProxy {
 /**
  * A designer-facing interface that provides access to an item of attachmen control.
  */
-interface IAttachmentEntryProxy extends IClientAPI {
+interface IAttachmentEntryProxy extends IElementProxy {
   /**
    * Get item value (Read-Only).
    * The value is in accordance with the interface [IAttachment](../../../reference/apidoc/interfaces/iattachment.html) definition.
@@ -1373,8 +1645,9 @@ interface IAttachmentEntryProxy extends IClientAPI {
    * Sets the ButtonType property of the FormCell's control.
    * Accepted values are: "Button", "Normal".
    * @param {string} type value to set.
+   * @returns {Promise<any>}
    */
-  setButtonType(type: string) 
+  setButtonType(type: string): Promise<any>;
 
   /**
    * Returns the ButtonType property value defined for the FormCell's control.
@@ -1386,8 +1659,9 @@ interface IAttachmentEntryProxy extends IClientAPI {
    * Sets the TextAlignment property of the FormCell's control.
    * Accepted values are: "left", "right", "center".
    * @param {string} alignment  value to set.
+   * @returns {Promise<any>}
    */
-  setTextAlignment(alignment: string);
+  setTextAlignment(alignment: string): Promise<any>;
 
   /**
    * Returns the TextAlignment property value defined for the FormCell's control.
@@ -1398,8 +1672,9 @@ interface IAttachmentEntryProxy extends IClientAPI {
   /**
    * Sets the Title property of the FormCell's FormCell's control.
    * @param {string} title {string} value to set.
+   * @returns {Promise<any>}
    */
-  setTitle(title: string): void;
+  setTitle(title: string): Promise<any>;
 
   /**
    * Returns the Title property value defined for the FormCell's control.
@@ -1410,8 +1685,9 @@ interface IAttachmentEntryProxy extends IClientAPI {
   /**
    * Sets the Image property of the Button FormCell's   control.
    * @param {string} image {string} value to set.
+   * @returns {Promise<any>}
    */
-  setImage(image: string): void;
+  setImage(image: string): Promise<any>;
 
   /**
    * Returns the Image property value defined for the FormCell's control.
@@ -1422,8 +1698,9 @@ interface IAttachmentEntryProxy extends IClientAPI {
   /**
    * Sets the Semantic property of the Button FormCell's control.
    * @param {string} semantic {string} value to set.
+   * @returns {Promise<any>}
    */
-  setSemantic(semantic: string): void;
+  setSemantic(semantic: string): Promise<any>;
  
   /**
    * Returns the Semantic property value defined for the Button FormCell's control.
@@ -1434,8 +1711,9 @@ interface IAttachmentEntryProxy extends IClientAPI {
   /**
    * Sets the ImagePosition property of the Button FormCell's control.
    * @param {string} imagePosition {string} value to set.
+   * @returns {Promise<any>}
    */
-  setImagePosition(imagePosition: string): void;
+  setImagePosition(imagePosition: string): Promise<any>;
  
   /**
    * Returns the ImagePosition property value defined for the Button FormCell's control.
@@ -1446,8 +1724,9 @@ interface IAttachmentEntryProxy extends IClientAPI {
   /**
    * Sets the ImageSize property of the Button FormCell's control.
    * @param {Object} imageSize {Object} value to set.
+   * @returns {Promise<any>}
    */
-  setImageSize(imageSize: Object): void;
+  setImageSize(imageSize: Object): Promise<any>;
 
   /**
    * Returns the ImageSize property value defined for the Button FormCell's control.
@@ -1467,8 +1746,9 @@ interface ITitleFormCellProxy extends IFormCellProxy {
   /**
    * Sets the PlaceHolder property value defined for the FormCell's control.
    * @param {string} placeHolder value to set.
+   * @returns {Promise<any>}
    */
-  setPlaceHolder(placeHolder: string): void
+  setPlaceHolder(placeHolder: string): Promise<any>;
 
   /**
    * Returns the PlaceHolder property value defined for the FormCell's control.
@@ -1500,8 +1780,9 @@ interface ISimplePropertyFormCellProxy extends IFormCellProxy {
    * Sets the AlternateInput property of the FormCell's control.
    * Accepted values are: "None", "Barcode".
    * @param {string} alternateInput value to set.
+   * @returns {Promise<any>}
    */
-   setAlternateInput(alternateInput: string)
+   setAlternateInput(alternateInput: string): Promise<any>;
 
   /**
    * Returns the AlternateInput property value defined for the FormCell's control.
@@ -1513,8 +1794,9 @@ interface ISimplePropertyFormCellProxy extends IFormCellProxy {
    * Sets the KeyboardType property of the FormCell's control.
    * Accepted values are:  "DateTime", "Default", "Email", "Number", "Phone", "Url","Password", "NumberPassword"
    * @param {string} keyboardType  value to set.
+   * @returns {Promise<any>}
    */
-   setKeyboardType(keyboardType: string);
+   setKeyboardType(keyboardType: string): Promise<any>;
 
   /**
    * Returns the KeyboardType property of the FormCell's FormCell's control.
@@ -1525,8 +1807,9 @@ interface ISimplePropertyFormCellProxy extends IFormCellProxy {
   /**
    * Sets the PlaceHolder property value defined for the FormCell's control.
    * @param {string} placeHolder value to set.
+   * @returns {Promise<any>}
    */
-  setPlaceHolder(placeHolder: string): void
+  setPlaceHolder(placeHolder: string): Promise<any>;
 
   /**
    * Returns the PlaceHolder property value defined for the FormCell's control.
@@ -1545,8 +1828,9 @@ interface ISegmentedFormCellProxy extends IFormCellProxy {
   /**
    * Sets the ApportionsSegmentWidthsByContent property of the FormCell's control.
    * @param {boolean} apportionsSegmentWidthsByContent value to set.
+   * @returns {Promise<any>}
    */
-  setApportionsSegmentWidthsByContent(apportionsSegmentWidthsByContent: boolean)
+  setApportionsSegmentWidthsByContent(apportionsSegmentWidthsByContent: boolean): Promise<any>;
 
   /**
    * Returns the ApportionsSegmentWidthsByContent property value defined for the FormCell's control.
@@ -1557,14 +1841,28 @@ interface ISegmentedFormCellProxy extends IFormCellProxy {
   /**
    * Sets the Segments property of the FormCell's control.
    * @param {any} segments  value to set.
+   * @returns {Promise<any>}
    */
-  setSegments(segments: any);
+  setSegments(segments: any): Promise<any>;
 
   /**
    * Returns the Segments property of the FormCell's FormCell's control.
    * @param {any}
    */
   getSegments(): any;
+
+  /**
+   * Sets the CaptionPosition property of the FormCell's control.
+   * @param {string} captionPosition value to set.
+   * @returns {Promise<any>}
+   */
+  setCaptionPosition(captionPosition: string): Promise<any>;
+
+  /**
+   * Returns the CaptionPosition property value defined for the FormCell's control.
+   * @return {string}
+   */
+  getCaptionPosition(): string;
 }
 
 /**
@@ -1713,8 +2011,9 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
   /**
    * Sets the AllowDefaultValueIfOneItem property of the FormCell's control.
    * @param {boolean} allowDefaultValueIfOneItem value to set.
+   * @returns {Promise<any>}
    */
-  setAllowDefaultValueIfOneItem(allowDefaultValueIfOneItem: boolean);
+  setAllowDefaultValueIfOneItem(allowDefaultValueIfOneItem: boolean): Promise<any>;
 
   /**
    * Returns the AllowDefaultValueIfOneItem property value defined for the FormCell's control.
@@ -1725,8 +2024,9 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
   /**
    * Sets the AllowEmptySelection property of the FormCell's control.
    * @param {boolean} allowEmptySelection value to set.
+   * @returns {Promise<any>}
    */
-  setAllowEmptySelection(allowEmptySelection: boolean);
+  setAllowEmptySelection(allowEmptySelection: boolean): Promise<any>;
 
   /**
    * Returns the AllowEmptySelection property value defined for the FormCell's control.
@@ -1737,8 +2037,9 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
   /**
    * Sets the AllowMultipleSelection property of the FormCell's control.
    * @param {boolean} allowMultipleSelection value to set.
+   * @returns {Promise<any>}
    */
-  setAllowMultipleSelection(allowMultipleSelection: boolean);
+  setAllowMultipleSelection(allowMultipleSelection: boolean): Promise<any>;
 
   /**
    * Returns the AllowMultipleSelection property value defined for the FormCell's control.
@@ -1749,8 +2050,9 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
   /**
    * Sets the DataPaging property of the FormCell's control.
    * @param {Object} dataPaging value to set.
+   * @returns {Promise<any>}
    */
-  setDataPaging(dataPaging: Object);
+  setDataPaging(dataPaging: Object): Promise<any>;
 
   /**
    * Returns the DataPaging property value defined for the FormCell's control.
@@ -1761,8 +2063,9 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
   /**
    * Sets the FilterProperty property of the FormCell's control.
    * @param {string} filterProperty value to set.
+   * @returns {Promise<any>}
    */
-  setFilterProperty(filterProperty: string);
+  setFilterProperty(filterProperty: string): Promise<any>;
 
   /**
    * Returns the FilterProperty property value defined for the FormCell's control.
@@ -1773,8 +2076,9 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
   /**
    * Sets the FilterValue property of the FormCell's control.
    * @param {string[]} filterValue value to set.
+   * @returns {Promise<any>}
    */
-  setFilterValue(filterValue: string[]);
+  setFilterValue(filterValue: string[]): Promise<any>;
 
   /**
    * Returns the FilterValue property value defined for the FormCell's control.
@@ -1785,8 +2089,9 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
   /**
    * Sets the IsPickerDismissedOnSelection property of the FormCell's control.
    * @param {boolean} isPickerDismissedOnSelection value to set.
+   * @returns {Promise<any>}
    */
-  setIsPickerDismissedOnSelection(isPickerDismissedOnSelection: boolean);
+  setIsPickerDismissedOnSelection(isPickerDismissedOnSelection: boolean): Promise<any>;
 
   /**
    * Returns the IsPickerDismissedOnSelection property value defined for the FormCell's control.
@@ -1797,8 +2102,9 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
   /**
    * Sets the IsSearchCancelledAfterSelection property of the FormCell's control.
    * @param {boolean} isSearchCancelledAfterSelection value to set.
+   * @returns {Promise<any>}
    */
-  setIsSearchCancelledAfterSelection(alternateInput: boolean);
+  setIsSearchCancelledAfterSelection(alternateInput: boolean): Promise<any>;
 
   /**
    * Returns the IsSearchCancelledAfterSelection property value defined for the FormCell's control.
@@ -1809,9 +2115,10 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
   /**
    * Sets the IsSelectedSectionEnabled property of the FormCell's control.
    * @param {boolean} isSelectedSectionEnabled value to set.
+   * @returns {Promise<any>}
    */
 
-  setIsSelectedSectionEnabled(isSelectedSectionEnabled: boolean);
+  setIsSelectedSectionEnabled(isSelectedSectionEnabled: boolean): Promise<any>;
 
   /**
    * Returns the IsSelectedSectionEnabled property value defined for the FormCell's control.
@@ -1822,8 +2129,9 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
   /**
    * Sets the PickerItems property of the FormCell's control.
    * @param {any} pickerItems value to set.
+   * @returns {Promise<any>}
    */
-  setPickerItems(pickerItems: any);
+  setPickerItems(pickerItems: any): Promise<any>;
 
   /**
    * Returns the PickerItems property value defined for the FormCell's control.
@@ -1834,8 +2142,9 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
   /**
    * Sets the PickerPrompt property of the FormCell's control.
    * @param {string} pickerPrompt value to set.
+   * @returns {Promise<any>}
    */
-  setPickerPrompt(pickerPrompt: string);
+  setPickerPrompt(pickerPrompt: string): Promise<any>;
 
   /**
    * Returns the PickerPrompt property value defined for the FormCell's control.
@@ -1844,16 +2153,30 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
   getPickerPrompt(): string;
 
   /**
-   * Sets the Search property of the FormCell's control.
-   * @param {Object} search value to set.
+   * Sets the PlaceHolder property of the FormCell's FormCell's control.
+   * @param {string} placeHolder {string} value to set.
+   * @returns {Promise<any>}
    */
-  setSearch(search: Object);
+  setPlaceHolder(title: string): Promise<any>;
+
+  /**
+   * Returns the PlaceHolder property value defined for the FormCell's control.
+   * @return {string}
+   */
+  getPlaceHolder(): string
+
+  /**
+   * Sets the Search property of the FormCell's control.
+   * @param {ISearch} search value to set.
+   * @returns {Promise<any>}
+   */
+  setSearch(search: ISearch): Promise<any>;
 
   /**
    * Returns the Search property value defined for the FormCell's control.
-   * @return {Object}
+   * @return {ISearch}
    */
-  getSearch(): Object;
+  getSearch(): ISearch;
 
   /**
    * Returns the list of selected items as JavaScript Objects, each with ReturnValue and DisplayValue properties. 
@@ -1862,6 +2185,65 @@ interface IListPickerFormCellTargetProxy extends IFormCellTargetProxy {
    * @return {Object[]}
    */
   getValue(): Object[];
+}
+
+/**
+ * LabelFormCellProxy is a developer-facing interface that provides access to a
+ * Label control and allows customizations.
+ * In addition it provides access to the IFormCellProxy interface.
+ */
+interface ILabelFormCellProxy extends IFormCellProxy {
+
+  /**
+   * Returns the text value of the Label FormCell.
+   * @return {string}
+   */
+  getText(): string;
+
+  /**
+   * Sets the text value of the Label FormCell.
+   * @param {string} text value to set.
+   * @returns {Promise<any>}
+   */
+  setText(text: string): Promise<any>;
+
+  /**
+   * Returns the textWrap property value of the Label FormCell.
+   * @return {boolean}
+   */
+  getTextWrap(): boolean;
+
+  /**
+   * Sets the textWrap property of the Label FormCell.
+   * @param {boolean} textWrap value to set.
+   * @returns {Promise<any>}
+   */
+  setTextWrap(textWrap: boolean): Promise<any>;
+
+  /**
+   * Returns the maxLines property value of the Label FormCell.
+   * @return {number}
+   */
+  getMaxLines(): number;
+
+  /**
+   * Sets the maxLines property of the Label FormCell.
+   * @param {number} maxLines value to set.
+   * @returns {Promise<any>}
+   */
+  setMaxLines(maxLines: number): Promise<any>;
+
+  /**
+   * Returns the style class value of the Label FormCell.
+   * @return {string}
+   */
+  getStyle(): string;
+
+  /**
+   * Sets the style class of the Label FormCell.
+   * @param {string} styleClass value to set.
+   */
+  setStyle(styleClass: string);
 }
 
 /**
@@ -1876,6 +2258,11 @@ interface IPageProxy extends IControlContainerProxy {
    * return the control, toolbar item or action bar item that was most recently pressed on this page.
    */
   getPressedItem(): PressedItem;
+
+  /**
+   * return the name passed into this page.
+   */
+  getName(): string;
 
   /**
    * return the most recently swipe item on this page.
@@ -1932,6 +2319,12 @@ interface IPageProxy extends IControlContainerProxy {
    */
   getFioriToolbar(): IFioriToolbarProxy;
   /**
+   * 
+   * @returns {IActionBarProxy} return the ActionBarProxy instance
+   * of the associated actionbar of that page
+   */
+  getActionBar(): IActionBarProxy;
+  /**
    * Set specified actionBar item on page to visible/hidden
    * 
    * @param item either an number or a string 
@@ -1956,6 +2349,247 @@ interface IPageProxy extends IControlContainerProxy {
    * @returns {Promise<any>}
    */
    executeCustomEvent(eventType: string, eventData: any);
+}
+
+/**
+ * A designer-facing interface that provides access to a actionbar
+ * control.
+ * 
+ * It is passed to rules to provide access to a actionbar control
+ * for application specific customizations.
+ * 
+ * In addition it provides access to the IControlProxy interface.
+ */
+interface IActionBarProxy extends IControlProxy {
+  /**
+   * This method returns the top-level controls of ActionBar Items for this container
+   *
+   * @return {IActionBarItemProxy[]} The actionbar items controls for this container
+   */
+  getItems(): IActionBarItemProxy[];
+
+  /**
+   * 
+   * @param itemName takes in _Name property of the actionbar item
+   * @returns {IActionBarItemProxy} returns the ActionBarItemProxy
+   * instance of the item by the name
+   */
+  getItem(itemName: string): IActionBarItemProxy;
+
+  /**
+   * Determine if the actionbar control is a container.
+   *
+   * @returns {boolean} true/false.
+   */
+  isContainer(): boolean;
+
+  /**
+   * Sets the caption property of the actionbar control.
+   * @param {string} caption {string} value to set.
+   */
+  setCaption(caption: string): void;
+
+  /**
+   * Returns the Caption property value defined for the actionbar control.
+   * @return {string}
+   */
+  getCaption(): string;
+
+  /**
+   * Sets the subhead property of the actionbar control.
+   * @param {string} subhead {string} value to set.
+   */
+  setSubhead(subhead: string): void;
+
+  /**
+   * Returns the Subhead property value defined for the actionbar control.
+   * @return {string}
+   */
+  getSubhead(): string;
+
+  /**
+   * Sets the prefersLargeCaption property of the actionbar control.
+   * @param {boolean} prefersLargeCaption {boolean} value to set.
+   */
+  setPrefersLargeCaption(prefersLargeCaption: boolean): void;
+
+  /**
+   * Returns the prefersLargeCaption property value defined for the actionbar control.
+   * @return {boolean}
+   */
+  getPrefersLargeCaption(): boolean;
+
+  /**
+   * Android only. Sets the captionAlignment property of the actionbar control.
+   * Accepted values are: "Left", "Center".
+   * @param {string} captionAlignment {string} value to set.
+   */
+  setCaptionAlignment(captionAlignment: string): void;
+
+  /**
+   * Android only. Returns the captionAlignment property value defined for the actionbar control.
+   * @return {string}
+   */
+  getCaptionAlignment(): string;
+
+  /**
+   * iOS only. Sets the OverflowIcon property of the fiori actionbar control.
+   * @param {string} overflowIcon {string} value to set.
+   */
+  setOverflowIcon(overflowIcon: string): void;
+
+  /**
+   * iOS only. Returns the Image property value defined for the control.
+   * @return {string}
+   */
+  getOverflowIcon(): string;
+
+  /**
+   * Sets the logo property of the fiori toolbar control.
+   * @param {string} logo {string} value to set.
+   */
+  setLogo(logo: string): void;
+
+  /**
+   * Returns the Logo property value defined for the control.
+   * @return {string}
+   */
+  getLogo(): string;
+
+   /**
+   * Sets the DataSubscriptions property of the toolbar control.
+   * @param {string[]} dataSubscriptions {string[]} value to set.
+   */
+   setDataSubscriptions(dataSubscriptions: string[]): void;
+
+   /**
+    * Returns the DataSubscriptions property value defined for the toolbar control.
+    * @return {string[]}
+    */
+   getDataSubscriptions(): string[];
+
+   /**
+   * Reset ActionBar and its items
+   * @returns {Promise<any>}
+   */
+  reset(): Promise<any>;
+
+  /**
+    * Returns the style property value defined for the actionbar control.
+    * @return {any}
+    */
+  getStyle(): any;
+}
+
+interface IActionBarItemProxy extends IControlProxy {
+  /**
+   * This method returns actionbar container control
+   * 
+   * @return {IActionBarProxy} The control of the actionbar container 
+   * 
+   */
+  getParent(): IActionBarProxy;
+  /**
+   * Sets the Enabled property of the control.
+   * @param {boolean} isEnabled true enables and false disables.
+   */
+  setEnabled(isEnabled: boolean): void;
+
+  /**
+   * Returns the Enabled property value defined for the control.
+   * @return {boolean}
+   */
+  getEnabled(): boolean;
+
+  /**
+   * Gets the control's visible state.
+   * @returns {boolean} returns true if the control is visible otherwise false. 
+   */
+  getVisible(): boolean;
+
+  /**
+   * Sets the Position property of the control.
+   * @param {string} position {string} value to set.
+   */
+  setPosition(position: string): void;
+
+  /**
+   * Returns the Position property value defined for the control.
+   * @return {string}
+   */
+  getPosition(): string;
+
+  /**
+   * Sets the Caption property of the control.
+   * @param {string} caption {string} value to set.
+   */
+  setCaption(caption: string): void;
+
+  /**
+   * Returns the Caption property value defined for the control.
+   * @return {string}
+   */
+  getCaption(): string;
+
+  /**
+   * Sets the SystemItem property of the control.
+   * @param {string} systemItem {string} value to set.
+   */
+  setSystemItem(systemItem: string): void;
+
+  /**
+   * Returns the SystemItem property value defined for the control.
+   * @return {string}
+   */
+  getSystemItem(): string;
+
+  /**
+   * Sets the Icon property of the control.
+   * @param {string} icon {string} value to set.
+   */
+  setIcon(icon: string): void;
+
+  /**
+   * Returns the Icoon property value defined for the control.
+   * @return {string}
+   */
+  getIcon(): string;
+
+  /**
+   * Sets the IsIconCircular property of the control.
+   * @param {boolean} isIconCircular {boolean} value to set.
+   */
+  setIsIconCircular(isIconCircular: boolean): void;
+
+  /**
+   * Returns the IsIconCircular property value defined for the control.
+   * @return {boolean}
+   */
+  getIsIconCircular(): boolean;
+
+  /**
+   * Sets the IconText property of the control.
+   * @param {string} iconText {string} value to set.
+   */
+  setIconText(iconText: string): void;
+
+  /**
+   * Returns the IconText property value defined for the control.
+   * @return {string}
+   */
+  getIconText(): string;
+
+  /**
+    * Returns the style property value defined for the control.
+    * @return {string}
+    */
+  getStyle(): string;
+
+  /**
+   * Reset ActionBar item
+   * @returns {Promise<any>}
+   */
+  reset(): Promise<any>;
 }
 
 /**
@@ -2083,6 +2717,11 @@ interface ISectionProxy {
    */
   getExtensions(): IView[];
   /**
+   * Get the section header proxy of associated section
+   * @returns {ISectionHeaderProxy} Returns the section header proxy of associated section
+   */
+  getHeader(): ISectionHeaderProxy;
+  /**
    * Sets the interacte object cell indicator's state in the section
    * 
    * @param {string} newState the new state of the indicator (possible values: toDownload, inProgress, open)
@@ -2105,6 +2744,12 @@ interface ISectionProxy {
    * @return {IControlProxy[]} The controls for this container 
    */
   getControls(): IControlProxy[];
+  /**
+   * This method returns the group header in this section if it is ObjectTable section
+   * 
+   * @return {IGroupHeaderProxy} The group header for this container 
+   */
+  getGroupHeader(): IGroupHeaderProxy;
   /**
    * Redraw the section
    * 
@@ -2143,14 +2788,335 @@ interface ISectionProxy {
      */
     setTargetSpecifier(target: ITargetProxy, redraw?: boolean): Promise<any>;
   }
+/**
+ * A designer-facing interface that provides access to card.
+ */
+interface ICardProxy extends ICardElementProxy {
+  /**
+   * This method returns CardCollection proxy
+   * @return {ICardCollectionProxy}
+   */
+  getParent(): ICardCollectionProxy;
 
+  /**
+   * This method returns card header proxy
+   * @return {ICardHeaderProxy}
+   */
+  getHeader(): ICardHeaderProxy;
+
+  /**
+   * This method returns card media proxy
+   * @return {ICardMediaProxy}
+   */
+  getMedia(): ICardMediaProxy;
+
+  /**
+   * This method returns card footer proxy
+   * @return {ICardFooterProxy}
+   */
+  getFooter(): ICardFooterProxy;
+}
+
+/**
+ * A designer-facing interface that provides access to action button in card.
+ */
+interface ICardHeaderActionButtonProxy extends ICardElementProxy {
+  /**
+   * This method returns card header proxy
+   * @return {ICardHeaderProxy}
+   */
+  getParent(): ICardHeaderProxy;
+
+  /**
+   * This method returns card action button overflow items proxy
+   * @return {ICardHeaderActionButtonOverflowButtonProxy[]}
+   */
+  getOverflowItems(): ICardHeaderActionButtonOverflowButtonProxy[];
+}
+
+/**
+ * A designer-facing interface that provides access to overflow button in card action button.
+ */
+interface ICardHeaderActionButtonOverflowButtonProxy extends ICardElementProxy {
+  /**
+   * Get button title
+   * @return {string} the title of the button
+   */
+  getTitle(): string;
+
+  /**
+   * This method returns card action button proxy
+   * @return {ICardHeaderActionButtonProxy}
+   */
+  getParent(): ICardHeaderActionButtonProxy;
+
+  /**
+   * Get item index
+   * @return {number}
+   */
+  getItemIndex(): number;
+}
+
+/**
+ * A designer-facing interface that provides access to a button in card footer.
+ */
+interface ICardFooterButtonProxy extends ICardElementProxy {
+  /**
+   * Get button title
+   * @return {string} the title of the button
+   */
+  getTitle(): string;
+
+  /**
+   * This method returns card footer proxy
+   * @return {ICardFooterProxy}
+   */
+  getParent(): ICardFooterProxy;
+}
+
+/**
+ * A designer-facing interface that provides access to card header properties.
+ */
+interface ICardHeaderProxy extends ICardElementProxy {
+  /**
+   * Get header title
+   * @return {string} the title of the header
+   */
+  getTitle(): string;
+
+  /**
+   * This method returns CardProxy
+   * @return {ICardProxy}
+   */
+  getParent(): ICardProxy;
+
+  /**
+   * This method returns CardHeaderActionButton proxy
+   * @return {ICardHeaderActionButtonProxy}
+   */
+  getActionButton(): ICardHeaderActionButtonProxy;
+
+  /**
+   * This method returns array of CardHeaderExtendedHeader proxy
+   * @return {ICardHeaderExtendedHeaderProxy[]}
+   */
+  getExtendedHeaders(): ICardHeaderExtendedHeaderProxy[];
+}
+
+
+/**
+ * A designer-facing interface that provides access to card header extended header properties.
+ */
+interface ICardHeaderExtendedHeaderProxy extends ICardElementProxy {
+  /**
+   * This method returns CardHeaderProxy
+   * @return {ICardHeaderProxy}
+   */
+  getParent(): ICardHeaderProxy;
+
+  /**
+   * This method returns array of card header extended header item proxy
+   * @return {ICardHeaderExtendedHeaderItemProxy[]}
+   */
+  getItems(): ICardHeaderExtendedHeaderItemProxy[];
+
+  /**
+   * Get item index
+   * @return {number}
+   */
+  getItemIndex(): number;
+}
+
+
+/**
+ * A designer-facing interface that provides access to card header extended header item properties.
+ */
+interface ICardHeaderExtendedHeaderItemProxy extends ICardElementProxy {
+  /**
+   * This method returns CardHeaderExtendedHeaderProxy
+   * @return {ICardHeaderExtendedHeaderProxy}
+   */
+  getParent(): ICardHeaderExtendedHeaderProxy;
+
+  /**
+   * Get item index
+   * @return {number}
+   */
+  getItemIndex(): number;
+}
+
+
+/**
+ * A designer-facing interface that provides access to card header KPI view properties.
+ */
+interface ICardHeaderKPIViewProxy extends ICardElementProxy {
+  /**
+   * This method returns CardHeaderProxy
+   * @return {ICardHeaderProxy}
+   */
+  getParent(): ICardHeaderProxy;
+}
+
+/**
+ * A designer-facing interface that provides access to card header properties.
+ */
+interface ICardBodyProxy extends ICardElementProxy {
+
+  /**
+   * This method returns CardProxy
+   * @return {ICardProxy}
+   */
+  getParent(): ICardProxy;
+
+  /**
+   * This method returns CardBodySeparators proxy
+   * @return {ICardBodySeparatorsProxy}
+   */
+  getSeparators(): ICardBodySeparatorsProxy;
+
+  /**
+   * This method returns array of CardBodyContent proxy
+   * @return {ICardBodyContentProxy[]}
+   */
+  getContents(): ICardBodyContentProxy[];
+
+}
+
+/**
+ * A designer-facing interface that provides access to body separators in card.
+ */
+interface ICardBodySeparatorsProxy extends ICardElementProxy {
+  /**
+   * This method returns card body proxy
+   * @return {ICardBodyProxy}
+   */
+  getParent(): ICardBodyProxy;
+
+  /**
+   * This method returns card body header separator boolean value
+   * @return {boolean}
+   */
+  getHeaderSeparator(): boolean;
+
+  /**
+   * This method returns card body content separator boolean value
+   * @return {boolean}
+   */
+  getBodySeparator(): boolean;
+
+  /**
+   * This method returns card body footer separator boolean value
+   * @return {boolean}
+   */
+  getFooterSeparator(): boolean;
+
+}
+
+/**
+ * A designer-facing interface that provides access to card body content properties.
+ */
+interface ICardBodyContentProxy extends ICardElementProxy {
+
+  /**
+   * This method returns CardBodyProxy
+   * @return {ICardBodyProxy}
+   */
+  getParent(): ICardBodyProxy;
+
+  /**
+   * Get item index
+   * @return {number}
+   */
+  getItemIndex(): number;
+
+}
+
+/**
+ * A designer-facing interface that provides access to card body content item properties.
+ */
+interface ICardBodyContentItemProxy extends ICardElementProxy {
+
+  /**
+   * This method returns CardBodyContentProxy
+   * @return {ICardBodyContentProxy}
+   */
+  getParent(): ICardBodyContentProxy;
+
+  /**
+   * Get item index
+   * @return {number}
+   */
+  getItemIndex(): number;
+
+}
+
+/**
+ * A designer-facing interface that provides access to card body content label bar layout properties.
+ */
+interface ICardBodyContentLabelBarLayoutProxy extends ICardElementProxy {
+
+  /**
+   * This method returns CardBodyContentProxy
+   * @return {ICardBodyContentProxy}
+   */
+  getParent(): ICardBodyContentProxy;
+
+  /**
+   * Get content layout type
+   * @return {string}
+   */
+  getLayoutType(): string;
+
+}
+
+/**
+ * A designer-facing interface that provides access to card media properties.
+ */
+interface ICardMediaProxy extends ICardElementProxy {
+  /**
+   * This method returns CardProxy
+   * @return {ICardProxy}
+   */
+  getParent(): ICardProxy;
+
+  /**
+   * Get row index
+   * @return {number}
+   */
+  getIndex(): number;
+
+}
+
+
+/**
+ * A designer-facing interface that provides access to card footer properties.
+ */
+interface ICardFooterProxy extends ICardElementProxy {
+  /**
+   * This method returns CardProxy
+   * @return {ICardProxy}
+   */
+  getParent(): ICardProxy;
+
+  /**
+   * This method returns card footer button proxy
+   * @return {ICardFooterButtonProxy}
+   */
+  getPrimaryAction(): ICardFooterButtonProxy;
+
+  /**
+   * This method returns card footer button proxy
+   * @return {ICardFooterButtonProxy}
+   */
+  getSecondaryAction(): ICardFooterButtonProxy;
+}
   interface IButtonTableProxy extends ISectionProxy {
     /**
      * This method returns buttons for this section
      *
      * @return {IButtonTableButtonProxy[]} The buttons for this section
      */
-    getButtons();
+    getButtons(): IButtonTableButtonProxy[];
   
     /**
      * 
@@ -2163,13 +3129,19 @@ interface ISectionProxy {
   /**
  * A ICalendarProxy can get/set the section's calendar dates, as well as scroll to a given date.
  */
-interface ICalendarSectionProxy extends ISectionProxy {
+interface ICalendarProxy extends ISectionProxy {
+  /**
+   * Returns the calendar type
+   * 
+   * @return {string}
+   */
+  getCalendarType(): string;
   /**
    * Returns the selected date based on device's local time zone via JavaScript Date Object
    * 
    * @return {Date}
    */
-  getSelectedDate() : Date;
+  getSelectedDate(): Date;
   /**
    * Changes the selected date in the calendar based on device's local time zone.
    * Accepted inputs: date string in "yyyy-MM-dd" or "yyyy-MM-ddThh:mm:ss" format, JavaScript Date Object.
@@ -2177,11 +3149,50 @@ interface ICalendarSectionProxy extends ISectionProxy {
    */
   setSelectedDate(dateInput: any);
   /**
+   * Returns the selected date range based on device's local time zone via JavaScript Date Object
+   * 
+   * @return {Date}
+   */
+  getSelectedDateRange(): any;
+  /**
+   * Changes the selected date range in the calendar based on device's local time zone.
+   * Accepted inputs: date string in "yyyy-MM-dd" or "yyyy-MM-ddThh:mm:ss" format, JavaScript Date Object.
+   * @param {any} startDate
+   * Accepted inputs: date string in "yyyy-MM-dd" or "yyyy-MM-ddThh:mm:ss" format, JavaScript Date Object.
+   * @param {any} endDate
+   */
+  setSelectedDateRange(startDate: any, endDate: any);
+  /**
    * Scrolls the calendar to the specified date based on device's local time zone.
    * Accepted values: date string in "yyyy-MM-dd" or "yyyy-MM-ddThh:mm:ss" format, JavaScript Date Object.
    * @param {any} dateInput
    */
   scrollToDate(dateInput: any);
+  /**
+   * 
+   * @returns {number} returns number of months before and after the currently selected month to load events. This is used to optimize the loading of events in the calendar. For example, if set to 1, events for the current month, the previous month, and the next month will be loaded. If set to 2, events for the current month, the two previous months, and the two next months will be loaded. This property is only applicable when `CalendarType` is set to `Month`. If set to 0, all events will be loaded..
+   */
+  getEventLoadRange(): number;
+   /**
+   * @returns {any[]} return array of all events displayed on the calendar.
+   */
+  getEvents(): any[];
+  /**
+   * @returns {any} return event of selected date if any.
+   */
+  getEventsOfSelectedDate(): any;
+  /**
+   * @returns {any[]} return array of events within selected date range.
+   */
+  getEventsOfSelectedDateRange(): any[];
+  /**
+   * @returns {any[]} return array of indicators displayed on the calendar.
+   */
+  getIndicators(): any[];
+  /**
+   * @returns {any[]} return array of targets to be used for the calendar section. Each target is represented by a binding or rule that returns an array of data items. The calendar will use these targets to populate the events and execute the rules defined in the `Event/IndicatorName` to determine the events in the calendar.
+   */
+  getTargets(): any[];
 }
   
   /*
@@ -2229,16 +3240,23 @@ interface ICalendarSectionProxy extends ISectionProxy {
   }
 
   /*
-* ObjectCardSectionProxy is mainly for ObjectCardSection operations.
+* ObjectTableProxy is mainly for ObjectTable operations.
 */
-interface IObjectCardCollectionSectionProxy extends IBindableSectionProxy {
+interface IObjectTableProxy extends ISelectableSectionProxy {
+  //
+}
+
+  /*
+* ObjectCardCollectionProxy is mainly for ObjectCard operations.
+*/
+interface IObjectCardCollectionProxy extends IBindableSectionProxy {
 
 }
 
 /*
-* DataTableSectionProxy is mainly for DataTableSection operations.
+* DataTableProxy is mainly for DataTable operations.
 */
-interface IDataTableSectionProxy extends IBindableSectionProxy {
+interface IDataTableProxy extends IBindableSectionProxy {
   /**
    * Get edit mode.
    * The return value is None or Inline
@@ -2286,12 +3304,12 @@ interface IExtensionSectionProxy extends IBindableSectionProxy {
 }
 
 /**
- * A designer-facing interface that provides access to a ObjectCollectionSection in a sectioned table.
+ * A designer-facing interface that provides access to a ObjectCollection in a sectioned table.
  * 
- * It is passed to rules to provide access to a ObjectCollectionSection 
+ * It is passed to rules to provide access to a ObjectCollection 
  * for application-specific customizations.
  */
-interface IObjectCollectionSectionProxy extends IBindableSectionProxy  {
+interface IObjectCollectionProxy extends IBindableSectionProxy  {
   /**
    * This method returns an array holding the instances of extensions that this section is using. 
    * Each element in the array represents the instance of an extension bound to the row corresponding to the index.
@@ -2301,12 +3319,12 @@ interface IObjectCollectionSectionProxy extends IBindableSectionProxy  {
 }
 
 /**
- * A designer-facing interface that provides access to a ObjectHeaderSection in a sectioned table.
+ * A designer-facing interface that provides access to a ObjectHeader in a sectioned table.
  * 
- * It is passed to rules to provide access to a ObjectHeaderSection 
+ * It is passed to rules to provide access to a ObjectHeader 
  * for application-specific customizations.
  */
-interface IObjectHeaderSectionProxy extends IBindableSectionProxy {
+interface IObjectHeaderProxy extends IBindableSectionProxy {
   
   /**
    * This method returns an array holding the instances of extensions that this section is using. 
@@ -2329,6 +3347,27 @@ interface IObjectHeaderSectionProxy extends IBindableSectionProxy {
     */
      reset(): Promise<any>;
   }
+
+/*
+ * CardCollectionProxy is mainly for CardCollection operations. 
+*/
+interface ICardCollectionProxy extends IBindableSectionProxy {
+  //
+}
+
+/*
+ * SimplePropertyCollectionProxy is mainly for SimplePropertyCollection operations. 
+*/
+interface ISimplePropertyCollectionProxy extends IBindableSectionProxy {
+  //
+}
+
+/*
+ * KeyValueCollectionProxy is mainly for KeyValueCollection operations. 
+*/
+interface IKeyValueCollectionProxy extends IBindableSectionProxy {
+  //
+}
 
 /**
  * A designer-facing interface that construct a Link object to be used by Odata create or update entity
@@ -2527,9 +3566,35 @@ interface IFioriToolbarProxy extends IControlProxy {
    * @return {string}
    */
   getHelperText(): string;
+
+  /**
+   * Sets the DataSubscriptions property of the toolbar control.
+   * @param {string[]} dataSubscriptions {string[]} value to set.
+   */
+  setDataSubscriptions(dataSubscriptions: string[]): void;
+
+  /**
+   * Returns the DataSubscriptions property value defined for the toolbar control.
+   * @return {string[]}
+   */
+  getDataSubscriptions(): string[];
+
+  /**
+   * Reset FioriToolbar and its items
+   * @returns {Promise<any>}
+   */
+  reset(): Promise<any>;
 }
 
 interface IFioriToolbarItemProxy extends IControlProxy {
+  /**
+   * This method returns toolbar container control
+   * 
+   * @return {IFioriToolbarProxy} The control of the toolbar container 
+   * 
+   */
+  getParent(): IFioriToolbarProxy;
+
   /**
    * Sets the Enabled property of the control.
    * @param {boolean} isEnabled true enables and false disables.
@@ -2548,29 +3613,6 @@ interface IFioriToolbarItemProxy extends IControlProxy {
    */
   getVisible(): boolean;
 }
-
-
-/**
- * FioriToolbarItemIconControlProxy is a developer-facing interface that provides access to a
- * button control and allows customizations.
- * In addition it provides access to the IFioriToolbarItemProxy interface.
- */
-interface IFioriToolbarItemIconControlProxy extends IFioriToolbarItemProxy {
-  
-  /**
-   * Sets the Icon property of the  control.
-   * @param {string} image {string} value to set.
-   */
-  setIcon(image: string): void;
-
-  /**
-   * Returns the Icon property value defined for the control.
-   * @return {string}
-   */
-  getIcon(): string;
- 
- }
-
 
 /**
  * FioriToolbarButtonProxy is a developer-facing interface that provides access to a
@@ -2707,6 +3749,19 @@ interface IButtonTableButtonProxy extends IControlProxy {
 }
 
 /**
+ * A designer-facing interface that provides access to a key value item in a KeyValueCollection
+ * 
+ * It is passed to rules to provide access to a key value item
+ * for application specific customizations.
+ */
+interface IKeyValueItemProxy extends IControlProxy {
+  /**
+   * Redraw control is not supported. Instead, the parent section redraw is triggered.
+   */
+  redraw(): Promise<any>;
+}
+
+/**
  * A designer-facing interface that provides access to the section footer in a section
  * 
  * It is passed to rules to provide access to a section footer
@@ -2731,7 +3786,7 @@ interface ISectionHeaderProxy extends IControlProxy {
    *
    * @return {ISectionHeaderItemProxy[]} The items for this section header
    */
-  getItems();
+  getItems(): ISectionHeaderItemProxy[];
 
   /**
    * 
@@ -2758,6 +3813,19 @@ interface ISectionHeaderItemProxy extends IControlProxy {
    * Redraw control is not supported. Instead, the parent section redraw is triggered.
    */
   redraw(): Promise<any>;
+  /**
+   * Returns the visible property value of the SectionHeaderItem.
+   * @return {boolean} returns true if the SectionHeaderItem is visible otherwise false.
+   */
+  getVisible(): boolean;
+
+
+  /**
+   * Sets the SectionHeaderItem's visible state with redraw
+   * @param value visible state
+   * @param redraw true if redraw after set the visible state
+   */
+  setVisible(value: boolean, redraw: boolean);
 }
 
 /**
@@ -2767,6 +3835,17 @@ interface ISectionHeaderItemProxy extends IControlProxy {
  * for application specific customizations.
  */
 interface ISectionHeaderButtonProxy extends ISectionHeaderItemProxy {
+  /**
+   * Returns the enabled property value of the SectionHeaderButtonItem.
+   * @return {boolean} returns true if the SectionHeaderButtonItem is enabled otherwise false.
+   */
+  getEnabled(): boolean;
+
+  /**
+   * Sets the SectionHeaderItem's enabled state with redraw.
+   * @param {boolean} isEnabled true enables and false disables.
+   */
+  setEnabled(isEnabled: boolean);
 }
 
 /**
@@ -2932,13 +4011,23 @@ interface IODataProviderProxy {
    * Determine whether the entitySet is draft enabled
    * @return {boolean}
    */
-  isDraftEnabled(entitySet: string): Boolean;
+  isDraftEnabled(entitySet: string): boolean;
 
   /**
-   * Returns the $metadata proxy.
+   * Returns the proxy of the $metadata associated with the data provider if available. Otherwise, it will be null.
+   * Any $metadata changes happening on the backend server after initializing the data service for the first time
+   * will not be reflected unless the users restart the application or call the refreshMetadata API.
    * @return {ICsdlDocumentProxy}
    */
   getMetadata(): ICsdlDocumentProxy;
+  
+  /**
+   * Reloads the latest $metadata from the backend server.
+   * It checks the compatibility between the current $metadata and the $metadata from the backend server, 
+   * then updates the $metadata associated with the data provider if there is no conflict.
+   * @return {Promise<boolean>} a promise with a boolean result indicating whether the $metadata was updated successfully.
+   */
+  refreshMetadata(): Promise<boolean>;
 }
 
 /**
@@ -2948,7 +4037,7 @@ interface ICsdlDocumentProxy {
   /**
    * Returns the original $metadata content as a minified XML string with unnecessary information removed if 
    * `retainOriginalText` in the [CSDLOptions](../../../reference/schemadoc/definitions/CSDLOptions.schema.html) is enabled. 
-   * Otherwise, a placeholder string indicated as "null" will be returned.
+   * Otherwise, an error message indicating the missing CSDL option will be returned.
    * @return {string}
    */
   getCompactXML(): string;
@@ -2956,15 +4045,15 @@ interface ICsdlDocumentProxy {
   /**
    * Returns the original $metadata content as a XML string if 
    * `retainOriginalText` in the [CSDLOptions](../../../reference/schemadoc/definitions/CSDLOptions.schema.html) is enabled. 
-   * Otherwise, a placeholder string indicated as "null" will be returned.
+   * Otherwise, an error message indicating the missing CSDL option will be returned.
    * @return {string}
    */
   getOriginalText(): string;
   
   /**
    * Returns the resolved $metadata content as a XML string, with inline references and expanded aliases, if 
-   * `retainResolvedText` in the [CSDLOptions](../../../reference/schemadoc/definitions/CSDLOptions.schema.html) is enabled.
-   * Otherwise, a placeholder string indicated as "null" will be returned.
+   * `retainResolvedText` in the [CSDLOptions](../../../reference/schemadoc/definitions/CSDLOptions.schema.html) is enabled. 
+   * Otherwise, an error message indicating the missing CSDL option will be returned.
    * @return {string}
    */
   getResolvedText(): string;
@@ -3142,10 +4231,10 @@ interface IDataTableCellProxy extends IClientAPI {
   setValue(value: string): void;
 
   /**
-   * This method returns DataTableSection proxy
-   * @return {IDataTableSectionProxy}
+   * This method returns DataTableRow proxy
+   * @return {IDataTableRowProxy}
    */
-  getParent(): IDataTableSectionProxy;
+  getParent(): IDataTableRowProxy;
 
   /**
    * Get row index
@@ -3158,6 +4247,23 @@ interface IDataTableCellProxy extends IClientAPI {
    * @return {number}
    */
   getColumnIndex(): number;
+
+  /**
+   * This method returns DataTableCell Type
+   * @return {string}
+   */
+  getType(): string 
+
+  /**
+   * Get data table cell name
+   * @return {string} the name of the cell
+   */
+  getName(): string 
+
+  /**
+   * @returns {IPageProxy} the Page, which the element belongs to
+   */
+  getPageProxy(): IPageProxy
 }
 
 /**
@@ -4697,4 +5803,185 @@ declare enum ActionExecutionStatus {
    * Action was canceled
    */
   Canceled,
+}
+
+interface ISearch {
+  AdditionalProperties?: string[];
+  BarcodeScanner?: boolean;
+  Delay?: number;
+  Enabled?: boolean;
+  MinimumCharacterThreshold?: number;
+  Placeholder?: string;
+  Options?: ISearchOptions;
+}
+
+interface ISearchOptions {
+  CaseSensitive?: boolean;
+  NumberSearch?: INumberSearch;
+  UseSearchOverFilter: IUseSearchOverFilter;
+}
+
+interface INumberSearch {
+  ConversionMethod: ConversionMethod;
+  Enabled?: boolean;
+}
+
+declare enum ConversionMethodEnum {
+  NoConversion = 'NoConversion',
+  UseCast = 'UseCast',
+  UseConcat = 'UseConcat'
+}
+
+declare type ConversionMethod = `${ConversionMethodEnum}`
+
+interface IUseSearchOverFilter {
+  Enabled?: boolean;
+}
+
+/**
+ * A designer-facing interface that provides access to SimplePropertyCell.
+ */
+interface ISimplePropertyCellProxy extends IElementProxy  {
+}
+
+/**
+ * A designer-facing interface that provides access to a element.
+ * 
+ * It is passed to rules to provide access to an element for
+ * application specific customizations.
+ */
+interface IRowProxy extends IClientAPI {
+  /**
+   * @returns {IPageProxy} the Page, which the element belongs to 
+   */
+  getPageProxy(): IPageProxy;
+
+  /**
+  * Get element name
+  * @return {string} the name of the button
+  */
+  getName(): string;
+
+  /**
+  * This method returns parent proxy
+  * @return {any}
+  */
+  getParent(): any;
+
+  /**
+  * Get index
+  * @return {number}
+  */
+  getIndex(): number;
+
+  /**
+   * This method returns type
+   * @return {string}
+   */
+  getType(): string 
+}
+
+/**
+ * A designer-facing interface that provides access to DataTableRow.
+ */
+interface IDataTableRowProxy extends IRowProxy {
+  /**
+   * Get a specific cell from row given indexes. 
+   * This method accepts 2 calling method, either passing in the columnIndex ONLY or passing in both row and column indexes.
+   * 
+   * getCell(colIndex):
+   * 
+   * - If only column index is passed in, the first parameter will be treated as the column index used to retrieve the DataTableCellProxy, and the second parameter must be undefined. 
+   * 
+   * 
+   * @deprecated getCell(rowIndex, colIndex):
+   * 
+   * - If both indexes are used in the order of (rowIndex, columnIndex), the first parameter will be treated as the row index, and the second parameter must be the column index. 
+   * 
+   * - Implemented to allow backwards compatibility. 
+   * @param rowOrColIndex - Can either be row index or column index, depending on calling method. 
+   * @param columnIndex - Either column index or undefined. 
+   * @returns {IDataTableCellProxy} returns the DataTableCellProxy
+   */
+  getCell(rowIndex: number, columnIndex: number): IDataTableCellProxy;
+}
+
+/**
+ * A designer-facing interface that provides access to ObjectCell.
+ */
+interface IObjectCellProxy extends IElementProxy  {
+}
+
+/**
+ * A designer-facing interface that provides access to ObjectCellContextMenu.
+ */
+interface IObjectCellContextMenuProxy extends IElementProxy  {
+  /**
+   * Sets the leading items of the ObjectCellContextMenu
+   * @param {string[]} items the items to be set
+  */
+  setLeadingItems(items: string[]): void
+
+  /**
+   * Sets the trailing items of the ObjectCellContextMenu
+   * @param {string[]} items the items to be set
+  */
+  setTrailingItems(items: string[]): void
+}
+
+/**
+ * A designer-facing interface that provides access to ObjectCellContextMenuItem.
+ */
+interface IObjectCellContextMenuItemProxy extends IElementProxy  {
+  /**
+   * This method returns binding
+   * @return {string}
+  */
+  getBinding(): object
+}
+
+/**
+ * A designer-facing interface that provides access to ObjectCard.
+ */
+interface IObjectCardProxy extends IElementProxy  {
+}
+
+/**
+ * A designer-facing interface that provides access to ObjectCardActionitem.
+ */
+interface IObjectCardActionItemProxy extends IElementProxy  {
+}
+
+/**
+ * A designer-facing interface that provides access to ObjectCardOverflowButton.
+ */
+interface IObjectCardOverflowButtonProxy extends IElementProxy  {
+}
+
+/*
+ * GroupHeaderProxy is mainly for Group Header operations.
+ */
+interface IGroupHeaderProxy {
+  /**
+   * This method returns all the grouping properties
+   * @return {string[]}
+  */
+  getGroupingProperties(): string[];
+
+  /**
+   * This method returns all the items
+   * @return {IGroupHeaderItemProxy[]}
+  */
+  getItems(): IGroupHeaderItemProxy[];
+}
+
+/*
+ * GroupHeaderItemProxy is mainly for Group Header Item operations.
+ */
+interface IGroupHeaderItemProxy {
+  /**
+   * This method returns title
+   * @return {string}
+  */
+  getTitle(): string;
 }

@@ -10,10 +10,6 @@
 			"Sections": [
 				{
 					"ObjectHeader": {
-						"Subhead": "Gestione y administre sus visitas a clientes",
-						"Footnote": "3.0.12",
-						"DetailImage": "/Skycm_v3/Images/playstore.png",
-						"DetailImageIsCircular": false,
 						"Tags": [
 							{
 								"Color": "Green",
@@ -24,6 +20,10 @@
 								"Text": "/Skycm_v3/Rules/Visitas/get_pernScponly.js"
 							}
 						],
+						"Subhead": "Gestione y administre sus visitas a clientes",
+						"Footnote": "3.0.12",
+						"DetailImage": "/Skycm_v3/Images/playstore.png",
+						"DetailImageIsCircular": false,
 						"BodyText": "Sistema para casos B2B",
 						"HeadlineText": "Commercial Management",
 						"StatusPosition": "Stacked",
@@ -162,7 +162,6 @@
 	],
 	"_Type": "Page",
 	"_Name": "Main",
-	"PrefersLargeCaption": true,
 	"OnLoaded": "/Skycm_v3/Rules/Application/Actualizar_interval.js",
 	"OnActivityBackPressed": "/Skycm_v3/Rules/Application/EjecutarMensaje.js",
 	"ActionBar": {
@@ -174,9 +173,12 @@
 				"Position": "Right",
 				"IsIconCircular": false,
 				"Visible": true,
-				"OnPress": "/Skycm_v3/Actions/Application/UserMenuPopover.action"
+				"OnPress": "/Skycm_v3/Actions/Application/UserMenuPopover.action",
+				"_Type": "Control.Type.ActionBarItem"
 			}
 		],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar1",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }

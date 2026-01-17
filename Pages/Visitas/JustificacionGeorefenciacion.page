@@ -65,8 +65,6 @@
 	],
 	"_Type": "Page",
 	"_Name": "JustificacionGeorefenciacion",
-	"Caption": "Motivo",
-	"PrefersLargeCaption": true,
 	"ActionBar": {
 		"Items": [
 			{
@@ -75,9 +73,13 @@
 				"Position": "Right",
 				"IsIconCircular": false,
 				"Visible": true,
-				"OnPress": "/Skycm_v3/Actions/Visitas/ProgressCrearVisita.action"
+				"OnPress": "/Skycm_v3/Actions/Visitas/ProgressCrearVisita.action",
+				"_Type": "Control.Type.ActionBarItem"
 			}
 		],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar1",
+		"Caption": "Motivo",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }

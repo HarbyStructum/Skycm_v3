@@ -94,11 +94,12 @@
 	],
 	"_Type": "Page",
 	"_Name": "InicioJornadalaboral",
-	"Caption": "Jornada Laboral",
-	"PrefersLargeCaption": true,
 	"OnLoaded": "/Skycm_v3/Actions/JornadaLaboral/Download_jornada.action",
 	"ActionBar": {
 		"Items": [],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar1",
+		"Caption": "Jornada Laboral",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }

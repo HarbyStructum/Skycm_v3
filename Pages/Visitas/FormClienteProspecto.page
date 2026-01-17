@@ -147,7 +147,10 @@
 	],
 	"_Type": "Page",
 	"_Name": "FormClienteProspecto",
-	"Caption": "Crear Prospecto",
-	"PrefersLargeCaption": true,
+	"ActionBar": {
+		"Caption": "Crear Prospecto",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
+	},
 	"OnLoaded": "/Skycm_v3/Rules/Visitas/Geo.rule.js"
 }

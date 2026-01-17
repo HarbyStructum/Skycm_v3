@@ -88,6 +88,9 @@
 	],
 	"_Type": "Page",
 	"_Name": "DetallePedido",
-	"Caption": "No pedido: {Pedido}",
-	"PrefersLargeCaption": true
+	"ActionBar": {
+		"Caption": "No pedido: {Pedido}",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
+	}
 }

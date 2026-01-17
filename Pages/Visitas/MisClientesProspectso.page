@@ -49,8 +49,6 @@
 	],
 	"_Type": "Page",
 	"_Name": "MisClientesProspectso",
-	"Caption": "Clientes Prospectos",
-	"PrefersLargeCaption": true,
 	"ActionBar": {
 		"Items": [
 			{
@@ -60,9 +58,13 @@
 				"Position": "Right",
 				"IsIconCircular": false,
 				"Visible": true,
-				"OnPress": "/Skycm_v3/Actions/Visitas/nav_FormClienteProspecto.action"
+				"OnPress": "/Skycm_v3/Actions/Visitas/nav_FormClienteProspecto.action",
+				"_Type": "Control.Type.ActionBarItem"
 			}
 		],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar1",
+		"Caption": "Clientes Prospectos",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }

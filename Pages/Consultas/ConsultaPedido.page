@@ -121,10 +121,11 @@
 	},
 	"_Type": "Page",
 	"_Name": "ConsultaPedido",
-	"Caption": "Consulta Pedido",
-	"PrefersLargeCaption": true,
 	"ActionBar": {
 		"Items": [],
-		"_Name": "ActionBar1"
+		"_Name": "ActionBar1",
+		"Caption": "Consulta Pedido",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }

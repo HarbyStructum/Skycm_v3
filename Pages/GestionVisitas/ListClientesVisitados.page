@@ -32,7 +32,8 @@
 							"Items": [],
 							"PerformFirstActionWithFullSwipe": true,
 							"LeadingItems": [],
-							"TrailingItems": []
+							"TrailingItems": [],
+							"_Type": "ObjectCell.Type.ContextMenu"
 						},
 						"Title": "{NAME1}",
 						"Subhead": "{FECHA}",
@@ -58,7 +59,8 @@
 							"ImageIsCircular": true
 						},
 						"OnPress": "/Skycm_v3/Actions/GestionVisitas/Nav_DetalleVisitarealizadas.action",
-						"Selected": false
+						"Selected": false,
+						"_Type": "ObjectTable.Type.ObjectCell"
 					},
 					"Search": {
 						"Enabled": true,
@@ -81,6 +83,9 @@
 	],
 	"_Type": "Page",
 	"_Name": "ListClientesVisitados",
-	"Caption": "Clientes visitados",
-	"PrefersLargeCaption": true
+	"ActionBar": {
+		"Caption": "Clientes visitados",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
+	}
 }

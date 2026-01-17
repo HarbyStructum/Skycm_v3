@@ -78,8 +78,6 @@
 	},
 	"_Type": "Page",
 	"_Name": "DetalleJornadaLaboral",
-	"Caption": "Detalle Jornada",
-	"PrefersLargeCaption": true,
 	"ActionBar": {
 		"Items": [
 			{
@@ -88,9 +86,13 @@
 				"Position": "Right",
 				"IsIconCircular": false,
 				"Visible": true,
-				"OnPress": "/Skycm_v3/Rules/Visitas/ValidarVisitaActivaJor.js"
+				"OnPress": "/Skycm_v3/Rules/Visitas/ValidarVisitaActivaJor.js",
+				"_Type": "Control.Type.ActionBarItem"
 			}
 		],
-		"_Name": "ActionBar0"
+		"_Name": "ActionBar0",
+		"Caption": "Detalle Jornada",
+		"PrefersLargeCaption": true,
+		"_Type": "Control.Type.ActionBar"
 	}
 }
